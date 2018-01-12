@@ -1,0 +1,116 @@
+%h3 Datos del examen
+
+-# TODO probar fecha para intentar hacerlo
+=simple_form_for [:admin,@course,@section,@test],:url => admin_course_section_tests_path(@course,@section), :method => :post,html:{class: "col s12"} do |t|
+	.row
+		.input-field.col.s12
+			= t.input :description, input_html: {class: "materialize-textarea ",'data-length': "20"}, label: "Descripción (mínimo de 20 caracteres)"
+
+	- if !@course.deadline_course.nil?
+		.row.valign-wrapper
+			.col.s3
+				.row
+					.col.s12
+						%ul.collection
+							%li.collection-item.avatar
+								%i.circle.amber.fa.fa-calendar-check-o
+								%span.title Fecha de inicio del examen
+								- if @test.start_date.nil?
+									%p.align-text Indeterminado
+								-else
+									%p.align-text= localize(@test.start_date)
+								-date = date_format(@test.start_date,@test)
+								%input.amber.btn.datepicker{placeholder: "Cambiar", name: "test[start_date]", value: "#{date}"}
+				.row
+					.col.s12
+						%ul.collection
+							%li.collection-item.avatar
+								%i.circle.red.fa.fa-calendar-times-o
+								%span.title Fecha de finalización del examen
+								- if @test.deadline.nil?
+									%p.align-text Indeterminado
+								-else
+									%p.align-text= localize(@test.deadline)
+								-date = date_format(@test.deadline,@test)
+								%input.red.btn.datepicker{placeholder: "Cambiar",name: "test[deadline]", value: "#{date}"}
+			.col.s9
+				.row
+					.col.s12.relative
+						.font-icon-test
+							%i.fa.fa-times-circle
+							Límite de intentos
+						= t.input :attemps_limits, label: false, input_html: {min: "0"}
+						%small.absolute{style: "bottom: 0px"} Indicar cero (0) significará ilimitado
+				.row
+					.col.s12.relative
+						.font-icon-test
+							%i.fa.fa-clock-o
+							Tiempo límite en minutos
+						= t.input :time_limit, label: false, input_html: {min: "0"}
+						%small.absolute{style: "bottom: 11px"} Indicar cero (0) significará ilimitado
+				.row
+					.col.s12
+						.font-icon-test
+							%i.fa.fa-check
+							Nota mínima para aprobar (La nota máxima es 20)
+							= t.input :min_grade, label: false, input_html: {min: 1, max: 20}
+	-else
+		.col.s12
+			.row
+				.col.s12
+					.font-icon-test
+						%i.fa.fa-times-circle
+						Límite de intentos
+					= t.input :attemps_limits, label: false, input_html: {min: "0"}
+			.row
+				.col.s12
+					.font-icon-test
+						%i.fa.fa-clock-o
+						Tiempo límite en minutos
+						= t.input :time_limit, label: false, input_html: {min: "0"}
+			.row
+				.col.s12
+					.font-icon-test
+						%i.fa.fa-check
+						Nota mínima para aprobar (La nota máxima es 20)
+						= t.input :min_grade, label: false, input_html: {min: "0", max: "20"}
+
+
+	.obligatorio
+		.switch-field
+			%p ¿Es obligatorio el examen?
+			%br
+			=t.collection_radio_buttons :required, [[1 ,"Si"] ,[0,"No"]], :first, :last, { item_wrapper_tag: false } do |b|
+				- if @test.id.nil?
+					-if b.value == 0
+						-checked = "checked"
+					-else
+						-checked = ""
+					=b.radio_button(checked: "#{checked}")
+					=b.label
+				-else
+					=b.radio_button
+					=b.label
+	%br
+
+	%h3 Preguntas
+	.panel
+		#panel-element.panel-element
+			= t.simple_fields_for :questions do |q|
+				= render "questions", q: q, id: q.index
+		.post-avatar.button-description
+			= link_to_add_tr_field(t, :questions, "question_test")
+
+%div{style: "text-align: center"}
+	%btn.btn-submit.btn
+		Guardar
+
+.fixed-action-btn{class: "tooltipped","data-position": "left", "data-delay": "50" ,"data-tooltip": "Suma total de las notas"}
+	-if @test.new_record?
+		%a.btn-floating.fl-btn.btn-large.amber
+			.total-point
+				0/20
+	-else
+		%a.btn-floating.fl-btn.btn-large.green
+			.total-point
+				20/20

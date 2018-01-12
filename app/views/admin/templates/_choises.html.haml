@@ -1,0 +1,36 @@
+.jumbotron.flex-box
+  .jumbotron.flex-element.size-respuesta
+    %h4 Respuestas posibles a la pregunta
+    .flex-box.flex-wrap
+    %ul.collection.with-header
+      - if !@counter.nil?
+        -counter = @counter
+      %div{id: "choises-list#{counter.to_s}"}
+        -if defined?(survey) != nil 
+          -Choise.where(survey_id: survey.id).each do |choise|
+            %li.collection-item{id: "i_choise_survey#{choise.description}"}
+              %input{name: "template[surveys][survey#{counter}][choises][]", value: "#{choise.description}", type: "hidden"}
+              %div
+                =choise.description
+                %a.secondary-content{id: "answer_#{choise.description}"}
+                  %i.material-icons.choises-pointer clear
+
+
+
+  .jumbotron.flex-element
+    .form-group
+      - if @counter.nil?
+        %h4
+          %label{class: "control-label text optional", for:"add_choise#{counter.to_s}"}
+            Agregar pregunta
+        %input{id: "add_choise#{counter.to_s}", placeholder: "Agregar pregunta", type: "text", class: "form-control" }
+        %br
+        %a.btn.btn-warning.btn-pointer{id: "btn-add-choise#{counter.to_s}"}
+          Agregar
+
+      -else
+        %h4
+        %input{id: "add_choise#{@counter}", placeholder: "Agregar respuesta", type: "text", class: "form-control" }
+        %br
+        %a.btn.btn-warning.btn-pointer{id: "btn-add-choise#{@counter}"}
+          Agregar

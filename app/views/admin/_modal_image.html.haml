@@ -1,0 +1,54 @@
+.modal#modal-image.bottom-sheet
+	.modal-content
+		.align-text
+			- if context == "este curso"
+				=simple_form_for @course, :url => "/admin/courses/"+@course.id.to_s+"/multimedia_courses" , :method => :post, remote: true , authenticity_token: true, html:{  id: "image-form" ,  :"data-type" => "json"} do |image|
+					.file-field.input-field
+						.btn
+							%span Subir imagen
+							= image.input :image, label: false, as: :file, input_html: {name: "multimedia[image]", id: "input-file-image"}
+						.file-path-wrapper
+							%input.file-path.validate{type: "text"}
+					%small Formatos aceptados: .jpg, .jpeg , .png y .gif
+			-else
+				=simple_form_for @section, :url => "/admin/courses/#{@course.id.to_s}/sections/#{@section.id.to_s}/multimedia_sections" , :method => :post, remote: true, authenticity_token: true , html:{  id: "image-form"} do |image|
+					.file-field.input-field
+						.btn
+							%span Subir imagen
+							= image.input :image, label: false, as: :file, input_html: {name: "multimedia[image]", id: "input-file-image"}
+						.file-path-wrapper
+							%input.file-path.validate{type: "text"}
+					%small Formatos aceptados: .jpg, .jpeg , .png y .gif
+
+		%br
+		%br
+		%h3
+			Imagenes subidas en
+			= context
+		%ul.collection#images
+			- @list_name_image.each do |hash|
+				- name = hash.keys.to_s.split('["')[1]
+				- name = name.split('"]')[0]
+				- id = hash.values.to_s.split('[')[1]
+				- id = id.split(']')[0]
+				%li.collection-item.avatar
+					- if context == "este curso"
+						%a
+							%img.circle{src: " /system/multimedia_courses/images/course_#{@course.id.to_s}/#{id}/medium/#{name}" }
+						%span.title
+							=name
+						.secondary-content
+							%button.btn{value: "#{id}",name: "#{name}"}
+								Agregar
+							%p.btn.red{'data-method':'delete',data_id: "#{id}"}
+								Eliminar
+					-else
+						%a
+							%img.circle{src: " /system/multimedia_sections/images/section_#{@section.id.to_s}/#{id}/medium/#{name}" }
+						%span.title
+							=name
+						.secondary-content
+							%button.btn{value: "#{id}",name: "#{name.gsub(" ", "-")}"}
+								Agregar
+							%p.btn.red{'data-method':'delete',data_id: "#{id}"}
+								Eliminar

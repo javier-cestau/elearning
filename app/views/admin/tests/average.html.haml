@@ -1,0 +1,74 @@
+.Container
+  .row
+    .col.s12
+      .align-text
+        %h3 Promedio de aprobados y reprobados del examen
+        %br
+        %br
+        %div
+          %canvas{id: "myChartAverage"}
+        %br
+        %br
+        %br
+        %br
+
+  .row.flex
+    .col.s6.center-margin
+      - if @approved_users.empty?
+        %h6.align-text.text-red No hay usuarios aprobados en este examen.
+      -else
+        %h6.align-text Usuarios aprobados:
+        %ul.collection
+          - @approved_users.each do |dt,talent|
+            %li.collection-item.avatar
+              - if talent.photo_file_name.nil?
+                -if talent.is_at_least_medium_admin?
+                  %img.circle{src: "/image-profile-admin.png",id: "user-#{talent.id}"}
+                -else
+                  %img.circle{src: "/image-profile-user.png",id: "user-#{talent.id}"}
+              -else
+                %img.circle{src: "#{talent.photo.url(:small)}",id: "user-#{talent.id}"}
+
+              %span.title
+                =talent.email
+              %p
+                =talent.name
+                %br
+                %small.position=talent.position
+                %br
+                - do_test_date= DoTest.where(do_course_id: dt.do_course_id, test_id: params[:test_id]).last
+                %small.position
+                  ="Fecha de realización del examen: #{localize(do_test_date.created_at.to_s.split(" ")[0].to_date)}"
+
+              .secondary-content
+                =link_to "Ver notas", course_grades_path(@course.id,dt.do_course_id,test_id: @test.id), class: "btn green darken-2"
+
+    .col.s6.center-margin
+      - if @reprobed_users.empty?
+        %h6.align-text.text-red No hay usuarios reprobados en este examen.
+      - else
+        %h6.align-text Usuarios reprobados:
+        %ul.collection
+          - @reprobed_users.each do |dt,talent|
+            %li.collection-item.avatar
+              - if talent.photo_file_name.nil?
+                -if talent.is_at_least_medium_admin?
+                  %img.circle{src: "/image-profile-admin.png",id: "user-#{talent.id}"}
+                -else
+                  %img.circle{src: "/image-profile-user.png",id: "user-#{talent.id}"}
+              -else
+                %img.circle{src: "#{talent.photo.url(:small)}",id: "user-#{talent.id}"}
+
+              %span.title
+                =talent.email
+              %p
+                =talent.name
+                %br
+                %small.position=talent.position
+                %br
+                - do_test_date= DoTest.find_by(id: dt.id)
+                %small.position
+                  ="Fecha de realización del examen: #{localize(do_test_date.created_at.to_s.split(" ")[0].to_date)}"
+
+              .secondary-content
+                =link_to "Ver notas", course_grades_path(@course.id,dt.do_course_id,test_id: @test.id), class: "btn green darken-2"

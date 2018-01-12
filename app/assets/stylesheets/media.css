@@ -1,0 +1,7 @@
+
+@media screen and (min-width: 990px) {
+	.day-row{
+		position: relative;
+		top: 80px;
+	}
+}

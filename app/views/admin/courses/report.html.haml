@@ -1,0 +1,142 @@
+
+
+.department-name{id: "#{@department_name}"}
+
+.title-report.align-text
+%br
+
+.align-text
+  %span Mostrar por
+  -if !params[:day].nil?
+    =link_to "Meses", report_admin_courses_path(month: true,year: Time.current.year), class: "btn blue lighten-2", id: "month"
+    =link_to "Semanas", report_admin_courses_path(year: Time.current.year), class: "btn blue lighten-2"
+    =link_to "Días", report_admin_courses_path(day: true,year: Time.current.year), class: "btn red lighten-2", id: "day"
+  -else
+    -if !params[:month].nil?
+      =link_to "Meses", report_admin_courses_path(month: true,year: Time.current.year), class: "btn red lighten-2", id: "month"
+      =link_to "Semanas", report_admin_courses_path(year: Time.current.year), class: "btn blue lighten-2"
+      =link_to "Días", report_admin_courses_path(day: true,year: Time.current.year), class: "btn blue lighten-2", id: "day"
+    -else
+      =link_to "Meses", report_admin_courses_path(month: true,year: Time.current.year), class: "btn blue lighten-2", id: "month"
+      =link_to "Semanas", report_admin_courses_path(year: Time.current.year), class: "btn red lighten-2"
+      =link_to "Días", report_admin_courses_path(day: true,year: Time.current.year), class: "btn blue lighten-2", id: "day"
+
+%br
+
+
+
+.align-text
+  -if @years_array.length > 0
+    %span Del año
+  -@years_array.each do |year|
+    -if year == params[:year].to_i
+      -if params[:day].nil? && params[:month].nil?
+        - if params[:department].nil?
+          =link_to year, report_admin_courses_path(year: year), class: "btn red lighten-2"
+        -else
+          =link_to year, report_admin_courses_path(department: params[:department], year: year), class: "btn red lighten-2"
+      -elsif !params[:day].nil?
+        - if params[:department].nil?
+          =link_to year, report_admin_courses_path(day: true,year: year), class: "btn red lighten-2"
+        -else
+          =link_to year, report_admin_courses_path(day: true,department: params[:department], year: year), class: "btn red lighten-2"
+      -elsif !params[:month].nil?
+        - if params[:department].nil?
+          =link_to year, report_admin_courses_path(month: true,year: year), class: "btn red lighten-2"
+        -else
+          =link_to year, report_admin_courses_path(month: true,department: params[:department], year: year), class: "btn red lighten-2"
+
+
+    -else
+      -if params[:day].nil? && params[:month].nil?
+        - if params[:department].nil?
+          =link_to year, report_admin_courses_path(year: year), class: "btn blue lighten-2"
+        -else
+          =link_to year, report_admin_courses_path(department: params[:department], year: year), class: "btn blue lighten-2"
+      -elsif !params[:day].nil?
+        - if params[:department].nil?
+          =link_to year, report_admin_courses_path(day: true,year: year), class: "btn blue lighten-2"
+        -else
+          =link_to year, report_admin_courses_path(day: true,department: params[:department], year: year), class: "btn blue lighten-2"
+      -elsif !params[:month].nil?
+        - if params[:department].nil?
+          =link_to year, report_admin_courses_path(month: true,year: year), class: "btn blue lighten-2"
+        -else
+          =link_to year, report_admin_courses_path(month: true,department: params[:department], year: year), class: "btn blue lighten-2"
+
+  %br
+.align-text
+  %span Por departamentos
+
+  -if params[:year].nil?
+    -searching_year = Time.current.year
+  -else
+    -searching_year = params[:year]
+
+  - unless @department_name.nil?
+    -if params[:day].nil?
+      -if params[:month].nil?
+        =link_to "Todo", report_admin_courses_path(year: searching_year), class: "btn blue lighten-2"
+      -else
+        =link_to "Todo", report_admin_courses_path(month: true,year: searching_year), class: "btn blue lighten-2"
+    -else
+      =link_to "Todo", report_admin_courses_path(day: true,year: searching_year), class: "btn blue lighten-2"
+
+  -else
+    -if params[:day].nil?
+      -if params[:month].nil?
+        =link_to "Todo", report_admin_courses_path(year: searching_year), class: "btn red lighten-2"
+      -else
+        =link_to "Todo", report_admin_courses_path(month: true, year: searching_year), class: "btn red lighten-2"
+    -else
+      =link_to "Todo", report_admin_courses_path(day: true,year: searching_year), class: "btn red lighten-2"
+
+
+  - @all_departments.each do |department|
+    - if @department_name != department.name
+      -if params[:day].nil?
+        -if !params[:month].nil?
+          =link_to "#{department.name}", report_admin_courses_path(:department => department.id, month: true,year: searching_year), class: "btn blue lighten-2"
+        -else
+          =link_to "#{department.name}", report_admin_courses_path(:department => department.id,year: searching_year), class: "btn blue lighten-2"
+      -else
+        =link_to "#{department.name}", report_admin_courses_path(:department => department.id, day: true,year: searching_year), class: "btn blue lighten-2"
+    -else
+      -if params[:day].nil?
+        -if !params[:month].nil?
+          =link_to "#{department.name}", report_admin_courses_path(:department => department.id, month: true,year: searching_year), class: "btn red lighten-2"
+        -else
+          =link_to "#{department.name}", report_admin_courses_path(:department => department.id,year: searching_year), class: "btn red lighten-2"
+      -else
+        =link_to "#{department.name}", report_admin_courses_path(:department => department.id, day: true,year: searching_year), class: "btn red lighten-2"
+
+-unless @error
+  -# Si es por semanas
+  -if params[:day].nil? && !params[:month].nil?
+
+
+
+    .chartContainer
+      %h2.align-text= params[:year]
+      %div{id:"total-users#{params[:year]}"}
+      .chartAreaWrapper
+        .chartAreaWrapper2
+          %canvas{id: "myChart#{params[:year]}"}
+
+  -else
+    -@month_array = ["Enero","Febrero","Marzo","Abril","Mayo","Junio", "Julio","Agosto", "Septiembre","Octubre", "Noviembre","Diciembre"]
+    .chartContainer
+      -@month_array.each do |month|
+        %h2.align-text= month
+        %div{id:"total-users#{month}"}
+        .chartAreaWrapper
+          .chartAreaWrapper2
+            %canvas{id: "myChart#{month}"}
+
+-else
+
+  .align-text
+    %h2
+      Actualmente nadie en el departamento
+      ="'#{@department_name}'"
+      se ha inscrito

@@ -1,0 +1,29 @@
+.progresss {
+	width: 70%;
+	max-width: 85vw;
+	height: 4px;
+	border-radius: 4px;
+	background: rgba(255,255,255,0.5);
+	transform: translate(-50%, -50%);
+	overflow: hidden;
+	position: relative;
+	left: 280px;
+	top: 22px;
+	height: 51px;
+
+}
+
+.amount{
+		position: absolute;
+		left: 45%;
+    top: 14px;
+		color: black;
+
+
+}
+
+.progresss > div {
+	width: 80%;
+	height: 51px;
+background-color: #aed581 !important;
+}

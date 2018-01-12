@@ -1,0 +1,88 @@
+// Place all the styles related to the User controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.hidden {
+  display: none !important;
+}
+
+.input-hide{
+  visibility: hidden;
+}
+
+
+.counter {
+  font-size: 18px !important;
+  text-align: center !important;
+}
+
+.margin-progress{
+  margin-left: 0px !important;
+}
+
+.ul_menu_progress {
+  margin: 0;
+  padding: 0;
+  height: 125px;
+  border-radius: 5px;
+  background-color: #fff;
+}
+.wrapper {
+    position: absolute;
+    width: 700px;
+}
+
+.fa-progress{
+  font-size: 10px !important;
+
+}
+
+.fa-progress-d{
+  font-size: 10px !important;
+
+}
+
+  .width_c{
+    width: 100%;
+  }
+
+
+.color-red{
+  color: #d9534f !important;
+}
+
+#slide-out > li  >.favorite-button {
+  position: absolute ;
+  top: 110px ;
+  right:0 ;
+  padding: 0 ;
+}
+#slide-out > li  > .favorite-button > i{
+  position: relative ;
+  left: 3px ;
+}
+
+.favorite-button{
+  width: 30px !important;
+  height: 30px !important;
+  line-height: 30px !important;
+}
+
+.favorite-icon{
+  line-height: 30px !important;
+}
+
+.add-favorite{
+  color: #a19fa7  !important;
+}
+
+.remove-favorite{
+  color: #fbf980 !important;
+}
+
+.img-profile-mobile{
+  border-radius: 85px;
+width: 60px;
+position: relative;
+top: 20px;
+}

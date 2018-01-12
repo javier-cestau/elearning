@@ -1,0 +1,15 @@
+.container
+  %h2
+    = context
+    Categoría
+  .container
+  = simple_form_for [:admin ,@category]  do |f|
+    = f.error_notification
+    - @category.errors.full_messages.each do |msg|
+      .alert.alert-danger
+        = msg
+    %p Los campos marcados con (*) son obligatorios
+    .data-eval
+      = f.input :name, required: true , label: "Nombre de la categoría", placeholder: "Nombre de la categoría...", error: false
+    .form-actions.align-text
+      = f.button :submit, context, class: "btn blue lighten-3 submit"

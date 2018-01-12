@@ -1,0 +1,63 @@
+= render "/menu";
+
+#tf-home
+  .overlay
+
+    .container
+      =render "/flash_message"
+      .content
+        - if user_signed_in?
+          %h4.white-text
+            Bienvenido
+            =current_user.name
+
+        %h1.leiros Cursos Leiros
+        .row
+          .col.s12.align-text
+            =simple_form_for "", url: courses_path(), method: 'get' ,html: {id: 'form-search', style:" width: 100% !important;"} do |c|
+              .row
+                .input-field.col.s12
+                  .input-field
+                    =c.input_field :search , as: :search, placeholder: "Buscar curso",value: "#{params[:search]}", name: "search", style: "background-color: rgba(255, 255, 255, 0.84) !important;"
+                    =c.label :search , style:"top: 20px;", class:"label-icon" do |a|
+                      %i.material-icons
+                        search
+                    %i.material-icons{style: "top: 17px;"} close
+                    =c.hidden_field :order , value: "#{params[:order]}", name: "order"
+              =c.submit "enviar", class: "hidden"
+        - if user_signed_in?
+          =link_to  "Cerrar sesión", destroy_user_session_path,method: :delete, class: "waves-effect waves-light btn"
+        -else
+          =link_to   "Iniciar sesión", user_elearning_omniauth_authorize_path , class: "waves-effect waves-light btn"
+        %a{:href => "#{courses_path}", class: "waves-effect waves-light btn mybtn2"} Ver cursos
+
+-if !@recomendation_courses.empty?
+  #tf-service
+    %h3 Cursos recomendados para usted
+    .arrow-wrap.arrow-left
+      %span.arrow
+    .arrow-wrap.arrow-right
+      %span.arrow
+    .container-slick-menu.row
+      -@recomendation_courses.each do |c|
+        .panels
+          .panels__container
+            %a.panel-recomendation{:href => "#{course_path(c)}"}
+              - if c.cover_file_name != nil
+                .panel__content{:style => "background: url(#{c.cover.url(:original)}) "}
+                  %h3.panel__title
+                    =c.name
+              -else
+                .panel__content.missing-cover-image
+                  %h3.panel__title
+                    =c.name
+
+%p.align-text
+  Grupo Leiros. J-06504883-2
+%p.align-text
+  Universidad de Margarita
+%p.align-text
+  Proyecto de pasantías elaborado por: Diego Molina y Javier Cestau
+%p.align-text{style: "margin-top: 12px;"}
+  Derechos reservados. Copyright 2017
+  %i.fa.fa-copyright

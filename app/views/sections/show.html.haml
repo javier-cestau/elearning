@@ -1,0 +1,192 @@
+
+#dialog-confirm{:title => "Atención"}
+	%p
+		%i.fa.fa-exclamation-triangle{:style => "float:left; margin:12px 12px 20px 0;"}>
+		¿Seguro que desea eliminar el comentario?
+
+=  render "/new_menu", admin_: 0
+.container
+	.col-md-12
+		.align-text
+			%h3= @section.name
+		%hr
+		.fr-view
+			-unless @section.description.nil?
+				= get_ids(@section.description)
+		-if !@section_files.empty?
+			%hr
+			%ul.collapsible.popout{'data-collapsible': "accordion"}
+				%li
+					.collapsible-header.align-text.active
+						Material complementario
+						%i.material-icons.right
+							arrow_drop_down
+					.collapsible-body
+						.extra-files.jumbotron.align-text
+							%ul.collection
+								- @section_files.each do |id,file|
+									-type = file.split(".")[1]
+									%li.collection-item.avatar{id: "li-#{id}"}
+										%a
+											%img.circle{src: " /system/icons_documents/#{type}.png" }
+										%span.title
+											=file
+										.secondary-content
+											-if request.port.nil?
+												%a.btn.lighten-1{href: "#{request.host}/system/section_files/files/section_#{@section.id}/#{id}/original/#{file}"}
+													-if type != "pdf"
+														Descargar
+													-else
+														Ver/Descargar
+											-else
+												%a.btn.lighten-1{href: "http://#{request.host}:#{request.port}/system/section_files/files/section_#{@section.id}/#{id}/original/#{file}"}
+													-if type != "pdf"
+														Descargar
+													-else
+														Ver/Descargar
+			%br
+			%br
+		%br
+		%br
+
+		- if !@section.tests.empty?
+			.col.s12.m7
+				.card.horizontal
+					.card-image
+						=image_tag("/examen.jpg", style: "height: 100%")
+					.card-stacked
+						.card-content
+							%ul.data-test
+								= info_test(@section.id)
+						.card-action
+							= do_button_test(@section.id)
+
+		.align-text
+		.align-text
+
+		.row
+			.row
+				.col.s12
+					%h3
+						Comentarios (
+						=@comments_count
+						)
+					/ Comment form
+					.row
+						.col.s12
+							%ul.comments-list.align-text
+								%li
+									.comment-main-level
+										/ Avatar
+										.comment-avatar
+											- if current_user.photo_file_name.nil?
+												-if current_user.is_at_least_medium_admin?
+													%img{src: "/image-profile-admin.png"}
+												-else
+													%img{src: "/image-profile-user.png"}
+											-else
+												%img{src: "#{current_user.photo.url(:small)}",id: "user-#{current_user.id}"}
+
+										/ Contenedor del Comentario
+										.comment-box{style: "float: none; width: 100%;"}
+											.comment-head
+												%h6.comment-name
+													%span.black-text= current_user.name
+											.comment-content
+												=simple_form_for [Course.find_by_id(params[:course_id]),@section,CommentSection.new], remote: true, html: {"data-type": :json, id: "comment-form-section"} do |c|
+													.row
+														.input-field.col.s12
+															= c.input :body, label: false, placeholder: "Añade un comentario...", input_html: {class: "text-area-comment"}
+															%br
+															= c.submit "Comentar", class: "btn grey lighten-3 black-text"
+
+
+
+
+			/ Contenedor Principal
+			.row
+				.col.s12
+					.comments-container
+						%hr
+						%ul#comments-list.comments-list
+							-@comments.each do |comment|
+								%li{id: "comment-#{comment.id}"}
+									.comment-main-level
+										/ Avatar
+										.comment-avatar
+											- if comment.user.photo_file_name.nil?
+												-if comment.user.is_at_least_medium_admin?
+													%img{src: "/image-profile-admin.png"}
+												-else
+													%img{src: "/image-profile-user.png"}
+											-else
+												%imge{src: "#{comment.user.photo.url(:small)}"}
+
+										/ Contenedor del Comentario
+										.comment-box
+											-animation = ""
+											-unless params[:comment].nil?
+												-if params[:comment] == comment.id.to_s
+													-animation = "animate-comment"
+
+											.comment-head{class: "#{animation}"}
+												-class_admin = ""
+												-if comment.user.is_at_least_medium_admin?
+													-class_admin = "by-author"
+												%h6.comment-name{class: "#{class_admin}"}
+													%span.black-text= comment.user.name
+												%span=timeago(comment.created_at)
+												%i.fa.fa-reply{id: "comment-#{comment.id}"}
+												-if current_user.email == comment.user.email or current_user.is_at_least_medium_admin?
+													%i.fa.fa-close.destroy{href: "#{course_section_comment_section_path(params[:course_id],@section,comment)}", method: "delete"}
+
+											.comment-content= comment.body
+									/ Respuestas de los comentarios
+									%ul.comments-list.reply-list{id: "reply-comments-box-#{comment.id}"}
+										-comments_reply = CommentSection.where(prv_comment: comment.id)
+										-comments_reply.each do |comment_reply|
+
+
+											%li{id: "comment-#{comment_reply.id}"}
+												/ Avatar
+												.comment-avatar{style: "left: 97px;"}
+													- if current_user.photo_file_name.nil?
+														-if current_user.is_at_least_medium_admin?
+															%img{src: "/image-profile-admin.png"}
+														-else
+															%img{src: "/image-profile-user.png"}
+													-else
+														%img{src: "#{comment_reply.user.photo.url(:small)}",id: "user-#{current_user.id}"}
+
+														/ Contenedor del Comentario
+												.comment-box
+													.comment-head{class: "#{animation}"}
+														-class_admin = ""
+														-if comment_reply.user.is_at_least_medium_admin?
+															-class_admin = "by-author"
+														%h6.comment-name{class: "#{class_admin}"}
+															%span.black-text= comment_reply.user.name
+
+														%span=timeago(comment_reply.created_at)
+
+
+														-if current_user.email == comment_reply.user.email or current_user.is_at_least_medium_admin?
+															%i.fa.fa-close.destroy{href: "#{course_section_comment_section_path(@section,comment_reply)}", method: "delete"}
+
+													.comment-content= comment_reply.body
+
+								%br
+
+
+-url = ""
+- if current_user.photo_file_name.nil?
+	-if current_user.is_at_least_medium_admin?
+		-url = "/image-profile-admin.png"
+	-else
+		-url = "/image-profile-user.png"
+-else
+	- url =  "#{current_user.photo.url(:small)}"
+
+= javascript_tag do
+	window.user_privilege = "#{current_user.privilege}";
+	window.user_image_url = "#{url}";

@@ -1,0 +1,12 @@
+=simple_form_for [:admin , @course] , html: {id: "form-course"} do |c|
+  .jumbotron
+    .flex.align-text{style: "align-items: last baseline;"}
+      =c.collection_check_boxes :departments, Department.all.order("name ASC"), :id , :name,  { item_wrapper_tag: false } do |b|
+        -if !CourseHasDepartment.where(department_id: b.value, course_id: @course.id).empty?
+          -checked = "checked"
+        -else
+          -checked = ""
+        =b.label
+        .squaredTwo
+          =b.check_box(checked: "#{checked}", class: "filled-in")
+          %label{for: "course_departments_#{b.value}"}

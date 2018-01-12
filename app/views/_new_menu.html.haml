@@ -1,0 +1,72 @@
+-#TODO arreglar boton favoritos en el menu
+.fixed-action-btn.menu-btn-course
+	%button.btn-floating.button-collapse-nav{"data-activates" => "slide-out", :href => "#"}
+		%i.material-icons menu
+%ul#slide-out.side-nav.menu-course
+	%li
+		.user-view
+			.background
+				-if @course.cover_file_name.nil?
+					%img.no-image-menu{src: "/logo-big-leiros.png"}
+				-else
+					=image_tag @course.cover.url, class: "image-menu";
+		- already_in_favorites = HasFavorite.where(user_id: current_user.id, course_id: @course.id)
+		-if already_in_favorites.empty?
+			%a.btn-floating.white.btn.tooltipped.favorite-button{id: "f-btn#{@course.id}", value:1,  data:{delay: "50"}, data:{tooltip:"Agregar a favoritos"} }
+				%i.add-favorite.material-icons.favorite-icon{id: "f-icon#{@course.id}"} star
+		-else
+			%a.btn-floating.white.btn.tooltipped.favorite-button{id: "f-btn#{@course.id}", value:2,  data:{delay: "50"}, data:{tooltip:"Eliminar de favoritos"} }
+				%i.remove-favorite.material-icons.favorite-icon{id: "f-icon#{@course.id}"}  star
+
+	%li
+		-if admin_ == 0
+			-link_course = course_path(@course)
+		-else
+			-link_course = edit_admin_course_path(@course)
+
+		%a.truncate.tooltipped{"data-position": "right", "data-delay": "50", "data-tooltip": "#{@course.name}", href:"#{link_course}"}
+			%i.fa.fa-graduation-cap
+			= @course.name
+	%li
+		-#
+		= see_grades(admin_)
+
+	%li
+		-if admin_ == 0
+			=recomendation
+	%li
+		.divider
+	%li
+		.row
+			.col.s12
+				.row
+					.input-field.col.s12
+						%i.material-icons.prefix.translate-y search
+						%input#autocomplete-input.autocomplete{:type => "text"}/
+						%label.active-autocomplete{:for => "autocomplete-input"} Buscar sección
+	%li
+		%a.subheader Secciones
+	%li
+		%ul.collapsible{"data-collapsible" => "accordion"}
+			-@primary_sections.each do |primary|
+				%li
+					.collapsible-header
+						.row.valign-wrapper
+							.col.s10
+								=link_menu(admin_,primary)
+							.col.s2{style: "height: 48px;"}
+								- if !@sections_hash[primary].nil?
+									%i.fa.fa-level-down.right
+					- if !@sections_hash[primary].nil?
+						.collapsible-body
+							%ul
+								-@sections_hash[primary].each do |subsection,index|
+									=create_subsection(subsection,admin_)
+	-if admin_ == 1
+		%li
+			=link_to "Crear sección", admin_course_sections_path(@course), :method => :post, class: "btn"
+	-else
+		%li
+			.divider
+		%li
+			%btn.btn.no-visible

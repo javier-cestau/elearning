@@ -1,0 +1,216 @@
+=  render "/new_menu", admin_: 0
+-#=  render 'favorite'
+.container
+	.align-text
+		.row.valign-wrapper
+			.col.s12.m7
+				.card
+					.card-image
+						-if @course.cover_file_name.nil?
+							%img{src: "/logo-big-leiros.png"}
+							%hr
+							%h5=@course.name
+						-else
+							= image_tag @course.cover.url, style: "height: 435px;"
+							%span.card-title=@course.name
+			.col.s12.m5
+				.row
+					.col.s12
+						%ul.collection
+							%li.collection-item.avatar.align-text
+								%i.circle.amber.fa.fa-calendar-check-o
+								%span.title Fecha de inicio del curso
+								- if @course.start_date.nil?
+									%p Indeterminado
+								-else
+									%p= localize(@course.start_date)
+					.col.s12
+						%ul.collection
+							%li.collection-item.avatar.align-text
+								%i.circle.red.fa.fa-calendar-times-o
+								%span.title Fecha de finalización del curso
+								- if @course.deadline_course.nil?
+									%p Indeterminado
+								-else
+									%p= localize(@course.deadline_course)
+					.col.s12
+						%ul.collection
+							%li.collection-item.avatar.align-text
+								%i.circle.green.fa.fa-calendar-plus-o
+								%span.title Fecha límite de inscripción
+								- if @course.deadline_inscription.nil?
+									%p Indeterminado
+								-else
+									%p= localize(@course.deadline_inscription)
+
+	.row
+		.col.s12
+			%br
+			.row
+				.col.s4
+				.col.s4
+				.col.s4
+
+			.row
+				.col.s12
+					%ul.collection
+						%li.collection-item.avatar.align-text
+							%i.material-icons.circle.brown.lighten-2
+								%i.fa.fa-book
+							- if @course.prelation != 0
+								%span.title Este curso requiere experiencia de otros cursos
+							-else
+								%span.title No se require experiencia previa para iniciar el curso
+						- if @course.prelation != 0
+							- @courses_prv.each do |id, c_prv|
+								%li.collection-item.avatar.align-text
+									-if c_prv[0][:img].nil?
+										%i.material-icons.circle.brown.lighten-2
+											%i.fa.fa-book
+									-else
+										%img.circle{src: " /system/cover/course_#{id.to_s}/small/#{ c_prv[0][:img]}" }
+									%span.title= c_prv[0][:name]
+									.secondary-content
+										=link_to "Ver curso", course_path(id), class: "btn blue lighten-3"
+			%br
+
+			%br
+
+			- unless @course.description.nil?
+
+				%br
+				.fr-view
+					%br
+					= get_ids(@course.description)
+
+
+
+		= enroll_button(current_user)
+
+	.row
+		.row
+			.col.s12
+				%h3
+					Comentarios (
+					=@comments_count
+					)
+				/ Comment form
+				.row
+					.col.s12
+						%ul.comments-list.align-text
+							%li
+								.comment-main-level
+									/ Avatar
+									.comment-avatar
+										- if current_user.photo_file_name.nil?
+											-if current_user.is_at_least_medium_admin?
+												%img{src: "/image-profile-admin.png",id: "user-#{current_user.id}"}
+											-else
+												%img{src: "/image-profile-user.png",id: "user-#{current_user.id}"}
+										-else
+											%img{src: "#{current_user.photo.url(:small)}",id: "user-#{current_user.id}"}
+
+									/ Contenedor del Comentario
+									.comment-box{style: "float: none; width: 100%;"}
+										.comment-head
+											%h6.comment-name
+												%span.black-text= current_user.name
+										.comment-content
+											=simple_form_for [@course,CommentCourse.new], remote: true, html: {"data-type": :json, id: "comment-form"} do |c|
+												.row
+													.input-field.col.s12
+														= c.input :body, label: false, placeholder: "Añade un comentario...", input_html: {class: "text-area-comment"}
+														%br
+														= c.submit "Comentar", class: "btn grey lighten-3 black-text", id: 'btn-comment'
+
+
+		/ Contenedor Principal
+		.row
+			.col.s12
+				.comments-container
+					%hr
+					%ul#comments-list.comments-list
+						-@comments.each do |comment|
+							%li{id: "comment-#{comment.id}"}
+								.comment-main-level
+									/ Avatar
+
+									.comment-avatar
+										- if comment.user.photo_file_name.nil?
+											-if comment.user.is_at_least_medium_admin?
+												%img{src: "/image-profile-admin.png"}
+											-else
+												%img{src: "/image-profile-user.png"}
+										-else
+											%img{src: "#{comment.user.photo.url(:small)}",id: "user-#{current_user.id}"}
+
+									/ Contenedor del Comentario
+									.comment-box
+										-animation = ""
+										-unless params[:comment].nil?
+											-if params[:comment] == comment.id.to_s
+												-animation = "animate-comment"
+
+										.comment-head{class: "#{animation}"}
+											-class_admin = ""
+											-if comment.user.is_at_least_medium_admin?
+												-class_admin = "by-author"
+											%h6.comment-name{class: "#{class_admin}"}
+												%span.black-text= comment.user.name
+											%span=timeago(comment.created_at)
+											%i.fa.fa-reply{id: "comment-#{comment.id}"}
+
+											-if current_user.email == comment.user.email or current_user.is_at_least_medium_admin?
+												%i.fa.fa-close.destroy{href: "#{course_comment_course_path(@course,comment)}", method: "delete"}
+
+										.comment-content= comment.body
+								/ Respuestas de los comentarios
+								%ul.comments-list.reply-list{id: "reply-comments-box-#{comment.id}"}
+									-comments_reply = CommentCourse.where(prv_comment: comment.id)
+									-comments_reply.each do |comment_reply|
+
+
+										%li{id: "comment-#{comment_reply.id}"}
+											/ Avatar
+											.comment-avatar{style: "left: 97px;"}
+												- if comment_reply.user.photo_file_name.nil?
+													-if comment_reply.user.is_at_least_medium_admin?
+														%img{src: "/image-profile-admin.png"}
+													-else
+														%img{src: "/image-profile-user.png"}
+												-else
+													%img{src: "#{comment_reply.user.photo.url(:small)}"}
+											/ Contenedor del Comentario
+											.comment-box
+												.comment-head{class: "#{animation}"}
+													-class_admin = ""
+													-if comment_reply.user.is_at_least_medium_admin?
+														-class_admin = "by-author"
+													%h6.comment-name{class: "#{class_admin}"}
+														%span.black-text= comment_reply.user.name
+
+													%span=timeago(comment_reply.created_at)
+
+
+													-if current_user.email == comment_reply.user.email or current_user.is_at_least_medium_admin?
+														%i.fa.fa-close.destroy{href: "#{course_comment_course_path(@course,comment_reply)}", method: "delete"}
+
+												.comment-content= comment_reply.body
+
+							%br
+
+
+
+
+-url = ""
+- if current_user.photo_file_name.nil?
+	-if current_user.is_at_least_medium_admin?
+		-url = "/image-profile-admin.png"
+	-else
+		-url = "/image-profile-user.png"
+-else
+	- url =  "#{current_user.photo.url(:small)}"
+
+= javascript_tag do
+	window.user_privilege = "#{current_user.privilege}";
+	window.user_image_url = "#{url}";

@@ -1,0 +1,74 @@
+.center-align-pdf{
+  text-align: center;
+}
+
+.absolute-pdf{
+  position: absolute;
+}
+.top-pdf{
+  top: 0;
+}
+.bottom-pdf{
+  bottom: 0px;
+}
+.right-pdf{
+    right: 0;
+}
+.left-pdf{
+    left: 0;
+}
+
+.left-50-pdf{
+  left: 40%;
+}
+
+.title-pdf{
+  font-size: 52px;
+  position: relative;
+  top: 20px;
+}
+
+.body-pdf{
+  opacity: 0.4
+}
+.body-pdf2{
+  opacity: 0.2;
+  bottom:180px;
+  left:880px;
+}
+
+.body-pdf3{
+  opacity: 0.2;
+  bottom:30px;
+  left:280px;
+}
+
+.body-height{
+  height: 7.9in
+}
+
+
+.name-grupo{
+  font-size: 47px;
+}
+
+.otorga{
+  font-size: 33px;
+}
+
+.certificado{
+  font-size: 24px;
+}
+
+.username{
+  font-size: 39px;
+}
+
+.participar{
+  font-size: 33px;
+
+}
+
+body{
+  font-family: Roboto;
+}

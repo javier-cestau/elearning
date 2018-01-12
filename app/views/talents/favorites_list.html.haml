@@ -1,0 +1,23 @@
+.container
+  .row
+    .col.s10
+      %h3 Lista de cursos favoritos
+  .row
+    .col.s9
+      - if !@favorites_list.empty?
+        %ul.collection
+          - @favorites_list.each do |fl|
+            - @course = Course.find_by_id( fl.course_id)
+            %li.collection-item.avatar
+              -if @course.cover.file?
+                %img.circle{src: " /system/cover/course_#{@course.id}/small/#{@course.cover_file_name}" }
+              -else
+                %i.material-icons.circle.red
+                  %i.fa.fa-book
+              %span.title
+                =@course.name
+
+              .secondary-content
+                =link_to "Ver curso", course_path(@course), class: "btn blue lighten-3"
+      - else
+        %h4 Usted no posee cursos favoritos.

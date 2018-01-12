@@ -1,0 +1,156 @@
+= render "/mobile_menu"
+= render "/about"
+
+- path = request.path.split('/').at(2)
+-# En el caso de que este en una seccion se cargara el menu correspondiente en el menu de usuario
+%ul{id: "menu-user", class: "dropdown-content"}
+	%li
+		%a{:href => profile_talent_path  }
+			%span Perfil
+	%li
+		%a{:href => favorites_list_talent_path  }
+			%span Cursos favoritos
+	%li
+		%a{:href => "https://auth.leiros.com" }
+			%span Ir al gestor de usuarios
+	%li
+		%a{:href => admin_path  }
+			%span Panel administrativo
+	%li
+		%a.modal-trigger{:href => "#ModalAcercaDe"} Acerca de
+
+	%li.divider
+	%li
+		%a{:href => destroy_user_session_path,"data-method" => "delete"}
+			%span  Cerrar sesión
+
+
+%nav.nav-extended.background-admin
+	.nav-wrapper
+		= link_to  admin_path, class: "brand-logo" do |a|
+			&nbsp&nbspPanel administrativo
+		%a.button-collapse{"data-activates": "mobile-demo"}
+			%i.material-icons menu
+
+		%ul.right.hide-on-med-and-down
+			%li
+				=simple_form_for "", url: admin_courses_path(), method: 'get' ,html: {id: 'form-search'} do |c|
+					.row{style: "height: 60px;margin-bottom: 0;"}
+						.input-field.col.s4
+							-collection = Array.new( )
+							-collection.push(Category.new(id: 0,name: "Todo"))
+							- Category.all.select(:id,:name).each do |cat|
+								-collection.push(cat)
+							.align-text
+								=c.input_field :cat, collection: collection, include_blank: false, class: "", name: "cat"
+						.input-field.col.s8
+							.display-inline-block.input-search.input-field
+								=c.input_field :search , as: :search, placeholder: "Buscar curso",value: "#{params[:search]}", name: "search"
+								=c.label :search , class:"label-icon" do |a|
+									%i.material-icons
+										search
+								%i.material-icons close
+								=c.hidden_field :order , value: "#{params[:order]}", name: "order"
+					=c.submit "enviar", class: "hidden"
+
+			%li{style: "margin-right: 10px"}
+				-if @counter_notifications.to_i > 100
+					-@counter_notifications = "99+"
+				.notification.nothing-notification.show-count{"data-count": "#{@counter_notifications}"}
+				.notifications.js-notifications{tabindex: "-1"}
+					%h3 Notificaciones
+					%ul.notifications-list
+						%li.progress-notifications
+							.progress
+								.indeterminate
+
+					%a.show-all{href: "/talent/#{current_user.id}/notifications"} Mostrar todas las notificaciones
+
+
+			%li
+				%a.dropdown-button.menu-user-position{'data-activates': "menu-user",  'data-turbolinks-permanent': ''}
+					= current_user.email
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					- if current_user.photo_file_name.nil?
+						-if current_user.is_at_least_medium_admin?
+							%img.usuario{src: "/image-profile-admin.png",id: "user-#{current_user.id}"}
+						-else
+							%img.usuario{src: "/image-profile-user.png",id: "user-#{current_user.id}"}
+					-else
+						%img.usuario{src: "#{current_user.photo.url(:thumb)}",id: "user-#{current_user.id}"}
+
+					%small.department-indicator
+						=current_user.department.name
+						="/"
+						-if current_user.is_super_admin?
+							Admin G.
+						-else
+							-if current_user.is_at_least_medium_admin?
+								Admin I.
+
+- path = request.path.split('/').at(2)
+- path2 = request.path.split('/').at(4)
+- if path != "courses" || path2.nil?
+	-top = "77px"
+-else
+	- top = "121px"
+
+- if path != "courses" || path2.nil?
+-else
+	-if @test.nil?
+		=render "/new_menu", admin_: 1
+
+
+- if path != "courses" || path2.nil?
+	.sidebar-behind
+	.sidebar{style: "top: #{top}"}
+		%ul
+			%li
+				%a{:href => root_path, :rel => "nofollow"  }
+					%i.fa.fa-home
+					%span Inicio
+			%li
+				%a{:href => admin_talents_path, :rel => "nofollow"  }
+					%i.fa.fa-users
+					%span Usuarios
+			%li
+				%a{:href => admin_departments_path, :rel => "nofollow"}
+					%i.fa.fa-university
+					%span Departamentos
+			%li
+				%a{:href => admin_templates_path, :rel => "nofollow"}
+					%i.fa.fa-pencil-square-o
+					%span Planilla
+			%li
+				%a{:href => admin_categories_path, :rel => "nofollow"}
+					%i.fa.fa-clone
+					%span Categorías
+			%li
+				%a{:href => admin_courses_path, :rel => "nofollow" }
+					%i.fa.fa-book
+					%span Cursos
+			-if current_user.is_super_admin?
+				-# %li
+				-# 	%a{:href => admin_system_settings_path, :rel => "nofollow" }
+				-# 		%i.fa.fa-cog
+				-# 		%span Opciones de sistema
+			%li
+				%a{"data-method" => "delete", :href => destroy_user_session_path, :rel => "nofollow"}
+					%i.fa.fa-power-off
+					%span Cerrar sesión
+
+
+-else
+	-if !@test.nil?
+		.sidebar-behind
+		.sidebar{style: "top: #{top}"}
+			%ul
+				%li
+					%a{ :href => edit_admin_course_section_path(@course,@section), :rel => "nofollow"}
+						%i.fa.fa-arrow-left
+						%span Volver a la sección
+.main
+	.hipsum
+		=render "/flash_message"
+		%br
+		= yield

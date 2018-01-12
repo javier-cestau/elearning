@@ -1,0 +1,168 @@
+.container
+  %br
+  %br
+  %br
+  %br
+  %ul
+    %li
+
+  .row{style: "text-align: center"}
+    = simple_form_for current_user, url: profile_talent_path do |f|
+      .col.s12
+        .col.s4.image-container-profile
+          - if current_user.photo_file_name.nil?
+            -if current_user.is_at_least_medium_admin?
+              %img{src: "/image-profile-admin.png",id: "user-#{current_user.id}"}
+            -else
+              %img{src: "/image-profile-user.png",id: "user-#{current_user.id}"}
+          -else
+            %img{src: "#{current_user.photo.url(:small)}",id: "user-#{current_user.id}"}
+
+        %span.col.s8
+          .file-field.input-field
+            .btn
+              %span Subir imagen
+              = f.input :photo, label: false, as: :file
+            .file-path-wrapper
+              %input.file-path.validate{type: "text"}
+          %small.left Formatos aceptados: .jpg, .jpeg y .png
+        -# = f.input :name, required: true , label: false
+      .row
+        = f.submit "Guardar", class: "btn"
+      =link_to template_path(@template) , class: "waves-effect waves-light btn blue" do |a|
+        %i.fa.fa-edit
+        Llenar planilla
+      -if current_user.is_super_admin?
+        - manual_url = "/manual_de_usuario_administrador_general.pdf"
+      -elsif current_user.is_medium_admin?
+        - manual_url = "/manual_de_usuario_administrador_intermedio.pdf"
+      -elsif current_user.is_employed?
+        - manual_url = "/manual_de_usuario_empleado.pdf"
+      %a.waves-effect.btn.teal.darken-1{href: manual_url}
+        %i.fa.fa-address-book
+        Manual de usuario
+
+  %hr
+  %br
+  .row
+    .col.s4
+      .rad-info-box.rad-txt-success
+        %i.fa.fa-caret-square-o-right
+        %span.heading Cursos en proceso
+        %span.value
+          %span= @courses_in_process_count
+
+
+    .col.s4
+      .rad-info-box.rad-txt-success
+        %i.fa.fa-check
+        %span.heading Cursos aprobados
+        %span.value
+          %span= @courses_finished_count
+
+    .col.s4
+      .rad-info-box.rad-txt-success
+        %i.fa.fa-close
+        %span.heading Cursos reprobados
+        %span.value
+          %span= @courses_failed_count
+  .row
+
+    .col.s4
+      %ul.collection.deactive-expand-course.process.animate-height
+        - @courses_in_process.each do |c|
+          - docourse = DoCourse.find_by(id: c.id)
+          - c = c.course
+          %li.collection-item.avatar.align-text
+            -if c.cover.file?
+              %img.circle{src: " /system/cover/course_#{c.id}/small/#{c.cover_file_name}" }
+            -else
+              %i.material-icons.circle.red
+                %i.fa.fa-book
+            %span.title
+              .truncate{class: "tooltipped", 'data-position': "right", 'data-delay': "50", 'data-tooltip': "#{c.name}"}
+                =c.name
+            = "Fecha de inscripción: "
+            %br
+            ="#{localize(docourse.created_at.to_s.split(" ")[0].to_date)}"
+            %br
+            %div
+              =link_to "Ver curso", course_path(c), class: "btn blue lighten-3"
+            %div
+              =link_to "Ver notas", course_grades_path(c, docourse.id), class: "btn green lighten-1"
+      .expandWrap
+        .mask-process
+        .toggle-list.toggleList-process
+          %a{"data-list": "process"}
+            %i.fa.fa-angle-double-down
+    .col.s4
+      %ul.collection.deactive-expand-course.finished.animate-height
+        - @courses_finished.each do |c|
+          - docourse = DoCourse.find_by(id: c.id)
+          - c = c.course
+          %li.collection-item.avatar.align-text
+            -if c.cover.file?
+              %img.circle{src: " /system/cover/course_#{c.id}/small/#{c.cover_file_name}" }
+            -else
+              %i.material-icons.circle.red
+                %i.fa.fa-book
+            %span.title
+              .truncate{class: "tooltipped", 'data-position': "right", 'data-delay': "50", 'data-tooltip': "#{c.name}"}
+                =c.name
+              %span.green-text Aprobado
+            %br
+            = "Fecha de inicio: "
+            %br
+            = "#{localize(docourse.start_date)}"
+            %br
+            = "Fecha de finalizacion:"
+            %br
+            ="#{localize(docourse.finished_at)}"
+            %br
+            %div
+              =link_to "Ver curso", course_path(c), class: "btn blue lighten-3"
+            %div
+              =link_to "Ver notas", course_grades_path(c, docourse.id), class: "btn green lighten-1"
+      .expandWrap
+        .mask-finished
+        .toggle-list.toggleList-finished
+          %a{"data-list": "finished"}
+            %i.fa.fa-angle-double-down
+
+    .col.s4
+      %ul.collection.deactive-expand-course.failed.animate-height
+        - @courses_failed.each do |c|
+          - docourse = DoCourse.find_by(id: c.id)
+          - c = c.course
+          %li.collection-item.avatar.align-text
+            -if c.cover.file?
+              %img.circle{src: " /system/cover/course_#{c.id}/small/#{c.cover_file_name}" }
+            -else
+              %i.material-icons.circle.red
+                %i.fa.fa-book
+            %span.title
+              .truncate{class: "tooltipped", 'data-position': "right", 'data-delay': "50", 'data-tooltip': "#{c.name}"}
+                =c.name
+              %span.red-text.lighten-2 Reprobado
+            %br
+            = "Fecha de inicio: "
+            %br
+            = "#{localize(docourse.start_date)}"
+            %br
+            = "Fecha de finalizacion:"
+            %br
+            ="#{localize(docourse.finished_at)}"
+            %br
+            %div
+              =link_to "Ver curso", course_path(c), class: "btn blue lighten-3"
+            %div
+              =link_to "Ver notas", course_grades_path(c, docourse.id), class: "btn green lighten-1"
+      .expandWrap
+        .mask-failed
+        .toggle-list.toggleList-failed
+          %a{"data-list": "failed"}
+            %i.fa.fa-angle-double-down
+%br
+%br
+%br
+%br

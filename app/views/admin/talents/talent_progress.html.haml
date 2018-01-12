@@ -1,0 +1,94 @@
+.container
+	.row
+		.col.s12
+			.align-text
+				%h3
+					Progreso del talento
+					= @user.name
+					%br
+					%br
+
+
+	.row
+		.align-text
+			.col.s12.m6
+				%div
+					%canvas{id: "myChart_courses", approved: "#{@all_approved_courses}", reprobed: "#{@all_reprobed_courses}"}
+				%br
+				%br
+					%h6 General:
+				%ul.dropdown-content#dropdown-general
+					%li
+						%a{id: "approved_general", value: "#{@user.id}"}
+							%span{:class => "fa fa-progress fa-check"}
+								= "   Cursos aprobados"
+					%li
+						%a{id: "reprobed_general", value: "#{@user.id}"}
+							%span{:class => "fa fa-progress fa-times"}
+								="   Cursos reprobados"
+					%li
+						%a{id: "finished_general", value: "#{@user.id}"}
+							%span{:class => "fa fa-progress fa-user"}
+								="   Cursos realizados"
+					%li
+						%a{id: "enrolled_general", value: "#{@user.id}"}
+							%span{:class => "fa fa-progress fa-id-card-o"}
+								="   Cursos inscritos"
+					%li
+						%a{id: "favorite_general", value: "#{@user.id}"}
+							%span{:class => "fa fa-progress fa-star"}
+								="   Cursos favoritos"
+					%li
+						%a{id: "categories_general", value: "#{@user.id}"}
+							%span{:class => "fa fa-progress fa-eye"}
+								="   Categorías de interés"
+				%a.btn.dropdown-button-progress.margin-progress{"data-activates" => "dropdown-general", "data-beloworigin" => "true"}
+					Lista de opciones
+					%i.material-icons.right arrow_drop_down
+
+			.col.s12.m6
+				%div
+					%canvas{id: "myChart_courses_department", approved: "#{@all_approved_courses_department}", reprobed: "#{@all_reprobed_courses_department}"}
+				%br
+				%br
+					%h6= "Según el departamento: #{@department.name}"
+				%ul.dropdown-content#dropdown-department
+					%li
+						%a{id: "approved_by_department", value: "#{@user.id}"}
+							%span{:class => "fa fa-progress-d fa-check"}
+								= "   Cursos aprobados"
+					%li
+						%a{id: "reprobed_by_department", value: "#{@user.id}"}
+							%span{:class => "fa fa-progress-d fa-times"}
+								= "   Cursos reprobados"
+					%li
+						%a{id: "finished_by_department", value: "#{@user.id}"}
+							%span{:class => "fa fa-progress-d fa-user"}
+								= "   Cursos realizados"
+					%li
+						%a{id: "enrolled_by_department", value: "#{@user.id}"}
+							%span{:class => "fa fa-progress-d fa-id-card-o"}
+								= "   Cursos inscritos"
+				%a.btn.dropdown-button-progress.margin-progress{"data-activates" => "dropdown-department", "data-beloworigin" => "false", "belowOrigin" => "false"}
+					Lista de opciones
+					%i.material-icons.right arrow_drop_down
+
+
+
+	.row.col.s12.option_result
+		#option{value:"#{@all_categories}"}
+			.anterior
+				%br
+				%br
+				%br
+				%br
+				%br
+				%br
+				%br
+				%br
+				%br
+				%br
+				%br
+				%br
+				%br
+				%br

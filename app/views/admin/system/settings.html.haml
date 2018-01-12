@@ -1,0 +1,26 @@
+.container
+	.row
+		.col.s4
+			%h4 Backup encontrados
+			%h4
+				%strong= @files.count
+			%hr
+			= link_to "Hacer Respaldo", admin_system_backup_path, class: "btn"
+
+		.col.s8
+			%table.bordered.responsive-table
+				%thead
+					%tr
+						%th Nombre
+						%th Fecha de creación
+						%th Restauración
+						%th Descarga
+				%tbody
+					-@files.each do |file|
+						%tr
+							%td= get_name_from_backup(file)
+							%td= get_date_from_backup(file)
+							%td
+								= link_to "Restaurar",admin_system_restore_path(name: get_name_from_backup(file)),class: "btn blue"
+							%td
+								= link_to "Descargar",admin_system_settings_path(name: get_name_from_backup(file)),class: "btn", target: '_self'

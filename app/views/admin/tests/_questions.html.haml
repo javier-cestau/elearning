@@ -1,0 +1,47 @@
+.jumbotron.jumbotron-fluid{id: "basic-addon#{id}"}
+	.element-content.contenido-post
+		.content-post
+			.post-avatar
+				%span.input-group-addon.back-red.borrar{"data-id": "#{id}"}
+					%i.fa.fa-trash.color-white
+			.post-content.preguntas-planilla-input
+				.row
+					.input-field.col.s10.post-title
+						= q.input :description, input_html: {class: "pregunta-input materialize-textarea grey-text text-darken-3",'data-length': 120}, label: false, placeholder: "Escriba su pregunta..."
+					.col.s1.puntaje
+						Puntaje
+						= q.input_field :points, min:1, max: 20, class:"align-text"
+						%small el examen es sobre 20
+
+
+				%br
+				%p.align-text Seleccione el tipo de pregunta:
+				.type-question.align-text
+					.switch-field
+						.col.s12{style: "margin-left: 14%;"}
+							= q.collection_radio_buttons :type_question_id,  TypeQuestion.all, :sequence, :name ,{ item_wrapper_tag: false } do |b|
+								-checked = checked_type(q.object,b.value)
+								=b.radio_button(checked: "#{checked}")
+								=link_to b.label,get_url_type_question(b.value,id), remote: true, "data-type": :script
+
+				%br
+				%br
+
+				%div{id: "type_question#{id}"}
+					.width-50.float-l.size-respuesta
+						%h4 Respuestas (Seleccione las respuestas correctas)
+						%span.red-text{style: "display: none"} Debe agreagar mas dos o mas respuestas
+						%ul.collection.with-header.container_answer{id: "answers-list#{id}"}
+							-@disabled = ""
+							-if !@test.new_record?
+								-q.object.answers.each do |a|
+									= add_answers(a,q)
+					.width-50.float-l
+						.form-group
+							%h4
+								%label{class: "control-label text optional", for:"add_answer"}
+									Agregar respuestas
+							%input{id: "add_answer#{id}", placeholder: "Agregar pregunta", type: "text", class: "center-input ","#{@disabled}": "" }
+							%br
+							%a.btn.btn-warning.btn-pointer{class: "add-answer #{@disabled}","data-id": "#{id}"}
+								Agregar

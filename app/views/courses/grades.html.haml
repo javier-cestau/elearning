@@ -1,0 +1,87 @@
+=  render "/new_menu", admin_: 0
+.container
+  .row
+    .col.s12
+      = head_message_grades(@user,@course)
+
+  .row
+    .col.s12.m12
+      - if !@hash_test.empty?
+        - @hash_test.each do |t,dotests|
+          .card
+            .card-title.align-text
+              %br
+              = card_title(t.required,t.section_id)
+            .card-content
+              .col.s6.col-grades
+                .rad-info-box.info-box-grades
+                  %i.fa-grades.fa.fa-clock-o
+                  %span.span-info-box Tiempo límite:
+                  %br
+                  = time_limit_message(t.time_limit)
+
+
+              .col.s6.col-grades
+                .rad-info-box.info-box-grades
+                  %i.fa-grades.fa.fa-repeat
+                  %span.span-info-box Límite de intentos:
+                  %br
+                  = attemps_limits_message(t.attemps_limits)
+
+              %br
+              %br
+              %br
+              %span
+                ="Descripción del examen:"
+              %p
+                ="#{t.description}"
+            .card-action
+
+              - if !dotests.empty?
+                %ul.collapsible{"data-collapsible" => "accordion"}
+                  - do_test_counter = 0
+                  - attemps_counter = 0
+                  - dotests.each do |dt|
+                    - do_test_counter = do_test_counter + 1
+                    %li
+                      .collapsible-header.align-text
+                        ="Intento número #{do_test_counter}"
+                      .collapsible-body.collapsible-grades.align-text
+                        .col.s6
+                          %span.title
+                            = "Nota mínima para aprobar: "
+                            %br
+                            %br
+                          %a.btn-floating.btn-large.blue.darken-1.cursor-default.btn-grade
+                            ="#{t.min_grade}/20"
+                            %br
+                        .col.s6
+                          %span.title
+                            ="Nota obtenida: "
+                            %br
+                            %br
+                          = talent_grade(dt.grade,t.min_grade)
+                          %br
+                          %br
+                        .col.s6.col-grades
+                          .rad-info-box.info-box-grades
+                            %i.fa-grades.fa.fa-clock-o
+                            %span.span-info-box Duración del talento:
+                            %br
+                            =talent_duration(dt.duration)
+                        .col.s6.col-grades
+                          .rad-info-box.info-box-grades
+                            %i.fa-grades.fa.fa-calendar
+                            %span.span-info-box Fecha de realización:
+                            %br
+                            %span.span-info-box
+                              ="#{localize(dt.created_at.to_s.split(" ")[0].to_date)}"
+                        .align-text
+                          =link_to "Ver respuestas", course_section_test_result_path(@course, t.section_id, t, dt, show:1), class: "btn green darken-2"
+              - else
+                %h6.align-text.red-text
+                  ="No se han realizado intentos en este examen"
+      -else
+        %br
+        %h5.align-text.red-text
+          = "No se encontraron exámenes realizados en este curso"

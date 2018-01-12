@@ -1,0 +1,30 @@
+.container
+  %h1 Planillas por departamento
+  %br
+  =link_to  "Crear nueva planilla", new_admin_template_path , class: "btn" , "data-turbolinks": false
+  - @departments.each do |department|
+    %br
+
+    .jumbotron.grey.lighten-5
+      %h2.align-text= department.name
+      %br
+      .col.s10
+        %ul.collection
+          - mensaje = "Planilla en uso"
+          - department.templates.reverse_each do |template|
+
+            %li.collection-item.avatar
+              -if mensaje.empty?
+                %i.material-icons.circle.grey
+                  %i.fa.fa-pencil-square-o.icon-position
+              -else
+                %i.material-icons.circle.green
+                  %i.fa.fa-pencil-square-o.icon-position
+              %span.title= template.name
+              %p
+                Creado hace
+                =time_ago_in_words(@templates.find(template.id).created_at)
+                -mensaje = ""
+              .secondary-content
+                %a.btn{href: "#{new_admin_template_path+"?id="+template.id.to_s }"  }
+                  Copiar planilla

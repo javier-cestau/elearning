@@ -1,0 +1,47 @@
+.row
+  .col.s12
+    %h4 Talentos que estan en el curso
+
+    %ul.collection#user-list
+      -if @users.empty?
+        %li.collection-item.no-one
+          El curso no posee usuarios invitados
+      -@users.each do |user|
+        %li.collection-item.avatar{id: "li_user#{user.id}"}
+          - if user.photo_file_name.nil?
+            -if user.is_at_least_medium_admin?
+              %img.circle{src: "/image-profile-admin.png",id: "user-#{user.id}"}
+            -else
+              %img.circle{src: "/image-profile-user.png",id: "user-#{user.id}"}
+          -else
+            %img.circle{src: "#{user.photo.url(:small)}",id: "user-#{user.id}"}
+
+          %span.title
+            =user.email
+          %p
+            =user.name
+          .secondary-content
+            %a.btn.red.lighten-2.delete-user{id: "user#{user.id}"} Eliminar
+    .flex-element#user-searching-box
+      %h5
+        Buscar talento
+        %input{id: "search_user", placeholder: "Buscar talento", type: "text", class: "form-control" }
+        .switch-field.align-text
+          %p Buscar por:
+          %label{for: "name_search"}
+            %input{id: "name_search", name: "search_user", type: "radio",   value: "0" , checked: "checked"}
+            %label{for: "name_search", class: "radio-no-materialize no-relative width-50"}
+              Nombre
+          %label{for: "email_search" , style: "margin-left: -4px;"}
+            %input{id: "email_search", type: "radio",  value: "1", name: "search_user" }
+            %label{for: "email_search", class: "width-50 no-relative radio-no-materialize"}
+              Correo electrónico
+
+        %br
+        %button#btn-search-users.btn.btn-primary
+          Buscar
+          %i.material-icons.right
+            %i.fa.fa-search
+      %br
+      %br
+      %ul.collection#list-search-users

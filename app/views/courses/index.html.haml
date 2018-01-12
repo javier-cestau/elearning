@@ -1,0 +1,90 @@
+.container
+	.row
+		.col.s10
+			- if params[:department].nil?
+				- if params[:scope].nil?
+					%h2 Cursos
+				-else
+					- if params[:scope] == "1"
+						%h2 Cursos públicos
+					-else
+						%h2 Cursos privados
+
+			-else
+				- name = Department.where(id: params[:department]).select(:name)
+				%h2
+					Cursos en
+					= name[0].name
+	.row
+		.col.s12.m9
+			=simple_form_for "", url: courses_path(), method: 'get' ,html: {id: 'form-order'} do |c|
+				- if params[:scope]
+					=c.hidden_field :scope, value: "#{params[:scope]}", name: "scope"
+				- if params[:department]
+					=c.hidden_field :department , value: "#{params[:department]}", name: "department"
+				=c.hidden_field :search , value: "#{params[:search]}", name: "search"
+				=c.input :order ,label: "Ordenar por:", collection: [["Más recientes",1],["Orden Alfabetico [A-Z]",2],["Orden Alfabetico [Z-A]",3]], include_blank: false, input_html: {id: 'order-courses', name: "order"},selected: params[:order]
+
+			- actual_date = Time.now.year.to_s + "-"  + Time.now.month.to_s+ "-" +Time.now.day.to_s
+			- actual_date = Date.current
+			- if @courses.empty?
+				%h5.align-text No se encontró ningún curso
+			%ul.collection.align-text
+				- @courses.each do |c|
+					%li.collection-item.avatar.row.none-padding
+						.col.s2.l1
+							-if c.cover.file?
+								%img.circle.relative{src: " /system/cover/course_#{c.id}/small/#{c.cover_file_name}" }
+							-else
+								%i.material-icons.relative.circle.red
+									%i.fa.fa-book
+						.col.s10.l7
+							%span.title
+								=c.name
+						.col.s12.l4
+							.col.s12
+								=link_to "Ver curso", course_path(c), class: "btn blue lighten-3"
+								- already_in_favorites = HasFavorite.where(user_id: current_user.id, course_id: c.id)
+								-if already_in_favorites.empty?
+									%a.btn-floating.white.btn.tooltipped.favorite-button{id: "f-btn#{c.id}", value:1,  data:{delay: "50"}, data:{tooltip:"Agregar a favoritos"} }
+										%i.add-favorite.material-icons.favorite-icon{id: "f-icon#{c.id}"} star
+								-else
+									%a.btn-floating.white.btn.tooltipped.favorite-button{id: "f-btn#{c.id}", value:2,  data:{delay: "50"}, data:{tooltip:"Eliminar de favoritos"} }
+										%i.remove-favorite.material-icons.favorite-icon{id: "f-icon#{c.id}"}  star
+								%span.tooltipped{"data-position": "bottom", "data-tooltip": "Personas que recomiendan este curso"}
+									.fa
+										.fa.fa-thumbs-up
+									= DoRecomendation.where(course_id: c).count
+							.col.s12
+								%b
+									- if c.start_date.nil?
+										%span.amber-text Estado: Proximamente
+									- elsif actual_date < c.start_date
+										%span.amber-text Estado: Proximamente
+									-elsif c.deadline_course.nil?
+										%span.green-text Estado: En curso
+									-elsif actual_date >= c.start_date && actual_date <= c.deadline_course
+										%span.green-text Estado: En curso
+									-elsif actual_date > c.deadline_course
+										%span.red-text.lighten-2= "Estado: Finalizado en "+localize(c.deadline_course)
+
+			=paginate @courses
+		.col.s3.hide-on-small-only
+			%div.collection.with-header
+				%h5 &nbsp;&nbsp; Filtros
+				%hr
+				- search = "search=#{params[:search]}&"
+				- cat = "cat=#{params[:cat]}&"
+				- order = "order=#{params[:order]}"
+
+				%a.collection-item{href: "/courses?scope=1&#{cat}#{search}#{order}"}
+					Público
+				%a.collection-item.bottom-bold{href: "/courses?scope=3&#{cat}#{search}#{order}"}
+					Privado
+				- Department.all.order("name ASC").each do |department|
+
+					%a.collection-item{href: "/courses?department=#{department.id}&#{cat}#{search}#{order}"}
+						= department.name
+				%hr
+				%a.collection-item.none-filter{href: "/courses?#{cat}#{search}#{order}"}
+					Sin Filtro

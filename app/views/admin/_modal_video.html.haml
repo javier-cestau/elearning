@@ -1,0 +1,52 @@
+.modal#modal-video.bottom-sheet
+	.modal-content
+		.align-text
+			- if context == "este curso"
+				=simple_form_for @course, :url => "/admin/courses/"+@course.id.to_s+"/multimedia_courses" , :method => :post, remote: true , html:{  id: "video-form"} do |video|
+					.file-field.input-field
+						.btn
+							%span Buscar video
+							= video.input :video, label: false, as: :file, input_html: {name: "multimedia[video]", id: "input-file-video"}
+						.file-path-wrapper
+							%input.file-path.validate{type: "text"}
+			-else
+				=simple_form_for @section, :url => "/admin/courses/#{@course.id.to_s}/section/#{@section.id.to_s}/multimedia_section" , :method => :post, remote: true , html:{  id: "video-form"} do |video|
+					.file-field.input-field
+						.btn
+							%span Buscar video
+							= video.input :video, label: false, as: :file, input_html: {name: "multimedia[video]", id: "input-file-video"}
+						.file-path-wrapper
+							%input.file-path.validate{type: "text"}
+			%br
+			%br
+			%button{id: "video-btn", class: "btn blue lighten-1"}
+				Subir
+				%i.material-icons.right
+					%i.fa.fa-upload
+		%br
+		%br
+		%h3
+			Videos subidos en
+			= context
+		%ul.collection#videos
+			- @list_name_video.each do |hash|
+				- name = hash.keys.to_s.split('["')[1]
+				- name = name.split('"]')[0]
+				- id = hash.values.to_s.split('[')[1]
+				- id = id.split(']')[0]
+				%li.collection-item.avatar
+					%i.material-icons.circle.red
+						%i.fa.fa-play.play-sign
+					%span.title
+						=name
+					.secondary-content
+						%button.btn{value: "#{id}",name: "#{name}"}
+							Agregar
+						- if context == "este curso"
+							=link_to    admin_course_multimedia_course_path(@course,id),method: :delete, data:{confirm: "¿Seguro que desea eliminar el video #{name}?"} do |a|
+								.btn.red
+									Eliminar
+						-else
+							=link_to admin_course_section_multimedia_section_path(@course, @section, id),method: :delete, data:{confirm: "¿Seguro que desea eliminar el video #{name}?"} do |a|
+								.btn.red
+									Eliminar

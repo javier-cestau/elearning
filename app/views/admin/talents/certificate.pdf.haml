@@ -1,0 +1,37 @@
+!!!
+%html
+	%head
+		%meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+		%meta{:charset => "utf-8"}/
+		%title Academia Leiros
+		= wicked_pdf_stylesheet_link_tag "pdf"
+		= wicked_pdf_javascript_include_tag "number_pages"
+
+	%body.body-height{:onload => "number_pages"}
+		.absolute-pdf.body-pdf.bottom-pdf
+			= image_tag wicked_pdf_asset_base64('pdf-background.jpg')
+		.absolute-pdf.right-pdf.bottom-pdf
+			= image_tag wicked_pdf_asset_base64('medalla.png')
+		.absolute-pdf.top-pdf.right-pdf
+			= image_tag wicked_pdf_asset_base64('logo.jpg')
+		.absolute-pdf.top-pdf.left-pdf
+			= image_tag wicked_pdf_asset_base64('logo.jpg')
+		.absolute-pdf.bottom-pdf.left-50-pdf
+			%h2= @date
+		%div.center-align-pdf
+			.name-grupo Grupo Leiros
+			%br
+			.certificado Certificado de aprobación.
+			%br
+			.otorga	Se otorga el presente a:
+			%br
+			%strong.username= @user.name
+			%br
+			%br
+			%br
+			%br
+			%br
+			.participar Por participar y aprobar el curso de:
+			%br
+			%strong.title-pdf.absolute-pdf= @course.name
+			%br

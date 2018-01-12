@@ -1,0 +1,64 @@
+.container
+  .row
+    - if !courses_do.empty?
+      .counter
+        = @message
+        %br
+      %ul.collection
+        - @course.each_with_index do |c, index|
+          %li.collection-item.avatar.row.none-padding
+            .col.s2.l1
+              -if c.cover.file?
+                %img.circle.relative{src: "#{c.cover.url(:small)}" }
+              -else
+                %i.material-icons.circle.red.relative
+                  %i.fa.fa-book
+            .col.s10.l7
+              %span.title
+                =c.name
+              -# opción 1 aprobado o reprobados
+              - if option_type == 1
+                %p
+                  = "Fecha de inicio: #{localize(courses_do[index].start_date)}"
+                %p
+                  = "Fecha de finalizacion: #{localize(courses_do[index].finished_at)}"
+                -# opción 1 aprobado y reprobados
+              - elsif option_type == 2
+                %p
+                  = "Fecha de inicio: #{localize(courses_do[index].start_date)}"
+                %p
+                  = "Fecha de finalizacion: #{localize(courses_do[index].finished_at)}"
+
+                - if courses_do[index].failed == 0
+                  %p.talent_progress_option{style: "color: #0f9e15;"}
+                    = "Estado: aprobado"
+                -elsif courses_do[index].failed == 1
+                  %p.talent_progress_option{style: "color: #d32f2f;"}
+                    = "Estado: reprobado"
+
+                -# cursos inscritos
+              - elsif option_type == 3
+                %p
+                  = "Fecha de inscripción: #{localize(courses_do[index].created_at.to_s.split(" ")[0].to_date)}"
+                -#  cursos favoritos
+              - elsif option_type == 4
+                %p
+                  = "Agregado el: #{localize(courses_do[index].created_at.to_s.split(" ")[0].to_date)}"
+
+
+            .col.s12.l4
+              .col.s12.align-text
+                - if option_type != 4
+                  - if courses_do[index].failed == 0 && (option_type == 2 || option_type == 1)
+                    .col.s6
+                      =link_to "Ver notas", course_grades_path(courses_do[index].course_id, courses_do[index].id), class: "btn blue lighten-3 width-100 none-padding"
+                    .col.s6
+                      =link_to "Certificado", admin_talent_course_certificate_path(courses_do[index].user_id, courses_do[index].course_id, doc_id: courses_do[index].id), class: "btn blue lighten-3 width-100 none-padding", target: "_blank"
+                  -else
+                    =link_to "Ver notas", course_grades_path(courses_do[index].course_id, courses_do[index].id), class: "btn blue lighten-3"
+                -else
+                  =link_to "Ver curso", course_path(courses_do[index].course_id), class: "btn blue lighten-3 width-100 none-padding"
+
+    - else
+      .align-text
+        %h4 Este talento no posee cursos de esta opción

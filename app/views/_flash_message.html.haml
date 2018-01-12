@@ -1,0 +1,23 @@
+
+- flash.each do |name, msg|
+  %ul.collapsible{'data-collapsible': "accordion"}
+    - if name == "alert"
+      -color_background = "red lighten-2"
+      - message = "ALERTA"
+      - color = "white"
+    -else
+      - color_background = "blue lighten-4"
+      - message = "MENSAJE"
+      - color = "black"
+    %li{class: "#{color_background}"}
+      .collapsible-header.align-text.active{style: "color:black"}
+        %i.fa.fa-exclamation-triangle
+        =message
+        %i.material-icons.right
+          arrow_drop_down
+      .collapsible-body.align-text{style: "color:#{color}"}
+        -if msg.class.name == "Array"
+          - msg.each do |m|
+            %p= m.html_safe
+        -else
+          %span= msg.html_safe

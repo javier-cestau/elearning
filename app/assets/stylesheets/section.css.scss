@@ -1,0 +1,85 @@
+.size-primary{
+  font-size: 20px !important;
+
+}
+
+.collapsible-header:hover{
+      background-color: aliceblue;
+}
+
+.box-primary{
+  box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+
+}
+
+.section-delete{
+  width: 42px;
+  height: 42px;
+  position: relative;
+  bottom: 10px;
+  border-radius: 24px !important;
+  display: inline-block;
+  left: 9px;
+}
+
+.father-section{
+  font-size: 16px;
+      background-color: #ebefff;;
+}
+
+.on-section{
+background-color: #eee;
+}
+
+.extra-files{
+  background-color: #e7f3fb !important;
+}
+
+.files{
+  max-width: 50px;
+  max-height: 70px;
+}
+
+.course-data{
+  background: #ffffc8;;
+}
+
+.max-width-200, .max-width-200  a{
+    width: 90% !important;
+  max-width: 200px;
+}
+.backgroun-video{
+  background-color: #f6f6ff;
+}
+
+.height-video-modal{
+      height: 85px;
+}
+.height-video-scroll{
+      height: 100px;
+}
+
+.margin-video-modal{
+  margin-right: 15px
+}
+
+.nav-content div{
+  width: 100% ;
+}
+
+
+.size-primary i{
+  height: 16px;
+  position: relative;
+  bottom: 1px;
+}
+
+
+.sidebar > ul {
+  height: 87%;
+overflow-y: auto;
+}
+
+.nav-content > div > ul {
+  height: 200px !important
+}

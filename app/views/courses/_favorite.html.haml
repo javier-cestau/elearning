@@ -1,0 +1,8 @@
+- already_in_favorites = HasFavorite.where(user_id: current_user.id, course_id: @course.id)
+
+- if already_in_favorites.empty?
+  %a.btn-floating.white.btn.tooltipped.favorite-button{id: "f-btn#{@course.id}", value:1,  data:{delay: "50"}, data:{tooltip:"Agregar a favoritos"} }
+    %i.add-favorite.material-icons.favorite-icon{id: "f-icon#{@course.id}"} star
+- else
+  %a.btn-floating.white.btn.tooltipped.favorite-button{id: "f-btn#{@course.id}", value:2,  data:{delay: "50"}, data:{tooltip:"Eliminar de favoritos"} }
+    %i.remove-favorite.material-icons.favorite-icon{id: "f-icon#{@course.id}"}  star

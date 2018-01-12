@@ -1,0 +1,63 @@
+.container
+  .col.s10
+    - if current_user.is_super_admin?
+      %p.h4.align-text Usuarios en la Academia Leiros
+    - else
+      %p.h4.align-text Empleados en la Academia Leiros
+    .row
+      .col.s12
+        =simple_form_for "", url: admin_talents_path(), method: 'get' ,html: {id: 'form-user-search'} do |c|
+          .row
+            .col.s12.m4
+              =c.input_field :type, collection: [["Nombre",0],["Email",1]], include_blank: false,  name: "type"
+            .input-field.col.s12.m6.margin-0
+              =c.input_field :search_user , as: :search, placeholder: "Buscar usuario",value: "#{params[:search]}", name: "search", class:"margin-0"
+              =c.label :search_user , class:"label-icon" do |a|
+                %i.material-icons
+                  search
+              %i.material-icons{style: "top: 14px;"} close
+            .col.s12.center.m2.buscar-top
+              =c.submit "Buscar", class: "btn blue", style: ""
+    =link_to  new_admin_talent_path , class: "btn", html: {style: "padding: 20px ; font-size: 10px;"} do |a|
+      Registrar usuario &nbsp;
+      %i.fa.fa-user-plus
+  %ul.collection
+    - @talents.each do |talent|
+      %li.collection-item.avatar.row.none-padding
+        .col.s12.m6.l6.padding-10
+          .col.s2
+            - if talent.photo_file_name.nil?
+              -if talent.is_at_least_medium_admin?
+                %img.circle.relative{src: "/image-profile-admin.png",id: "user-#{talent.id}"}
+              -else
+                %img.circle.relative{src: "/image-profile-user.png",id: "user-#{talent.id}"}
+            -else
+              %img.circle.relative{src: "#{talent.photo.url(:small)}",id: "user-#{talent.id}"}
+          .col.s12.m12.l8
+            %span.title.line-height-2-5
+              =talent.email
+          .col.s12
+            %p
+              =talent.name
+            %small.position=talent.position
+
+            -if current_user.is_super_admin? && current_user.email != talent.email
+              .switch
+                %label
+                  Deshabilitado
+                  -if talent.state == 1
+                    %input{type: "checkbox", checked: "checked", name: "#{talent.email}/1"}
+                    %span.lever{id: "#{talent.email}/1"}
+                  -else
+                    %input{type: "checkbox", name: "#{talent.email}/0"}
+                    %span.lever{id: "#{talent.email}/0"}
+                  Habilitado
+        .col.s12.m6.l6
+          .col.s6
+            =link_to "Editar", edit_admin_talent_path(talent), class: "btn blue lighten-3 width-100 none-padding", style: "margin: 15px 0px;"
+          .col.s6
+            =link_to "Ver planillas", admin_talent_templates_path(talent), class: "btn width-100", style: "margin: 15px 0px;"
+          .col.s12
+            =link_to "Progreso", admin_talent_progresses_path(talent), class: "btn grey darken-2 width-100", style: "margin: 0px 0px 15px 0px;"
+    .align-text.background-admin
+      =paginate @talents

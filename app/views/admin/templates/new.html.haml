@@ -1,0 +1,36 @@
+%p Los campos marcados con (*) son obligatorios
+%br
+=simple_form_for [:admin , @template], :url => admin_templates_path, :method => "post" do |t|
+  .row
+    .input-field.col.s12
+
+      = t.input_field :name,class: "validate" ,id: "template-name"
+      = t.label :name ,  "*Nombre de la planilla" , class: "nombre-planilla-label",  'data-error': "El nombre de la planilla tener al menos 10 caracteres", style: "margin-top: 10px;"
+    -# Si es nulo significa que no se cargo con un template ya creado anteriormente
+  - if @template.id.nil?
+    .panel
+      .panel-element#panel-element
+        = render "description", t: t, counter: 1 , survey: @survey, required: 0
+      .post-avatar.button-description
+        %span.input-group-addon.back-green.btn-floating.btn-large.waves-effect.waves-light#button-description{data: "1"}
+          %i.fa.fa-plus.color-white{class: "tooltipped", 'data-position': "right", 'data-delay': "50", 'data-tooltip': "Agregar una nueva pregunta"}
+      = render "department", t: t
+  - else
+    -# En el caso de que se quiera copiar un planilla
+    - counter = 1
+    .panel
+      .panel-element#panel-element.col.s12
+        - last_s_id = @template.surveys.last.id
+
+        - @surveys[0..@surveys.count-5].each do |survey|
+          -if  last_s_id != survey.id
+            = render "description", t: t, counter: counter ,survey: survey, required: survey.required
+            -counter += 1
+      .post-avatar.button-description
+        %span.input-group-addon.back-green.btn-floating.btn-large.waves-effect.waves-light#button-description{data: "#{counter-1}"}
+          %i.fa.fa-plus.color-white{class: "tooltipped", 'data-position': "right", 'data-delay': "50", 'data-tooltip': "Agregar una nueva pregunta"}
+      = render "department", t: t
+
+%br
+.col.s6.align-text
+  %button{class: "waves-effect waves-light btn guardar-planilla"} Guardar planilla

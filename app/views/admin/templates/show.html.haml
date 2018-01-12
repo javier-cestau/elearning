@@ -1,0 +1,58 @@
+.container
+  %article
+    %br
+    %br
+    .align-text
+      %i
+        De:
+        =@user.name
+      %h3=  @template.name
+    .row
+      .col.s12{style: "text-align: center"}
+        .survey-template
+          - @surveys.each do |survey|
+            %h2
+              %strong=survey.sequence.to_s + "- " + survey.description
+            =simple_form_for  @responses[survey.id] , :url => "" do |r|
+              - required = false
+              - if survey.required == 1
+                - required = true
+                -# 1 Es para respuesta corta
+                -# 2 es para redaccion
+              .form-response.break-word
+                - if survey.type_survey.sequence == 1 or survey.type_survey.sequence == 2
+                  -if @responses[survey.id].description.empty?
+                    %strong
+                      %i No respondió
+                  -else
+                    Respuesta:
+                    = @responses[survey.id].description.html_safe
+
+                -# 3 es seleccion simple
+                - if (survey.type_survey.sequence == 3)
+                  .switch-field.switch-survey.switch-sm
+                    =r.collection_radio_buttons :description, [["Si", 'Si'] ,["No", 'No']], :first, :last, { item_wrapper_tag: false } do |b|
+                      -if b.value == r.object.description
+                        -checked = "checked"
+                      -else
+                        -checked = ""
+                      =b.radio_button(checked: "#{checked}" , disabled: true)
+                      =b.label
+
+                -#  4 es de seleccion multiple
+                - if survey.type_survey.sequence == 4
+
+                  %br
+                  .flex{style: "height: 80px;"}
+                    -list_choise = HasChoise.where(response_id: @responses[survey.id].id)
+                    =r.collection_check_boxes :choise_id, Choise.where(survey_id: survey.id), :id , :description,  { item_wrapper_tag: false } do |b|
+                      - checked = ""
+                      -list_choise.each do |list|
+                        -if b.value == list.choise_id
+                          - checked = "checked"
+                      =b.label
+                      .squaredTwo
+                        =b.check_box(class:"filled-in", disabled: true, checked: "#{checked}")
+                        %label{for: "template_#{survey.id}_choise_id_#{b.value}"}
+                        %br
+                        %br

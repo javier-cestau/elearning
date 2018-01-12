@@ -1,0 +1,75 @@
+.container
+  %article
+    %br
+    %br
+    .align-text
+      %h3=  @template.name
+    .row
+      .col.s12{style: "text-align: center"}
+        .survey-template
+          -counter_type_4 = 0
+          =simple_form_for  @template, :url => template_responses_path(@template), :method => "post",class: "col s12" do |t|
+            - @surveys.each_with_index do |survey,index|
+              =t.simple_fields_for survey.id.to_s, @responses do |r|
+                - required = false
+                - required_input = ""
+
+                - if survey.required == 1
+                  - required = true
+                  - required_input = "required_input_#{survey.type_survey.sequence}"
+                .col.s12{style: "margin-bottom: 15px;"}
+                  %h2=survey.sequence.to_s + "- " + survey.description
+
+                  -# 1 Es para respuesta corta
+                  .form-response{class: "#{required_input}"}
+                    - if (survey.type_survey.sequence == 1)
+                      = r.input :description, required: required , placeholder: "Escriba su respuesta",  label: false, input_html:{class: "form-control input-response-short" }, label_html:{class: "nombre-planilla-label"}
+
+                    - if (survey.type_survey.sequence == 3)
+                      - if required
+                        -require_option = "type_3_required"
+                      - else
+                        -require_option = ""
+                      .switch-field.switch-survey{class: "#{require_option}"}
+                        =r.collection_radio_buttons :description, [["Si", 'Si'] ,["No", 'No']], :first, :last, { item_wrapper_tag: false } do |b|
+                          =b.radio_button
+                          =b.label
+                    - if (survey.type_survey.sequence == 4)
+                      -counter_type_4 += 1
+                      %br
+                      - if required
+                        -require_option = "type_4_required_#{index+1}"
+                      - else
+                        -require_option = ""
+
+                      .flex{style: "height: 80px;", class: "#{require_option}"}
+                        =r.collection_check_boxes :choise_id, Choise.where(survey_id: survey.id), :id , :description,  { item_wrapper_tag: false } do |b|
+                          .flex-element
+                            =b.label
+                            .squaredTwo
+                              =b.check_box(class:"filled-in")
+                              %label{for: "template_#{survey.id}_choise_id_#{b.value}"}
+                    - if required
+                      - if (survey.type_survey.sequence == 2)
+                        .row
+                          .col.s12
+                            .row
+                              .input-field.col.s12.area-template
+                                %textarea{ class: " validate required-textarea materialize-textarea ", id: "textarea_#{index}", name: "template[#{survey.id}][description]", 'data-length': "10"}
+                                %span.error-character{id: "limit_textarea_#{index}"}
+                                  Debe ser mayor a 10 caracteres
+                      .survey-warning.warning-msg
+                        %i.fa.fa-exclamation-triangle.fa-lg
+                        ¡Atención! esta pregunta es obligatoria
+                    -else
+                      - if (survey.type_survey.sequence == 2)
+                        .row
+                          .col.s12
+                            .row
+                              .input-field.col.s12
+                                %textarea{class: "  materialize-textarea ", name: "template[#{survey.id}][description]"}
+
+
+          %button{class: "save save-button waves-effect waves-light btn", id: "submit-template"}
+            Guardar
+            .input-hide.type-4{'data-counter': counter_type_4}

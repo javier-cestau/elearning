@@ -1,0 +1,27 @@
+.container
+  .row
+    .col.s10
+      %h3 Notificaciones
+  .row
+    -if @notifications.empty?
+      %h4.align-text No posee ninguna notificación
+    .col.s12
+      %ul.collection
+        - @notifications.each do |n|
+          %li.collection-item.avatar.notifications-read
+            -if n.read == 1
+              %i.material-icons.circle.green
+                %i.fa.fa-eye
+            -else
+              %i.material-icons.circle.red
+                %i.fa.fa-eye-slash
+            -if n.url.index('?')
+              - url = n.url+"&notification=#{n.id}"
+            -else
+              - url = n.url+"?notification=#{n.id}"
+            %span.title=n.message
+            %p
+              Hace
+              = time_ago_in_words(n.created_at)
+            %a.secondary-content.btn{href: "#{url}"}
+              Ver notificación

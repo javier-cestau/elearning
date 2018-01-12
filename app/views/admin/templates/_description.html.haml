@@ -1,0 +1,57 @@
+.jumbotron{id: "basic-addon#{counter.to_s}"}
+  .element-content.contenido-post
+    .content-post
+      .post-avatar
+        %span.input-group-addon.back-red{class: "borrar#{counter.to_s}"}
+          %i.fa.fa-trash.color-white
+      .post-content.preguntas-planilla-input
+        =t.simple_fields_for "survey"+counter.to_s, survey do |s|
+          %span.post-title
+            =s.input_field :description, class: "form-control pregunta-input", placeholder: "Escriba su pregunta...", label: false
+          -if survey.description.nil?
+            - id = TypeSurvey.first.id
+          -else
+            - id = survey.type_survey.id
+          %br
+          %br
+          .post-body
+            .row
+              .type-question.align-text
+                .switch-field
+                  %p Seleccione el tipo de pregunta:
+                  =s.collection_radio_buttons :type_survey_id,  TypeSurvey.all, :sequence, :name ,{ item_wrapper_tag: false } do |b|
+                    -id_typesurvey = b.value
+
+                    -if id_typesurvey == id
+
+                      -checked = "checked"
+
+                    -else
+                      -checked = ""
+                    =b.radio_button(checked: "#{checked}")
+                    =b.label
+
+                  %div{id: "choises#{counter.to_s}"}
+                    - if !survey.type_survey.nil?
+                      -if (survey.type_survey.sequence == 4)
+                        = render "choises", survey: survey, counter: counter.to_s
+
+
+
+            .obligatorio
+              .switch-field
+                %br
+                %p ¿Es obligatoria?
+                =s.collection_radio_buttons :required, [[1 ,"Si"] ,[0,"No"]], :first, :last, { item_wrapper_tag: false } do |b|
+                  -# Es para que la primera pregunta se inicialice en 'No obligatorio' en el caso de ser una planilla que no exista
+                  - if survey.id.nil?
+                    -if b.value == 0
+                      -checked = "checked"
+                    -else
+                      -checked = ""
+                    =b.radio_button(checked: "#{checked}")
+                    =b.label
+                  -else
+                    -# en el caso de tener cargar una planilla existente se inicializa con los valores que poseean
+                    =b.radio_button
+                    =b.label

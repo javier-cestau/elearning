@@ -1,0 +1,33 @@
+-# TODO evitar que el usuario actualize la pagina en el examen
+:css
+	.nav-extended{
+		display: none;
+	}
+#dialog-confirm{:title => "Atención. Tiene preguntas sin responder"}
+	%p
+		%i.fa.fa-exclamation-triangle{:style => "float:left; margin:12px 12px 20px 0;"}>
+		¿Seguro que desea enviar el examen con preguntas sin responder?
+
+
+.sidebar-behind
+.sidebar{style: "top: 108px"}
+	%ul
+		%li
+			%a{ :href => course_section_path(@course,@section.id), :rel => "nofollow", data:{confirm: "¿Está seguro que desea salir? Si sale no aprobará el examen "} }
+				%i.fa.fa-arrow-left
+				%span Salir del examen
+
+.container
+	.clock-container
+		.row
+			.col.s6
+				.clock
+	=@test.description
+	%br
+	%hr
+	.align-center
+		= render 'form'
+
+		.align-text
+			%button.submit.btn
+				Enviar

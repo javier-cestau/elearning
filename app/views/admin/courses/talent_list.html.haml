@@ -1,0 +1,27 @@
+.container
+  - if !@talents.empty?
+    .row.flex
+      .col.s12.m8.center-margin
+        %ul.collection
+          - @talents.each do |talent|
+            %li.collection-item.avatar
+              - if talent.photo_file_name.nil?
+                -if talent.is_at_least_medium_admin?
+                  %img.circle{src: "/image-profile-admin.png",id: "user-#{talent.id}"}
+                -else
+                  %img.circle{src: "/image-profile-user.png",id: "user-#{talent.id}"}
+              -else
+                %img.circle{src: "#{talent.photo.url(:small)}",id: "user-#{talent.id}"}
+
+              %span.title
+                =talent.email
+              %p
+                =talent.name
+                %br
+                %small.position=talent.position
+
+              .secondary-content
+                =link_to "Ver notas", course_grades_path(@course.id,@docourse.find_by(user_id: talent.id)), class: "btn green darken-2"
+  - else
+    .align-text
+      %h5 No hay talentos inscritos en el curso.

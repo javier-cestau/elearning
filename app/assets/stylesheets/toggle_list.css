@@ -1,0 +1,48 @@
+
+.deactive-expand-course{
+	max-height: 185px;
+}
+
+.mask {
+  background-image: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 1) 45%, rgba(255, 255, 255, 0) 99%);
+  background-image: -moz-linear-gradient(bottom, rgba(255, 255, 255, 1) 45%, rgba(255, 255, 255, 0) 99%);
+  background-image: -ms-linear-gradient(bottom, rgba(255, 255, 255, 1) 45%, rgba(255, 255, 255, 0) 99%);
+  background-image: -o-linear-gradient(bottom, rgba(255, 255, 255, 1) 45%, rgba(255, 255, 255, 0) 99%);
+  background-image: linear-gradient(bottom, rgba(255, 255, 255, 1) 45%, rgba(255, 255, 255, 0) 99%);
+  height: 20px;
+  top: -20px;
+  position: relative;
+  z-index: 999;
+}
+
+.toggle-list a {
+  color: #5E5E5E;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: default;
+  opacity: .7;
+  position: relative;
+}
+
+.toggle-list a:hover {
+  opacity: 1;
+  top: 1px;
+}
+
+.toggle-list {
+  text-align: center;
+  margin-top: -20px;
+}
+.toggleExpanded {
+  margin-top: -10px;
+  transform: rotate(180deg);
+  position: relative;
+  bottom: -12px;
+}
+
+.animate-height{
+	-webkit-transition:  max-height 1s ;
+	-moz-transition:  max-height 1s ;`
+	-o-transition:  max-height 1s ;
+	transition:  max-height 1s ;
+}

@@ -1,0 +1,21 @@
+.container
+	%h1.templates-user
+		Planillas realizadas por el usuario
+		=@user.name
+	%br
+		.row
+			.col.s12
+				-if @templates.empty?
+					%h3.align-text El usuario no ha llenado ninguna planilla
+				-else
+					%ul.collection
+						-@templates.reverse_each do |template|
+							%li.collection-item.avatar
+								%img.circle{:alt => "Edit", :src => image_path("edit.png")}
+								%span.title= @templates_name[template.sequence].name
+								%p
+									Hecho el:
+									= template_date(params[:talent_id], @templates_name[template.sequence].id, template.sequence)
+
+								=link_to admin_talent_template_path(@user, template.template_id)+"?s=#{template.sequence}" , class: "secondary-content" do |a|
+									.btn Ver planilla

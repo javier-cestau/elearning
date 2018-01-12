@@ -1,0 +1,69 @@
+.container
+  .row
+    .col.s10
+      - if params[:department].nil?
+        - if params[:scope].nil?
+          %h2 Cursos
+        -else
+          - if params[:scope] == "1"
+            %h2 Cursos públicos
+          -else
+            %h2 Cursos privados
+
+      -else
+        - name = Department.where(id: params[:department]).select(:name)
+        %h2
+          Cursos en
+          = name[0].name
+      =link_to  "Crear curso", new_admin_course_path , class: "btn"
+      =link_to  "Reporte de inscripciones de los cursos", report_admin_courses_path(year: Time.current.year) , class: "btn"
+  .row
+    .col.s12.m9
+      -# TODO hacer que funcione el orden por...
+      - if @courses.empty?
+        %h5.align-text No se encontró ningún curso
+
+      %ul.collection
+        - @courses.each do |c|
+          %li.row.collection-item.avatar.none-padding.align-text
+            .col.s2.l1
+              -if c.cover.file?
+                %img.circle.relative{src: " /system/cover/course_#{c.id}/small/#{c.cover_file_name}" }
+              -else
+                %i.material-icons.circle.relative.red
+                  %i.fa.fa-book
+            .col.s10.l7
+              %span.title
+                =c.name
+            .col.s12.l4
+              .col.s12{style: "padding-bottom: 8px;"}
+                =link_to "Administrar",edit_admin_course_path(c), class: "btn blue lighten-3"
+                -if c.active == 1
+                  %p.white-text.chip.green
+                    Activado
+                -else
+                  %p.white-text.red.chip
+                    Desactivado
+
+
+
+      =paginate @courses
+    .col.s3.hide-on-small-only
+      %div.collection.with-header
+        %h5 &nbsp;&nbsp; Filtros
+        %hr
+        - search = "search=#{params[:search]}&"
+        - cat = "cat=#{params[:cat]}&"
+        - order = "order=#{params[:order]}"
+
+        %a.collection-item{href: "/admin/courses?scope=1&#{cat}#{search}#{order}"}
+          Público
+        %a.collection-item.bottom-bold{href: "/admin/courses?scope=3&#{cat}#{search}#{order}"}
+          Privado
+        - Department.all.order("name ASC").each do |department|
+
+          %a.collection-item{href: "/admin/courses?department=#{department.id}&#{cat}#{search}#{order}"}
+            = department.name
+        %hr
+        %a.collection-item.none-filter{href: "/admin/courses?#{cat}#{search}#{order}"}
+          Sin Filtro

@@ -1,0 +1,16 @@
+:css
+	[type="radio"] + label:before, [type="radio"] + label:after {
+	  display: block
+	}
+=simple_form_for @test, :url => check_answer_course_section_test_path(@course,@section,@test), method: :post do |t|
+	= t.simple_fields_for :questions do |q|
+		%h3
+			="#{q.index+1}."
+			%span.question=q.object.description
+			%span.question="(#{pluralize(q.object.points.to_i,'punto','puntos')} )"
+		.container_answer
+			-q.object.answers.each do |a|
+				- if action_name == 'result'
+					= show_responses(a,q)
+				-else
+					= show_answer(a,q)

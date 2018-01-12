@@ -1,0 +1,149 @@
+.text-red{
+  color: red;
+}
+
+.type-question .switch-field label input[value="1"]:checked + a > label {
+ background-color: #A5DC86;
+ -webkit-box-shadow: none;
+ box-shadow: none;
+
+}
+
+.type-question .switch-field label input[value="2"]:checked + a > label {
+ background-color: #A5DC86;;
+ -webkit-box-shadow: none;
+ box-shadow: none;
+}
+
+.switch-field label + a > label   {
+ border-radius: 0 4px 4px 0;
+}
+
+
+.type-question .switch-field label input[value="3"]:checked + a > label {
+ background-color: #A5DC86;;
+ -webkit-box-shadow: none;
+ box-shadow: none;
+}
+
+
+.type-question .switch-field label input[value="1"] + a > label{
+	border-radius: 4px 0 0 4px ;
+}
+
+.type-question .switch-field label input[value="2"] + a > label{
+  border-radius: 0 ;
+
+}
+
+.type-question .switch-field label input[value="3"] + a > label{
+  border-radius: 0 4px 4px 0;
+
+}
+
+
+.container_answer > li > div{
+  position: relative;
+}
+.container_answer > li > div > input{
+  position: absolute !important;
+  left: inherit !important;
+  right: 28px !important;
+  top: 3px !important;
+  opacity: 1 !important;
+}
+
+
+.font-icon-test,.font-icon-test i{
+  font-size: 22px;
+}
+
+.info-test .col {
+  display: contents
+}
+
+
+.clock-container
+{
+  width: 100%;
+}
+
+
+h3 > .question{
+  font-size: 20px;
+}
+
+.align-center{
+  width: 80%;
+  margin: 0 auto
+}
+
+
+.puntaje{
+  background-color: white;
+border: 1px solid rgba(0,0,0,0.255);
+
+}
+
+.fl-btn{
+  width: 72px !important;
+  height: 72px !important;
+}
+
+.fixed-action-btn > a:hover{
+  color: white;
+  cursor: default;
+}
+
+
+ .total-point{
+   position: relative;
+   top: 10px;
+ }
+
+.data-test > li{
+  list-style: initial !important;
+}
+
+
+.result-test{
+  margin: 0 auto;
+  float: none !important;
+}
+
+
+.headline {
+  position: relative;
+  margin: 0;
+  padding: .25em 0;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.headline:before, .headline:after {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  content: "";
+  width: 30%;
+  height: .1em;
+  z-index: 200;
+  background: #c81414;
+}
+.headline:before {
+  top: 0;
+  animation: lineUp 0.5s linear;
+}
+.headline:after {
+  bottom: 0;
+  animation: lineDown 0.5s linear;
+}
+
+.primary-symbol{
+    font-size: 22px !important
+}
+
+.recomendation i{
+  top: 2px;
+position: absolute;
+right: 27px;
+}

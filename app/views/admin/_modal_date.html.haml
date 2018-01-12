@@ -1,0 +1,17 @@
+.modal.modal-date{id: "#{name}_modal"}
+  .modal-content
+    .row.date
+      .col.s6
+        %h5{class:"#{color}-text"}= message
+        %p Seleccione la fecha
+        -if date.nil?
+          %input.datepicker{type: "date", id: "#{name}_input", value: "Indeterminada", name: "course[#{name}]"}
+        -else
+          %input.datepicker{type: "date", id: "#{name}_input", value: "#{date.to_formatted_s}", name: "course[#{name}]"}
+      .col.s6.col-date{class: "#{color}"}
+  .modal-footer
+    .row.align-text
+      .col.s6
+        %a.btn.modal-action.modal-close.waves-effect.waves-green{style: "float:none"} Cerrar
+        - if name != "start_date"
+          %a.btn.modal-action.waves-effect.waves-green.red.indeterminate{style: "float:none", id: "indeterminate_#{name}"} Indeterminada

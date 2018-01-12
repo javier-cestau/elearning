@@ -1,0 +1,33 @@
+!!!
+%html
+	%head
+		%title Academia Leiros
+		=Gon::Base.render_data
+		= csrf_meta_tags
+		= action_cable_meta_tag
+		%link{:rel => "icon", :href => "/favicon.ico", :type => "image/x-icon"}
+		= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload', 'data-turbolinks-eval': false
+		%meta{name: "turbolinks-cache-control", content: "no-cache"}
+		= javascript_include_tag 'application', 'data-turbolinks-track': 'reload','data-turbolinks-eval': false
+
+	%body{class: "#{controller_name} #{action_name}" }
+		- path = request.path.split('/').at(1)
+
+		- if path == "admin"
+			-# Menu para el panel administrativo
+
+			= render "/admin/general_menu"
+		- else
+			-# Si no es el path admin
+			- if path != nil
+
+				-# Menu de navagacion
+				= render "/menu"
+				.main
+					.hipsum
+						= render "/flash_message"
+
+				= yield
+			-else
+				-#Welcome page
+				= yield

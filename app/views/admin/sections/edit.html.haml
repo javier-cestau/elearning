@@ -1,0 +1,95 @@
+= tinymce_assets
+
+=render '/new_menu', admin_: 1
+
+.container
+	.col.s12
+		%h2.align-text  Editar sección
+		%br
+		= show_button_test(@section.id)
+		= delete_button_test(@section.id)
+		= average_button_test(@section.id)
+		=simple_form_for [:admin , @course, @section] , html: {id: "form-section"} do |s|
+			= s.input :name, label: "Nombre de la sección", input_html:{id: "section-name"}
+			Descripción
+			= s.input_field :description,label: false, input_html:{id: "section-description"}, :class => "tinymce", :rows => 40, :cols => 120
+
+
+			%br
+			%br
+		=render "admin/modal_image", context: "esta sección"
+		%br
+		%ul.collapsible.popout{'data-collapsible': "accordion"}
+			%li
+				.collapsible-header.align-text.active
+					Material complementario
+					%i.material-icons.right
+						arrow_drop_down
+				.collapsible-body
+					.extra-files.jumbotron.align-text
+						-if !@section_files.empty?
+							%ul.collection#files-list
+								- @section_files.each do |id,file|
+									-type = file.split(".")[1]
+									%li.collection-item.avatar{id: "li-#{id}"}
+										%a
+											%img.circle{src: " /system/icons_documents/#{type}.png" }
+										%span.title
+											=file
+										.secondary-content
+											%button.btn.red.lighten-1{id: "#{id}"}
+												Eliminar
+											-# En el caso de no existir puerto en la URL
+											-if request.port.nil?
+												%a.btn.lighten-1{href: "#{request.host}/system/section_files/files/section_#{@section.id}/#{id}/original/#{file}"}
+													-if type != "pdf"
+														Descargar
+													-else
+														Ver/Descargar
+											-else
+												%a.btn.lighten-1{href: "http://#{request.host}:#{request.port}/system/section_files/files/section_#{@section.id}/#{id}/original/#{file}"}
+													-if type != "pdf"
+														Descargar
+													-else
+														Ver/Descargar
+						-else
+							%ul.collection#files-list
+
+							%span#message-file No posee ningun archivo
+						%br
+						=simple_form_for SectionFile.new , :url => admin_course_section_section_files_path(@course,@section) , html:{ id: "file-form"} do |s|
+							.file-field.input-field
+								.btn
+									%span Subir archivo
+									= s.input :file, label: false, as: :file, input_html: {name: "section[file]", id: "input-file"}
+								.file-path-wrapper
+									%input.file-path.validate{type: "text"}
+							%small Formatos aceptados: .docx, .xlsx, .pptx y .pdf
+
+						%br
+						%br
+						%small Si no visualiza los archivos que subió, recargue la página.
+		%div{style: "text-align: right;"}
+			= link_to admin_course_section_path(@course, @section.id), method: :delete ,class: "btn waves-effect waves-light red lighten-1 ", data: {confirm: "¿Seguro que quieres eliminar la sección? Los cambios son irreversibles"} do |a|
+				Eliminar sección
+				%i.material-icons.right.trash-align
+					%i.fa.fa-trash
+			= link_to admin_course_sections_path(@course, prv_section: @section.id), method: :post ,class: "btn waves-effect waves-light  cyan lighten-2 " do |a|
+				Crear una subsección
+				%i.material-icons.right
+					%i.fa.fa-arrow-right
+
+			%button.submit-form-section{ class: "btn waves-effect waves-light " , type: "submit"}
+				Guardar sección
+				%i.material-icons.right
+					%i.fa.fa-save
+.fixed-action-btn.size-icon
+	%a.btn-floating.btn-large.green.father-icon.submit-form-section{class: "tooltipped", 'data-position': "left", 'data-delay': "50", 'data-tooltip': "Guardar sección"}
+		%i.fa.fa-save
+	%ul
+		%li
+			= link_to admin_course_sections_path(@course, prv_section: @section.id), method: :post ,class: "waves-effect waves-light  cyan lighten-2 btn-floating tooltipped", 'data-position': "left", 'data-delay': "50", 'data-tooltip': "Crear subsección" do |a|
+				%i.fa.fa-arrow-right
+		%li
+			= link_to admin_course_section_path(@course, @section.id), method: :delete ,class: "btn-floating waves-effect waves-light red lighten-1  tooltipped", data: {confirm: "¿Seguro que quieres eliminar la sección? Los cambios son irreversibles"}, 'data-position': "left", 'data-delay': "50", 'data-tooltip': "Eliminar sección" do |a|
+				%i.fa.fa-trash{style: "top: -16px;position: relative;"}

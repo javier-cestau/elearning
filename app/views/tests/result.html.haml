@@ -1,0 +1,65 @@
+- if !session[:approved_course].nil?
+	-session[:approved_course] = nil
+	#approved_course.modal.modal-fixed-footer{style: "height: 500px"}
+		.modal-content
+			%h6.align-text.green-text Felicitaciones aprobaste el curso:
+			%h5.align-text= @course.name
+			%br
+			%h5.align-text
+				%i Si desea su certificado, contacte con algún administrador del sistema
+			%br
+			%br
+			-if @course.cover_file_name.nil?
+				%img.no-image-menu{src: "/logo-big-leiros.png"}
+			-else
+				=image_tag @course.cover.url, style: "width: 100%"
+		.modal-footer
+			%a.modal-action.modal-close.waves-effect.waves-green.btn{:href => "/courses/#{@course.id}/recomendation"}
+				Recomendar Curso
+				%i.material-icons{style: "position: relative;top: 3px;"} thumb_up
+
+.container
+	-if params[:show].nil?
+		.row
+			.col.s12.m7.center-margin{style:"float: none !important"}
+				.card.horizontal
+					.card-image
+					.card-stacked
+						- if @do_test.grade >= @test.min_grade
+							.row
+								.col.s12
+									.center-margin{style: "width: 375px;"}
+										.emoji.emoji--wow
+											.emoji__face
+												.emoji__eyebrows
+												.emoji__eyes
+												.emoji__mouth
+										=image_tag("/trophy.png", style: "height: 100%")
+									%h5.headline.align-text Felicitaciones
+									%h3.align-text.green-text="#{@do_test.grade}/20"
+							.card-action.align-text
+								=link_to "Volver a la sección", course_section_path(@course,@section), class: "btn"
+						-else
+							.row
+								.col.s12
+									.center-margin{style: "width: 160px;"}
+										.emoji.emoji--sad
+											.emoji__face
+												.emoji__eyebrows
+												.emoji__eyes
+												.emoji__mouth
+									%h5.headline.align-text Sigue intentado
+									%h3.align-text.red-text="#{@do_test.grade}/20"
+									%h5.align-text
+										La nota mínima para aprobar es
+										="#{@do_test.test.min_grade}"
+							.card-action.align-text
+								-if @do_test.do_course.finished_at.nil?
+									= do_button_test(@section.id)
+								= link_to "Volver a la sección", course_section_path(@course,@section), style:"margin-right: 0px !important;"
+	=@test.description
+	%br
+	%br
+	%hr
+	%brZ
+	= render 'form'

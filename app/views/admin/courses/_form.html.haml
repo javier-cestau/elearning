@@ -1,0 +1,191 @@
+= tinymce_assets
+.container
+	.div
+		%h2
+			=context
+			curso
+
+
+		=simple_form_for [:admin , @course] , html: {id: "form-course"} do |c|
+
+			.row
+				.col.s12.m6.l4
+					%ul.collection
+						%li.collection-item.avatar.align-text
+							%i.circle.amber.fa.fa-calendar-check-o
+							%span.title Fecha de inicio del curso
+							- if @course.start_date.nil?
+								%p.align-text= localize(Date.today)
+								-date = localize(Date.today)
+							-else
+								%p.align-text= localize(@course.start_date)
+								-date = date_format(@course.start_date,@course)
+
+							%input.amber.datepicker{placeholder: "Cambiar", name: "course[start_date]", value: "#{date}"}
+
+				.col.s12.m6.l4
+					%ul.collection
+						%li.collection-item.avatar.align-text
+							%i.circle.red.fa.fa-calendar-times-o
+							%span.title Fecha de finalización del curso
+							- if @course.deadline_course.nil?
+								%p.align-text Indeterminado
+							-else
+								%p.align-text= localize(@course.deadline_course)
+							-date = date_format(@course.deadline_course,@course)
+
+							%input.red.datepicker{placeholder: "Cambiar", name: "course[deadline_course]", value: "#{date}"}
+				.col.s12.m12.l4
+					%ul.collection
+						%li.collection-item.avatar.align-text
+							%i.circle.green.fa.fa-calendar-plus-o
+							%span.title Fecha límite de inscripción
+							- if @course.deadline_inscription.nil?
+								%p.align-text Indeterminado
+							-else
+								%p.align-text= localize(@course.deadline_inscription)
+							-date = date_format(@course.deadline_inscription,@course)
+							%input.green.datepicker{placeholder: "Cambiar", name: "course[deadline_inscription]", value: "#{date}"}
+
+			.row
+				.col.s12.m6
+					.row
+						.input-field.col.s12
+							= c.input_field :name, required: true,  class: 'validate', id: 'course-name'
+							= c.label :name, "Nombre del curso", 'data-error': 'El nombre del curso debe tener mas de 10 caracteres', style:"margin-top: 8px;"
+					.row
+						.input-field.col.s12
+							= c.input_field :category_id, collection: Category.all.order("name ASC"), include_blank: false, class: "validate"
+							= c.label :category_id, "Categoría"
+					- if context == "Editar"
+						-if current_user.is_super_admin?
+							.row
+								.input-field.col.s12
+									= c.input_field :active, collection: [["Desactivado",0],["Activo",1]], include_blank: false, class: "validate"
+									= c.label :active, "Estado del curso"
+				-if !@course.cover.file?
+					- relative_box = "empty-cover"
+				.col.s12.m6{class: "#{relative_box}"}
+					%ul.collection
+						%li.collection-item
+							-if !@course.cover.file?
+								.jumbotron.align-text.grey.lighten-1
+									No posee imagen de portada
+							-else
+								%img.cover-image{src: " /system/cover/course_#{@course.id}/original/#{@course.cover_file_name}" }
+							%span.title
+								.file-field.input-field
+									.btn
+										%span Foto de portada
+										= c.input :cover, label: false, as: :file
+									.file-path-wrapper
+										%input.file-path.validate{type: "text"}
+
+			%br
+			-#
+			-#  Foto de portada
+			-#
+			- if context == "Editar"
+				.align-text
+					%h4 Descripción
+				-# = text_area_tag :content, "", :class => "tinymce", :rows => 40, :cols => 120
+				= c.input_field :description,label: false, input_html:{id: "course-description"}, :class => "tinymce", :rows => 40, :cols => 120
+
+			%br
+			%br
+
+			#prelation_inputs
+				-@list_prelation.each do |prelation_input|
+					%input{name: "prelation[]" , value: prelation_input.id, type: "hidden", id: "i_prela_course#{prelation_input.id}"}
+
+			#users_inputs
+				-@list_users.each do |user_input|
+					%input{name: "users[]" , value: user_input, type: "hidden", id: "i_user#{user_input}"}
+
+			#tag_inputs
+				-@list_tags.each do |tags_input|
+					%input{name: "tag[]" , value: tags_input.name, type: "hidden", id: "i_tag_course#{tags_input.name}"}
+
+			= c.input :scoping,collection: [["Público",1],["Por departamento",2],["Privado",3]] , label: "Tipo de curso", input_html:{ id: "scoping-list"},  include_blank: false
+
+			%br
+			%div.align-text.date-container
+
+
+
+			#departments
+		#users
+		- if context == "Editar"
+			=render "admin/modal_video", context: "este curso"
+			=render "admin/modal_image", context: "este curso"
+		%br
+		%br
+
+		-#
+		-#    Tags
+		-#
+		.col.s12.align-text
+			%h4 Etiquetas
+			.tags-container
+				.flex-box.flex-wrap#tags-list
+					-@list_tags.each do |tags|
+						%span.new.badge.grey.lighten-1{'data-badge-caption': "#{tags.name}", name: "tag[]" , value: tags.name, type: "hidden", id: "#{tags.name}"}
+							%i.fa.fa-times
+
+			%input{id: "add_tag", placeholder: "Agregar Etiqueta", type: "text", class: "form-control" }
+			%br
+				%button#btn-add-tag.btn.waves-effect.waves-light.orange.lighten-2{type: "submit"}
+					Agregar
+					%i.material-icons.right
+						%i.fa.fa-tag
+		%br
+		%br
+		%br
+
+
+		-#
+		-#    Prelaciones
+		-#
+
+		.row
+			.col.s12
+				%h4
+					Prelaciones
+					%br
+				%br
+				%ul.collection#prelation
+					-if @list_prelation.empty?
+						.no-prelation
+							El curso no posee prelaciones
+					- @list_prelation.each do |prelation|
+						%li.collection-item.avatar{id: "prel_course#{prelation.id}"}
+							-if prelation.cover_file_name.nil?
+								%i.material-icons.circle.red
+									%i.fa.fa-book
+							-else
+								%img.circle{src: " /system/cover/course_#{prelation.id}/small/#{prelation.cover_file_name}"}
+							%span.title
+								=prelation.name
+							.secondary-content
+								%i.material-icons
+									%i.fa.fa-close
+			.col.s12
+				%h5
+					Buscar cursos
+				=simple_form_for Course.new, :url => admin_search_courses_path , :method => :get, remote: true , html:{  id: "prelation-form", :"data-type" => "json"} do |pre|
+					= pre.input :name, label: false, placeholder: "Nombre del curso a buscar..."
+					%button.btn.waves-effect.waves-light.blue.lighten-2{type: "submit"}
+						Buscar
+						%i.material-icons.right
+							%i.fa.fa-search
+				%ul.collection.list-group#list-search-courses
+
+	%br
+	%br
+
+
+
+
+	.align-text
+		%button#submit-form.btn.waves-effect.waves-light{type: "submit"}
+			Guardar

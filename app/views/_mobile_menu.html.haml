@@ -1,0 +1,61 @@
+- unless current_user.nil?
+	%ul#mobile-demo.side-nav
+		%li
+			.row
+				.col.s4
+					- if current_user.photo_file_name.nil?
+						-if current_user.is_at_least_medium_admin?
+							%img.img-profile-mobile{src: "/image-profile-admin.png",id: "user-#{current_user.id}"}
+						-else
+							%img.img-profile-mobile{src: "/image-profile-user.png",id: "user-#{current_user.id}"}
+					-else
+						%img.img-profile-mobile{src: "#{current_user.photo.url(:thumb)}",id: "user-#{current_user.id}"}
+				.col.s8
+					= current_user.email
+					%small
+						=current_user.department.name
+						="/"
+						-if current_user.is_super_admin?
+							Admin G.
+						-else
+							-if current_user.is_at_least_medium_admin?
+								Admin I.
+		%li.divider
+			%li
+				=simple_form_for "", url: url_form_search, method: 'get' ,html: {id: 'form-search'} do |c|
+					.row
+						.col.s1
+							=c.label :search , class:"label-icon" do |a|
+								%i.material-icons
+									search
+						.col.s11
+							=c.input_field :search , as: :search, placeholder: "Buscar curso",value: "#{params[:search]}", name: "search", style: "width: 200px; margin-bottom:5px;"
+							=c.hidden_field :order , value: "#{params[:order]}", name: "order"
+					=c.submit "enviar", class: "hidden"
+		%li
+			%a.show-all{href: "/talent/#{current_user.id}/notifications"}
+				Ver notificaciones
+				%span.new.badge.mobile-notification{"data-badge-caption": "nuevas", "data-count": "#{@counter_notifications}"}
+					-if @counter_notifications > 99
+						+99
+					-else
+						=@counter_notifications
+		%li.divider
+		%li
+			%a{:href => profile_talent_path  }
+				%span Perfil
+		%li
+			%a{:href => favorites_list_talent_path  }
+				%span Cursos favoritos
+		%li
+			%a{:href => "https://auth.leiros.com" }
+				%span Ir al gestor de usuarios
+		%li
+			%a{:href => admin_path  }
+				%span Panel administrativo
+		%li
+			%a.modal-trigger{:href => "#ModalAcercaDe"} Acerca de
+		%li.divider
+		%li
+			%a{:href => destroy_user_session_path,"data-method" => "delete"}
+				%span  Cerrar sesión

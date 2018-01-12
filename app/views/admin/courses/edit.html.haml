@@ -1,0 +1,37 @@
+.container
+  .row
+    .row.col.s12.m12.l8
+      .col.s12
+        .rad-info-box.rad-txt-success
+          %i.fa.fa-user
+          %span.heading Usuarios inscritos
+          %span.value
+            %span= @total_inscription
+
+      .col.s12
+        .rad-info-box.rad-txt-success
+          .row
+            .col
+              %i.fa.fa-line-chart{style: "background-color: #{@color}"}
+            .col.s11
+              .row
+                .col.s6.offset-s5
+
+                  %span.heading{style: "bottom: 10px;right: 65px;"} Media aprobado
+              .row
+                .col.s9.offset-s3
+                  .progress.grey.lighten-3{style: "height: 50px"}
+                    .determinate{style: "	width: #{@media_pass}%;height: 51px;background-color: #{@color} !important;"}
+                      .amount= "#{@media_pass}%"
+              .row
+                %span.value
+                  %span= "#{@total_pass}/#{@total_inscription}"
+    .row.col.s12.m12.l4.day-row
+      .col.s12
+        .rad-info-box.rad-txt-success
+          %i.fa.fa-sun-o
+          %span.heading Días activo
+          %span.value
+            %span= "#{@days} días"
+
+=render "form" , context: "Editar"

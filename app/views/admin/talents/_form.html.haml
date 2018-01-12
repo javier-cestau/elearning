@@ -1,0 +1,39 @@
+
+.container
+  %h2
+    = context
+    usuario
+  .container
+  -if context == "Registrar"
+    -#Ajax form
+    = simple_form_for [:admin , @user] , :url => admin_talents_path, :method => :post, remote: true , html:{ class: "hidden", id: "registration-form", :"data-type" => "json"} do |f|
+      = f.input :email
+  -# Hace falta indicar la url debido a que automaticamente lo redirecciona a los url que
+  -if context == "Registrar"
+    -method = "post"
+    -url = admin_talents_path
+    -disable = true
+  -else
+    -method = "put"
+    -url = admin_talent_path (@user)
+    -disable = false
+  %p Los campos marcados con (*) son obligatorios
+
+  = simple_form_for @user , :url => url, :method => method  do |f|
+
+    -if context == "Registrar"
+      .row
+        .input-field.col.s12
+          = f.input_field :email, required: true, autofocus: true, class: 'validate email-input'
+          = f.label "*Correo electrónico", id: "label-email" ,'data-error': 'El correo electrónico no es válido', 'data-success': 'El correo electrónico está disponible'
+
+    = f.input :position, required: true , label: 'Cargo'
+    = f.input :management, label: 'Gerencia'
+    -# = f.input :photos, label: 'Foto', as: :file
+    = f.input :name, required: true , label: "Nombre completo"
+    =f.association :department , collection: Department.order(:name),  label: "Departamentos" ,  :error => false, include_blank: false
+    - if current_user.is_super_admin?
+      =f.input :privilege ,collection: User.get_system_privileges,  label: "Privilegios" , :error => false, include_blank: false
+
+  .form-actions{style: "text-align: center"}
+    %button.btn.submit Registrar

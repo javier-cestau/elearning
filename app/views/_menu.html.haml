@@ -1,0 +1,98 @@
+= render "/mobile_menu"
+
+= render "/about"
+
+-if !current_user.nil?
+	%nav.nav-extended.background-admin
+		.nav-wrapper
+			= link_to  root_path, class: "brand-logo" do |a|
+				&nbsp&nbspAcademia Leiros
+			%a.button-collapse{"data-activates": "mobile-demo"}
+				%i.material-icons menu
+			%ul.right.hide-on-med-and-down
+				-if controller_name != "welcome"
+					%li
+						=simple_form_for "", url: courses_path(), method: 'get' ,html: {id: 'form-search'} do |c|
+							.row{style: "height: 60px;margin-bottom: 0;"}
+								.input-field.col.s4
+									-collection = Array.new( )
+									-collection.push(Category.new(id: 0,name: "Todo"))
+									- Category.all.select(:id,:name).each do |cat|
+										-collection.push(cat)
+									.align-text
+										=c.input_field :cat, collection: collection, include_blank: false, class: "", name: "cat"
+								.input-field.col.s8
+									.display-inline-block.input-search.input-field
+										=c.input_field :search , as: :search, placeholder: "Buscar curso",value: "#{params[:search]}", name: "search"
+										=c.label :search , class:"label-icon" do |a|
+											%i.material-icons
+												search
+										%i.material-icons close
+										=c.hidden_field :order , value: "#{params[:order]}", name: "order"
+							=c.submit "enviar", class: "hidden"
+				%li{style: "margin-right: 10px"}
+					-if @counter_notifications.to_i > 100
+						-@counter_notifications = "99+"
+					.notification.nothing-notification.show-count{"data-count": "#{@counter_notifications}"}
+					.notifications.js-notifications{tabindex: "-1"}
+						%h3 Notificaciones
+						%ul.notifications-list
+							%li.progress-notifications
+								.progress
+									.indeterminate
+
+						%a.show-all{href: "/talent/#{current_user.id}/notifications"} Mostrar todas las notificaciones
+
+				%li
+					%a.dropdown-button.menu-user-position{'data-activates': "menu-user"}
+						= current_user.email
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						- if current_user.photo_file_name.nil?
+							-if current_user.is_at_least_medium_admin?
+								%img.usuario{src: "/image-profile-admin.png",id: "user-#{current_user.id}"}
+							-else
+								%img.usuario{src: "/image-profile-user.png",id: "user-#{current_user.id}"}
+						-else
+							%img.usuario{src: "#{current_user.photo.url(:thumb)}",id: "user-#{current_user.id}"}
+						%small.department-indicator
+							=current_user.department.name
+							="/"
+							-if current_user.is_super_admin?
+								Admin G.
+							-else
+								-if current_user.is_at_least_medium_admin?
+									Admin I.
+								-else
+									Empleado
+
+
+
+	%ul{id: "menu-user", class: "dropdown-content"}
+		%li
+			%a{:href => profile_talent_path  }
+				%span Perfil
+		%li
+			%a{:href => favorites_list_talent_path  }
+				%span Cursos favoritos
+		%li
+			%a{:href =>  "https://auth.leiros.com" }
+				%span Ir al gestor de usuarios
+
+		-if current_user.is_at_least_medium_admin?
+			%li
+				%a{:href => admin_path  }
+					%span Panel administrativo
+		%li
+			%a.modal-trigger{:href => "#ModalAcercaDe"} Acerca de
+		%li.divider
+		%li
+			%a{:href => destroy_user_session_path,"data-method" => "delete"}
+				%span  Cerrar sesión
+-else
+	%nav.nav-extended.background-admin
+		.nav-wrapper
+			= link_to  root_path, class: "brand-logo" do |a|
+				&nbsp&nbspAcademia Leiros
+			%ul.right.hide-on-med-and-down
+				%li
+					=link_to  "Ir al gestor de usuarios", "https://auth.leiros.com", class: "waves-effect waves-light btn"
