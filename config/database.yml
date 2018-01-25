@@ -16,16 +16,15 @@
 #
 default: &default
   adapter: postgresql
-  encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # http://guides.rubyonrails.org/configuring.html#database-pooling
-  database: elearning_production
-  username: elearning
-  password: <%= ENV['ELEARNING_DATABASE_PASSWORD'] %>
+  username: rails
+  password: 123456789
+  port: 5432
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
 
 development:
   <<: *default
+  database: elearning_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -36,7 +35,7 @@ development:
   # The password associated with the postgres role (username).
   #password:
 
-  # Connect on a TCP socket. Omitted by default since the client uses a
+  # Connect on a TCP socket. Omitted by defaul-t since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
   # domain sockets, so uncomment these lines.
   #host: localhost
@@ -81,7 +80,7 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  <<: *default
+  # <<: *default
   adapter: postgresql
   port: 5432
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>

@@ -29,9 +29,12 @@
         -# = f.input :name, required: true , label: false
       .row
         = f.submit "Guardar", class: "btn"
-      =link_to template_path(@template) , class: "waves-effect waves-light btn blue" do |a|
+      =link_to profiles_edit_path() , class: "waves-effect waves-light btn blue" do |a|
         %i.fa.fa-edit
-        Llenar planilla
+        Cambiar perfil
+      -# =link_to template_path(@template) , class: "waves-effect waves-light btn blue" do |a|
+      -#   %i.fa.fa-edit
+      -#   Llenar planilla
       -if current_user.is_super_admin?
         - manual_url = "/manual_de_usuario_administrador_general.pdf"
       -elsif current_user.is_medium_admin?

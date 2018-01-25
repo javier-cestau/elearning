@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'welcome#index'
 
-
   namespace :admin do
     get '/' => redirect('admin/talents')
     get "true_false", to: "tests#true_false"
@@ -67,7 +66,7 @@ Rails.application.routes.draw do
         resources :tests do
           get 'average', to: 'tests#average', as: 'average'
         end
-        
+
       end
       collection do
           get 'departments'
@@ -128,5 +127,10 @@ Rails.application.routes.draw do
     post 'responses'
   end
 
+
+  resources :profiles, except: [:destroy,:index,:show, :edit]
+  get "profile", to: "profiles#show"
+  get "profiles/edit", to: "profiles#edit"
+  
   mount ActionCable.server, at: '/cable'
 end

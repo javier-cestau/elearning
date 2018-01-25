@@ -24,12 +24,10 @@
 @import "material_icons";
 @import 'slick';
 @import 'slick-theme';
-@import 'plugins/colors.min.css';
-@import 'plugins/emoticons.min.css';
-@import 'plugins/table.min.css';
 @import "froala_editor.min.css";
 @import "froala_style.min.css";
 @import 'flipclock';
+
 $activeColor: #27ae60; //green
 $darkenColor: darken($activeColor, 20%);
 $background: #3498db;

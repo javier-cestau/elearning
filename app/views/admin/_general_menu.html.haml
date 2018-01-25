@@ -11,9 +11,6 @@
 		%a{:href => favorites_list_talent_path  }
 			%span Cursos favoritos
 	%li
-		%a{:href => "https://auth.leiros.com" }
-			%span Ir al gestor de usuarios
-	%li
 		%a{:href => admin_path  }
 			%span Panel administrativo
 	%li
@@ -80,7 +77,8 @@
 						%img.usuario{src: "#{current_user.photo.url(:thumb)}",id: "user-#{current_user.id}"}
 
 					%small.department-indicator
-						=current_user.department.name
+						=current_user.name
+
 						="/"
 						-if current_user.is_super_admin?
 							Admin G.

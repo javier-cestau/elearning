@@ -21,7 +21,9 @@
 								%p.align-text= localize(@course.start_date)
 								-date = date_format(@course.start_date,@course)
 
-							%input.amber.datepicker{placeholder: "Cambiar", name: "course[start_date]", value: "#{date}"}
+								%input.hidden#start_date_input_hidden{name: "course[start_date]", value: "#{@course.start_date}"}
+							#start_date
+								%input.amber.datepicker{placeholder: "Cambiar", name: "", value: "#{date}"}
 
 				.col.s12.m6.l4
 					%ul.collection
@@ -33,8 +35,9 @@
 							-else
 								%p.align-text= localize(@course.deadline_course)
 							-date = date_format(@course.deadline_course,@course)
-
-							%input.red.datepicker{placeholder: "Cambiar", name: "course[deadline_course]", value: "#{date}"}
+							%input.hidden#deadline_course_input_hidden{name: "course[deadline_course]", value: "#{@course.deadline_course}"}
+							#deadline_course
+								%input.red.datepicker{placeholder: "Cambiar", name: "", value: "#{date}"}
 				.col.s12.m12.l4
 					%ul.collection
 						%li.collection-item.avatar.align-text
@@ -45,7 +48,9 @@
 							-else
 								%p.align-text= localize(@course.deadline_inscription)
 							-date = date_format(@course.deadline_inscription,@course)
-							%input.green.datepicker{placeholder: "Cambiar", name: "course[deadline_inscription]", value: "#{date}"}
+							%input.hidden#deadline_inscription_input_hidden{name: "course[deadline_inscription]", value: "#{@course.deadline_inscription}"}
+							#deadline_inscription
+								%input.green.datepicker{placeholder: "Cambiar", name: "", value: "#{date}"}
 
 			.row
 				.col.s12.m6

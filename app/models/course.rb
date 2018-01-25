@@ -165,11 +165,13 @@ class Course < ApplicationRecord
 
   def start_date_valid?
     if self.start_date.nil?
+      @message = "La Fecha de inicio no puede ser nula"
       false
     else
       if self.start_date >= Date.today
         true
       else
+        @message = "La Fecha de inicio debe ser mayor a hoy"
         false
       end
     end
@@ -213,7 +215,7 @@ class Course < ApplicationRecord
         message = "La fecha de finalización no puede ser menor que la de inicio"
       end
     else
-      message = "La fecha de inicio no puede ser nula"
+      message = @message
     end
 
     message

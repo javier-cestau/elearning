@@ -3,6 +3,7 @@ class ReproveCourseJob < ApplicationJob
 
   def perform(*args)
 
+
     Course.all.each do |c|
       do_courses = DoCourse.where(enroll: 1, course_id: c.id, finished_at: nil)
       do_courses.each do |do_course|
@@ -20,6 +21,10 @@ class ReproveCourseJob < ApplicationJob
            else
              if c.deadline_course == Date.today
                message = "El curso #{c.name} finaliza hoy"
+             else
+               if c.deadline_course < Date.today
+                 message = "El curso #{c.name} ya finalizó"
+               end
              end
            end
 
@@ -38,10 +43,13 @@ class ReproveCourseJob < ApplicationJob
       end
     end
 
+    # u = User.where(email: "javier.cestau1209@gmail.com").last
+    # u.name = Time.now
+    # u.save
     reschedule_job
   end
 
   def reschedule_job
-    self.class.set(wait: Date.tomorrow.noon).perform_later
+    ReproveCourseJob.set(wait_until: Date.tomorrow.noon).perform_later()
   end
 end

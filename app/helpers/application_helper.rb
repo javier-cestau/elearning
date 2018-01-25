@@ -7,7 +7,7 @@ module ApplicationHelper
 			courses_path()
 		end
 	end
-	
+
 	def link_to_add_tr_field(t, association, table_id)
 
 		new_object = t.object.send(association).klass.new
@@ -37,7 +37,6 @@ module ApplicationHelper
 
 		if !object.new_record?
 			if date.class == Date
-
 				return localize(date)
 			end
 		end

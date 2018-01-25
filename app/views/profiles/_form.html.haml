@@ -1,0 +1,41 @@
+.container
+  %article
+    %br
+    %br
+    .align-text
+      %h3 Perfil
+    .row
+      .col.s12{style: "text-align: center"}
+        .survey-template
+          .container
+            .row
+              %form{action: "/profiles", method: "post"}
+                .col.s6
+                  %h2 Nombres
+                  %input.center-align{name: "profile[questions][]", value: "#{session['devise.first_name'] if @profile[0].nil?} #{@profile[0].answer if !@profile[0].nil?} "}
+                .col.s6
+                  %h2 Apellidos
+                  %input.center-align{name: "profile[questions][]", value: "#{session['devise.last_name'] if @profile[1].nil? } #{@profile[1].answer if !@profile[1].nil?}"}
+                .col.s12
+                  %h2 Fecha de nacimiento
+                  %input.center-align{type: "date",name: "profile[questions][]", value: "#{@profile[2].answer if !@profile[2].nil?}"}
+                .col.s12
+                  %h2 Teléfono
+                  %input#phone.center-align{type: "text",name: "profile[questions][]", value: "#{@profile[3].answer if !@profile[3].nil?}"}
+                .col.s4#registry_state_str_input
+                  %h2 Estado
+                  %select#registry_state_str{name: "profile[questions][]"}
+                .col.s4#registry_county_str_input
+                  %h2 Municipio
+                  %select#registry_county_str{name: "profile[questions][]"}
+                    %option{value: "#{@profile[5].answer if !@profile[5].nil?}"}= @profile[5].answer if !@profile[5].nil?
+                .col.s4
+                  %h2 Ciudad
+                  %input.center-align{type: "text",name: "profile[questions][]", value: "#{@profile[6].answer if !@profile[6].nil?}"}
+                .col.s12
+                  %h2 Movimiento o Grupo Juvenil
+                  %input.center-align{type: "text",name: "profile[questions][]", value: "#{@profile[7].answer if !@profile[7].nil?}"}
+                .col.s12
+                  %h2 Parroquía
+                  %input.center-align{type: "text",name: "profile[questions][]", value: "#{@profile[8].answer if !@profile[8].nil?}"}
+                %button.btn Enviar

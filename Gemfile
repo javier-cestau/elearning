@@ -7,9 +7,9 @@ end
 
 #
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.2'
+gem 'rails'
 # Use sqlite3 as the database for Active Record
-gem 'pg'
+gem 'pg', '0.21.0'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
@@ -66,14 +66,15 @@ gem 'wkhtmltopdf-binary'
 gem 'pdfkit'
 gem 'faker'
 gem 'dotenv-rails'
+gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
+gem 'redis'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-    gem 'factory_girl_rails'
 end
 
 group :production do
-  gem 'redis', '3.3.5'
 end
 
 group :development do
