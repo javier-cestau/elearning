@@ -124,7 +124,7 @@ before_action :all_topic, only: %i[edit talent_list]
 	end
 
 	def update
-
+		
 		@course = Course.find(params[:id])
 		#Para saber si se pueden modificar los datos o no.
 		canUpdate = false
@@ -254,6 +254,7 @@ before_action :all_topic, only: %i[edit talent_list]
 							else
 								cover = course_params[:cover]
 							end
+
 							if active.to_i == 1 and @course.day_counter_update == nil
 								@course.day_counter_update = Date.today
 							end

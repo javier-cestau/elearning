@@ -54,7 +54,7 @@
                   Habilitado
         .col.s12.m6.l6
           .col.s6
-            =link_to "Editar", edit_admin_talent_path(talent), class: "btn blue lighten-3 width-100 none-padding", style: "margin: 15px 0px;"
+            =link_to "Ver perfil", "/profile?id="+talent.id.to_s, class: "btn blue lighten-3 width-100 none-padding", style: "margin: 15px 0px;"
           .col.s6
             =link_to "Ver planillas", admin_talent_templates_path(talent), class: "btn width-100", style: "margin: 15px 0px;"
           .col.s12

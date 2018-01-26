@@ -54,16 +54,8 @@
 								%img.usuario{src: "/image-profile-user.png",id: "user-#{current_user.id}"}
 						-else
 							%img.usuario{src: "#{current_user.photo.url(:thumb)}",id: "user-#{current_user.id}"}
-						%small.department-indicator
-							=current_user.department.name
-							="/"
-							-if current_user.is_super_admin?
-								Admin G.
-							-else
-								-if current_user.is_at_least_medium_admin?
-									Admin I.
-								-else
-									Empleado
+						%small.department-indicator.truncate
+							=current_user.name
 
 
 
@@ -74,10 +66,6 @@
 		%li
 			%a{:href => favorites_list_talent_path  }
 				%span Cursos favoritos
-		%li
-			%a{:href =>  "https://auth.leiros.com" }
-				%span Ir al gestor de usuarios
-
 		-if current_user.is_at_least_medium_admin?
 			%li
 				%a{:href => admin_path  }
@@ -95,4 +83,10 @@
 				&nbsp&nbspAcademia Leiros
 			%ul.right.hide-on-med-and-down
 				%li
-					=link_to  "Ir al gestor de usuarios", "https://auth.leiros.com", class: "waves-effect waves-light btn"
+					=link_to user_facebook_omniauth_authorize_path , class: "waves-effect waves-light btn blue" do |a|
+						%span  Continuar con Facebook
+						%i.fa.fa-facebook-official
+				%li
+					=link_to user_google_oauth2_omniauth_authorize_path , class: "waves-effect waves-light btn red" do |a|
+						%span  Continuar con Google
+						%i.fa.fa-google-plus

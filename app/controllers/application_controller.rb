@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
 
-  before_action :redirect_to_fill_template
+  before_action :redirect_to_fill_profile
   before_action :redirect_sign_page
   before_action :notification_readed
   before_action :count_notification
@@ -10,9 +10,8 @@ class ApplicationController < ActionController::Base
 
   # Solo permitira acceder al cierre de sesion y a la planilla en si ,
   #  mientras no haya llenado todavia su primera planilla
-  def redirect_to_fill_template
-      redirect_to template_path(session['devise.template']) if session['devise.fill_template?'] &&
-                                                             request.path != '/users/sign_out'
+  def redirect_to_fill_profile
+      redirect_to new_profile_path() if session['devise.fill_profile?'] && request.path != '/users/sign_out'
   end
 
   def redirect_sign_page

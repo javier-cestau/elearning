@@ -1,7 +1,7 @@
 class TemplateController < ApplicationController
 
   before_action :authenticate_user! , only: [:show,:responses]
-  skip_before_action :redirect_to_fill_template
+  skip_before_action :redirect_to_fill_profile
 
 
 
@@ -212,7 +212,7 @@ class TemplateController < ApplicationController
       end
 
       #Se le permite al usuario acceder a otras opciones porque ya tiene una planilla hecha
-      session["devise.fill_template?"] = false
+      session["devise.fill_profile?"] = false
       redirect_to root_path, notice: "Guardado correctamente"
     else
     # Si los datos han sido alterados o si la respuesta es invalida, el usuario

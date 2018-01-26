@@ -1,9 +1,72 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
-  skip_before_action :redirect_to_fill_template
+  skip_before_action :redirect_to_fill_profile
+
+  def facebook
+    auth = request.env["omniauth.auth"]
+    if !auth.info.email.empty?
+
+      user = User.where(email: auth.info.email).first
+
+      if user.nil?
+        user = User.auth_creation(auth)
+      end
+
+      if user.persisted?
+        sign_in user
+        profile = Profile.where(user_id: current_user.id) #kill me plox
+        if profile.empty?
+
+          session["devise.first_name"] = auth.info.first_name
+          session["devise.last_name"] = auth.info.last_name
+          session["devise.fill_profile?"] = true
+        end
+        redirect_to root_path
+      else
+        flash[:alert] = "Validación incorrecta"
+        redirect_to root_path
+      end
+    else
+      flash[:alert] = "Debe poseer correo electrónico"
+      redirect_to root_path
+
+    end
+  end
+
+  def google_oauth2
+    auth = request.env["omniauth.auth"]
+    if !auth.info.email.empty?
+
+      user = User.where(email: auth.info.email).first
+
+      if user.nil?
+        user = User.auth_creation(auth)
+      end
+
+      if user.persisted?
+        sign_in user
+        profile = Profile.where(user_id: current_user.id) #kill me plox
+        if profile.empty?
+
+          session["devise.first_name"] = auth.info.first_name
+          session["devise.last_name"] = auth.info.last_name
+          session["devise.fill_profile?"] = true
+        end
+        redirect_to root_path
+      else
+        flash[:alert] = "Validación incorrecta"
+        redirect_to root_path
+      end
+    else
+      flash[:alert] = "Debe poseer correo electrónico en tu cuenta"
+      redirect_to root_path
+
+    end
+  end
+
 
   def elearning
-
+    raise
     auth = request.env["omniauth.auth"]
     user = User.where(email: auth.info.email).first
     if user.nil?

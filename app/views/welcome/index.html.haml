@@ -27,9 +27,7 @@
               =c.submit "enviar", class: "hidden"
         - if user_signed_in?
           =link_to  "Cerrar sesión", destroy_user_session_path,method: :delete, class: "waves-effect waves-light btn"
-        -else
-          =link_to   "Iniciar sesión", user_elearning_omniauth_authorize_path , class: "waves-effect waves-light btn"
-        %a{:href => "#{courses_path}", class: "waves-effect waves-light btn mybtn2"} Ver cursos
+        %a{:href => "#{courses_path}", class: "waves-effect waves-light btn"} Ver cursos
 
 -if !@recomendation_courses.empty?
   #tf-service

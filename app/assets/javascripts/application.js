@@ -41,12 +41,6 @@ function GetUserId(){
   user_id = $(".usuario").attr("id").split("user-")[1];
 }
 
-
-
-
-
-
-
 function AddOrRemoveFromFavorites(){
 
    var course_id;
@@ -287,6 +281,20 @@ document.addEventListener("turbolinks:load", function(){
       PageFile = 15;
 
     }
+  }
+  if ( $('body').hasClass('profiles')) {
+
+    if ( $('body').hasClass('new')   ) {
+        PageFile = 16;
+
+    }
+
+    if ( $('body').hasClass('edit')   ) {
+        PageFile = 17;
+
+    }
+
+
   }
 
       AddOrRemoveFromFavorites();

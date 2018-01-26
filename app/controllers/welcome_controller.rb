@@ -1,15 +1,15 @@
 class WelcomeController < ApplicationController
 
-    # skip_before_action :redirect_to_fill_template
+    # skip_before_action :redirect_to_fill_profile, only: [:profile]
 
     def index
     @recomendation_courses = Array.new
     if user_signed_in?
-      
 
-      response_id = DoTemplate.where(user_id: current_user.id).last.response_id
-      responses = HasChoise.where(response_id: response_id)
-      # Tomar todos los cursos realizados por el usuario
+
+      # response_id = DoTemplate.where(user_id: current_user.id).last.response_id
+      # responses = HasChoise.where(response_id: response_id)
+      # # Tomar todos los cursos realizados por el usuario
       course_by_the_user = current_user.do_courses
 
       courses_id_by_user = Array.new
@@ -32,44 +32,44 @@ class WelcomeController < ApplicationController
       # Se obtienen las respuestas del usuario en la planilla
       @recomendation_courses = Array.new
       @counter_recomendation_array = Array.new
-      responses.each do |r|
-        # Se obtiene la categorias segun la respuesta
-        category  = Category.find_by_name(r.choise.description)
-        if !category.nil?
-
-          # Se obtienen los cursos que posean la categoria y los que el usuario no este inscrito
-          course = Course.where(category_id: category.id, scoping: 1).where.not(id: courses_id_by_user)
-
-          if @recomendation_courses.length < 6
-            counter = @recomendation_courses.length
-          else
-            counter = 0
-          end
-          # Se recorren dichos cursos
-          course.each do |c|
-
-
-            # Se toma la cantidad de recomendaciones que tiene
-            counter_recomendation =  DoRecomendation.where(course_id: c.id).count
-
-            if @recomendation_courses.length < 6
-
-              @recomendation_courses[counter] = c
-              @counter_recomendation_array[counter] = counter_recomendation
-            else
-              # Tomar el index y el valor de recomendacion del que posea menor recomendaciones
-              index = @counter_recomendation_array.each_with_index.min[1]
-              value = @counter_recomendation_array.each_with_index.min[0]
-              if counter_recomendation > value
-                @recomendation_courses[index] = c
-                @counter_recomendation_array[index] = counter_recomendation
-
-              end
-            end
-            counter += 1
-          end
-        end
-      end
+      # responses.each do |r|
+      #   # Se obtiene la categorias segun la respuesta
+      #   category  = Category.find_by_name(r.choise.description)
+      #   if !category.nil?
+      #
+      #     # Se obtienen los cursos que posean la categoria y los que el usuario no este inscrito
+      #     course = Course.where(category_id: category.id, scoping: 1).where.not(id: courses_id_by_user)
+      #
+      #     if @recomendation_courses.length < 6
+      #       counter = @recomendation_courses.length
+      #     else
+      #       counter = 0
+      #     end
+      #     # Se recorren dichos cursos
+      #     course.each do |c|
+      #
+      #
+      #       # Se toma la cantidad de recomendaciones que tiene
+      #       counter_recomendation =  DoRecomendation.where(course_id: c.id).count
+      #
+      #       if @recomendation_courses.length < 6
+      #
+      #         @recomendation_courses[counter] = c
+      #         @counter_recomendation_array[counter] = counter_recomendation
+      #       else
+      #         # Tomar el index y el valor de recomendacion del que posea menor recomendaciones
+      #         index = @counter_recomendation_array.each_with_index.min[1]
+      #         value = @counter_recomendation_array.each_with_index.min[0]
+      #         if counter_recomendation > value
+      #           @recomendation_courses[index] = c
+      #           @counter_recomendation_array[index] = counter_recomendation
+      #
+      #         end
+      #       end
+      #       counter += 1
+      #     end
+      #   end
+      # end
 
 
       @recomendation_courses.each do |course|

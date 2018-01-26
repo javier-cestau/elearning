@@ -3,8 +3,8 @@
 	 include  Constant::StateEnroll
 
 	validates :privilege, presence: true
-	validates :name, presence: true, numericality: false ,length: { minimum: 5 }
-	validates :position, presence: true
+	# validates :name, presence: true, numericality: false ,length: { minimum: 5 }
+	# validates :position, presence: true
 
 	has_attached_file :photo, styles: {small: ["128x128",:jpg], thumb: ["60x60",:jpg]},
 	:convert_options => {
@@ -21,7 +21,7 @@
 	devise :database_authenticatable, :registerable,
 				 :recoverable, :rememberable, :trackable, :validatable
 
-	devise :omniauthable, omniauth_providers: [:elearning]
+ devise :omniauthable, omniauth_providers: [:facebook,:google_oauth2]
 
 	belongs_to :department
 
@@ -114,6 +114,25 @@
  def is_super_admin?
 	 self.privilege >= 3
  end
+
+ def self.auth_creation(auth)
+
+	 password =  BCrypt::Password.create("#{auth.uid}")
+
+	 where(email: auth.email).first_or_create do |user|
+		 user.provider = auth.provider
+		 user.uid = auth.uid
+		 user.email = auth.info.email
+		 if !auth.info.image.empty?
+			 user.photo = auth.info.image+"?type=normal"
+		 end
+		 user.privilege = "1"
+		 user.password = password
+		 user.department_id = Department.first.id
+		 user.save
+	 end
+ end
+
 
  def self.get_system_privileges
 	 privilege = [["Empleado",1],["Administrador intermedio", 2],["Administrador general", 3]]

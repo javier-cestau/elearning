@@ -1,0 +1,39 @@
+.container
+  %article
+    %br
+    %br
+    .align-text
+      %h3 Perfil
+    .row
+      .col.s12{style: "text-align: center"}
+        .survey-template
+          .container
+            .row
+              %form{action: "/profiles", method: "post"}
+                .col.s6
+                  %h2 Nombres
+                  %h5.center-align=@profile[0].answer
+                .col.s6
+                  %h2 Apellidos
+                  %h5.center-align=@profile[1].answer
+                .col.s12
+                  %h2 Fecha de nacimiento
+                  %h5.center-align=@profile[2].answer
+                .col.s12
+                  %h2 Teléfono
+                  %h5.center-align=@profile[3].answer
+                .col.s4
+                  %h2 Estado
+                  %h5.center-align=@profile[4].answer
+                .col.s4
+                  %h2 Municipio
+                  %h5.center-align=@profile[5].answer
+                .col.s4
+                  %h2 Ciudad
+                  %h5.center-align=@profile[6].answer
+                .col.s12
+                  %h2 Movimiento o Grupo Juvenil
+                  %h5.center-align=@profile[7].answer
+                .col.s12
+                  %h2 Parroquía
+                  %h5.center-align=@profile[8].answer

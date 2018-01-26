@@ -118,7 +118,7 @@ document.addEventListener("turbolinks:load", function(){
 
         });
 
-      
+
 
         $(".indeterminate").click(function (e) {
                 var id = e.target.id.split("_")[1]+"_"+e.target.id.split("_")[2];
@@ -527,8 +527,10 @@ document.addEventListener("turbolinks:load", function(){
         // Enviar el Form principal
         $("#submit-form").click(function(){
             if ( $( "#course-name" ).val().length  > 10 ) {
-
-                $("#form-course").submit();
+              $("#start_date_input_hidden").val($("#start_date > input:first-child").attr('value'))
+              $("#deadline_course_input_hidden").val($("#deadline_course > input:first-child").attr('value'))
+              $("#deadline_inscription_input_hidden").val($("#deadline_inscription > input:first-child").attr('value'))
+              $("#form-course").submit();
             }
             else{
 
