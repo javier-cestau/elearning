@@ -112,7 +112,7 @@ document.addEventListener("turbolinks:load", function(){
         $("#videos").on("click", "button", function(){
 
             var name = ($(this).attr("name"));
-            let html = "<p style='font-size: 25px'> #video{"+$(this).attr("value")+"/"+name+"} </p>";
+            varhtml = "<p style='font-size: 25px'> #video{"+$(this).attr("value")+"/"+name+"} </p>";
             $(".fr-view").append(html);
             $('#modal-video').modal('close');
 
@@ -150,7 +150,7 @@ document.addEventListener("turbolinks:load", function(){
         //  Boton de buscar usuarios
         $("#users").on("click" ,"#btn-search-users",function(){
 
-            let option = $('input[name=search_user]:checked').val();
+            varoption = $('input[name=search_user]:checked').val();
             searching_for =  $("#search_user").val();
             $.ajax({
 
@@ -190,7 +190,7 @@ document.addEventListener("turbolinks:load", function(){
                             $("#list-search-users").append(search_list);
                             //Se crean las funcionalidades los clicks de cada elemento de la lista
                             var function_anonym = function(){
-                                let id_u = id;
+                                varid_u = id;
 
                                 var search_list =  ' <li class="collection-item avatar" id="li_user'+id_u+'" >'+
                                 '  <img src='+icon_user+' class="circle"/>'+
@@ -211,7 +211,7 @@ document.addEventListener("turbolinks:load", function(){
 
                                     //  Si hace click se elimina de la lista
                                     $("#li_user_search"+id_u).remove();
-                                    let length_text = $("#user-list #user"+id_u).text().length ;
+                                    varlength_text = $("#user-list #user"+id_u).text().length ;
                                     //  se toma en cuenta si ya existe el elemento en la lista de usuarios para no volver a agregarlo
                                     if (length_text ==  0){
                                         // se agrega a la lista de prelaciones  y ademas se agrega un input al form principal
@@ -295,7 +295,7 @@ document.addEventListener("turbolinks:load", function(){
                         dataType:'html',
                         success : function(data) {
                             //  Se debe hacer un split debido a que lo devuelve con un tag <form> y solo se debera usar lo que esta dentro de dicho tag
-                            let departments = "<div class='jumbotron'>"+data.split("<div class='jumbotron'>")[1];
+                            vardepartments = "<div class='jumbotron'>"+data.split("<div class='jumbotron'>")[1];
                             departments = departments.split("</form>")[0];
                             $("#departments").append(departments);
                         },
@@ -313,7 +313,7 @@ document.addEventListener("turbolinks:load", function(){
                             type : 'get',
                             dataType:'html',
                             success : function(data) {
-                                let users = data;
+                                varusers = data;
                                 $("#users").append(users);
                             },
                             error : function(request,error)
@@ -350,7 +350,7 @@ document.addEventListener("turbolinks:load", function(){
                     dataType:'html',
                     success : function(data) {
                         //  Se debe hacer un split debido a que lo devuelve con un tag <form> y solo se debera usar lo que esta dentro de dicho tag
-                        let departments = "<div class='jumbotron'>"+data.split("<div class='jumbotron'>")[1];
+                        vardepartments = "<div class='jumbotron'>"+data.split("<div class='jumbotron'>")[1];
                         departments = departments.split("</form>")[0];
 
 
@@ -370,7 +370,7 @@ document.addEventListener("turbolinks:load", function(){
                         type : 'get',
                         dataType:'html',
                         success : function(data) {
-                            let users = data;
+                            varusers = data;
                             $("#users").append(users);
 
                             $("#user-list > .collection-item > .secondary-content ").on("click",".delete-user",function(e){
@@ -397,7 +397,7 @@ document.addEventListener("turbolinks:load", function(){
     }
     function InitializePrelationsAndTagsItem(){
         $("#prelation").on("click" ,"li",function(){
-            let id = $(this).attr("id").split("prel_course")[1];
+            varid = $(this).attr("id").split("prel_course")[1];
             $("#i_prela_course"+id).remove();
             $("#prel_course"+id).remove();
         });
@@ -420,8 +420,8 @@ document.addEventListener("turbolinks:load", function(){
 
                 for (var i = 0; i < length; i++) {
                     // se toma el id y el nombre del curso
-                    let name = data.courses[i].name;
-                    let id = data.courses[i].id;
+                    varname = data.courses[i].name;
+                    varid = data.courses[i].id;
                     var cover = data.courses[i].cover_file_name;
 
                     if (cover === null){
@@ -449,7 +449,7 @@ document.addEventListener("turbolinks:load", function(){
                             $(".no-prelation").remove();
                             var img_src = $("#img_c_"+id).prop("src");
                             $("#search_course"+id).remove();
-                            let length_text = $("#prel_course"+id).text().length ;
+                            varlength_text = $("#prel_course"+id).text().length ;
                             //  se toma en cuenta si ya existe el elemento en la lista de prelaciones para no volver a agregarlo
                             if (length_text ===  0){
 

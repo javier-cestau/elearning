@@ -65,7 +65,7 @@ document.addEventListener("turbolinks:load", function(){
     // Cuando el usuario se salga del input se enviara el formulario por AJAX en el caso de ser valido
     $("#new_user #user_email").blur(function(){
 
-        let email =$("#new_user #user_email").val();
+        varemail =$("#new_user #user_email").val();
 
 
           if (isEmail(email)){

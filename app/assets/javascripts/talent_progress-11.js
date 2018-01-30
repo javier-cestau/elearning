@@ -92,7 +92,7 @@ document.addEventListener("turbolinks:load", function(){
         type : 'get',
         dataType: 'html',
         success : function(data) {
-           let courses = "<div class='anterior'>"+data;
+           varcourses = "<div class='anterior'>"+data;
            $("#option").append(courses);
         },
         error : function(request,error){
@@ -114,7 +114,7 @@ document.addEventListener("turbolinks:load", function(){
         type : 'get',
         dataType: 'html',
         success : function(data) {
-           let courses = "<div class='anterior'>"+data;
+           varcourses = "<div class='anterior'>"+data;
            $("#option").append(courses);
         },
         error : function(request,error){
@@ -136,7 +136,7 @@ document.addEventListener("turbolinks:load", function(){
         type : 'get',
         dataType: 'html',
         success : function(data) {
-           let courses = "<div class='anterior'>"+data;
+           varcourses = "<div class='anterior'>"+data;
            $("#option").append(courses);
 
         },
@@ -159,7 +159,7 @@ document.addEventListener("turbolinks:load", function(){
         type : 'get',
         dataType: 'html',
         success : function(data) {
-           let courses = "<div class='anterior'>"+data;
+           varcourses = "<div class='anterior'>"+data;
            $("#option").append(courses);
 
         },
@@ -182,7 +182,7 @@ document.addEventListener("turbolinks:load", function(){
         type : 'get',
         dataType: 'html',
         success : function(data) {
-           let courses = "<div class='anterior'>"+data;
+           varcourses = "<div class='anterior'>"+data;
            $("#option").append(courses);
 
         },
@@ -205,7 +205,7 @@ document.addEventListener("turbolinks:load", function(){
         type : 'get',
         dataType: 'json',
         success : function(data) {
-           let courses = "<div class='anterior'> <canvas id='myChart' width='850px' height='320px'></canvas></div>";
+           varcourses = "<div class='anterior'> <canvas id='myChart' width='850px' height='320px'></canvas></div>";
            $("#option").append(courses);
            GetCategories(data);
 
@@ -235,7 +235,7 @@ document.addEventListener("turbolinks:load", function(){
         type : 'get',
         dataType: 'html',
         success : function(data) {
-           let courses = "<div class='anterior'>"+data;
+           varcourses = "<div class='anterior'>"+data;
            $("#option").append(courses);
 
         },
@@ -259,7 +259,7 @@ document.addEventListener("turbolinks:load", function(){
         type : 'get',
         dataType: 'html',
         success : function(data) {
-           let courses = "<div class='anterior'>"+data;
+           varcourses = "<div class='anterior'>"+data;
            $("#option").append(courses);
 
         },
@@ -283,7 +283,7 @@ document.addEventListener("turbolinks:load", function(){
         type : 'get',
         dataType: 'html',
         success : function(data) {
-           let courses = "<div class='anterior'>"+data;
+           varcourses = "<div class='anterior'>"+data;
            $("#option").append(courses);
 
         },
@@ -306,7 +306,7 @@ document.addEventListener("turbolinks:load", function(){
             type : 'get',
             dataType: 'html',
             success : function(data) {
-               let courses = "<div class='anterior'>"+data;
+               varcourses = "<div class='anterior'>"+data;
                $("#option").append(courses);
 
             },
