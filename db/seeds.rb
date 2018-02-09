@@ -366,7 +366,7 @@ end
               puts "-------------------------------------------------------------".yellow
 
 
-               enroll_user(admin,@course_1,0,@course_1.nil,1) #Aprueba el curso 1
+               enroll_user(admin,@course_1, 0,@course_1.nil,1) #Aprueba el curso 1
                enroll_user(admin,@course_2,1,@course_2.deadline_course,1) #Reprueba el curso 2
                enroll_user(admin,@course_3,0,@course_3.deadline_course,1) #Aprueba el curso 3
                enroll_user(admin,@course_4,1,@course_4.deadline_course,1) #Reprueba el curso 4

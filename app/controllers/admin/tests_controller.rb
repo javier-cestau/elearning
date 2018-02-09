@@ -180,12 +180,12 @@ class Admin::TestsController < ApplicationController
  end
 
  def is_active_course
-   if @course.active == 0
+   
+   if @course.closed?
      yield
    else
      flash[:alert] = "No se puede modificar o eliminar un examen mientras el curso está activo"
      redirect_to edit_admin_course_section_path(@course, @section)
-
    end
  end
 

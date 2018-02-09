@@ -40,6 +40,29 @@ class Course < ApplicationRecord
   has_many :multimedia_courses
 
   has_many :comment_courses
+
+  include AASM
+
+  aasm whiny_transitions: false do
+      state :disabled, :initial => true
+      state :active
+      state :closed
+
+      event :activate do
+        transitions from: :disabled, to: :active
+      end
+
+      event :disable do
+        transitions from: :active, to: :disabled
+        transitions from: :closed, to: :disabled
+      end
+
+      event :close do
+        transitions from: :active, to: :closed
+      end
+
+    end
+
   def self.search_admin(search)
      id_array =  Course.search_by_tag_admin(search)
 
@@ -296,9 +319,9 @@ class Course < ApplicationRecord
 
       # Se toma solo los id de los cursos que poseen los cada tag
       if id_array.empty?
-        relation = tag.courses.where("active = 1").select(:id)
+        relation = tag.courses.where("active = 1").select(:id) #TODO cambiar por aasm_state?
       else
-        relation = tag.courses.where("(courses.id NOT IN (?)) AND active = 1",id_array).select(:id)
+        relation = tag.courses.where("(courses.id NOT IN (?)) AND active = 1",id_array).select(:id) #TODO igual aqui
       end
 
       unless relation.empty?

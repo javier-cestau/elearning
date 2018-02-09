@@ -37,7 +37,7 @@
         end
       end
     else
-      @courses = Course.where("active = 1").order("#{order}").paginate(params[:page])
+      @courses = Course.active.order("#{order}").paginate(params[:page])
     end
 
     unless params[:cat].nil?
@@ -58,7 +58,6 @@
     prelations = Prelation.where(course_id: @course.id)
 
     @courses_prv = Hash.new
-
 
     prelations.each do |pre|
 
