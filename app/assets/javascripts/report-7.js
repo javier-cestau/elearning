@@ -136,7 +136,7 @@ document.addEventListener("turbolinks:load", function() {
                 }
                 else{
                     department_name = $(".department-name").attr("id");
-                    $(".title").append("<h2>Usuarios inscritos por semana en el departamento <strong>"+department_name+"</strong></h2>");
+                    $(".title").append("<h2>Usuarios inscritos por semana en el programa <strong>"+department_name+"</strong></h2>");
 
                 }
                 $.each(data.data.year, function(index,year_object){
@@ -294,7 +294,7 @@ document.addEventListener("turbolinks:load", function() {
                       }
                       else{
                           department_name = $(".department-name").attr("id");
-                          $(".title-report").append("<h2>Usuarios inscritos por día en el departamento <strong>"+department_name+"</strong></h2>");
+                          $(".title-report").append("<h2>Usuarios inscritos por día en el programa <strong>"+department_name+"</strong></h2>");
 
                       }
 
@@ -360,7 +360,7 @@ document.addEventListener("turbolinks:load", function() {
                       }
                       else{
                           department_name = $(".department-name").attr("id");
-                          $(".title-report").append("<h2>Usuarios inscritos por día en el departamento <strong>"+department_name+"</strong></h2>");
+                          $(".title-report").append("<h2>Usuarios inscritos por día en el programa <strong>"+department_name+"</strong></h2>");
 
                       }
 

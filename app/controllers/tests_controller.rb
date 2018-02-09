@@ -77,7 +77,7 @@ class TestsController < ApplicationController
 					values[:answers_correct].each do |c|
 						answer = Answer.find_by(question_id: question_object.id,description: c)
 						HasAnswer.create(do_test_id: @do_test.id,answer_id: answer.id)
-
+						
 						if answer.is_correct == 1
 							counter_correct += 1
 						else
@@ -132,15 +132,14 @@ class TestsController < ApplicationController
 
 
 	def result
-	 @do_test = DoTest.find(params[:id])
-	#  En caso de que un usuario coloque un id de do_test que no corresponde al examen de la url
-	 if @do_test.test_id == @test.id
-			 #  Asegurar que los unicos que lo puedan ver son el que hizo el examen y los administradores
-			 if current_user.is_at_least_medium_admin? || current_user.id == @do_test.user_id
-
-			 else
-				 root_path
-			 end
+		@do_test = DoTest.find(params[:id])
+		#  En caso de que un usuario coloque un id de do_test que no corresponde al examen de la url
+		if @do_test.test_id == @test.id
+			#  Asegurar que los unicos que lo puedan ver son el que hizo el examen y los administradores
+			if current_user.is_at_least_medium_admin? || current_user.id == @do_test.user_id
+			else
+			 root_path
+			end
 		else
 			flash[:alert] = "Hubo un error en enlace para mostrar los resultados"
 			root_path

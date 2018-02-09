@@ -278,7 +278,7 @@ document.addEventListener("turbolinks:load", function(){
 
 
 
-        // Cargar los departamentos desde un parcial
+        // Cargar los programas desde un parcial
         $('#scoping-list').change(function() {
             var index = $(this)[0].selectedIndex;
             if(index >= 0 && index <= 2){
@@ -332,7 +332,7 @@ document.addEventListener("turbolinks:load", function(){
     function InitializeScopingCourse(){
 
 
-        //Para cargar por defecto los departamentos o usuarios segun el scoping del curso
+        //Para cargar por defecto los programas o usuarios segun el scoping del curso
 
 
         var index = $("#scoping-list")[0].selectedIndex;

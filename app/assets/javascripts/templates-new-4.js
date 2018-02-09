@@ -434,7 +434,7 @@ document.addEventListener("turbolinks:load", function(){
 
 
 
-  	      //Evitar que se envie el formulario sin selccionar ningun departamento
+  	      //Evitar que se envie el formulario sin selccionar ningun programa
 	        validate_department = 0;
 
           $.each($('.department > .flex > label input'),function(index,input){
@@ -513,7 +513,7 @@ document.addEventListener("turbolinks:load", function(){
 
           } else if (validate_department == 0){
 
-              alert("Debe seleccionar al menos un departamento");
+              alert("Debe seleccionar al menos un programa");
 
           } else if (validate_multiple_options == 0){
 

@@ -6,8 +6,7 @@
     %ul.collection#images
       - @categories.each do |category|
         %li.collection-item.avatar
-          %i.material-icons.circle.blue-grey.lighten-1
-            %i.fa.fa-clone
+          %img.circle{src: "#{category.photo(:medium)}"} 
           %span.title
             =category.name
           %p

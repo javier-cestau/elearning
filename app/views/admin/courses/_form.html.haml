@@ -21,7 +21,7 @@
 								%p.align-text= localize(@course.start_date)
 								-date = date_format(@course.start_date,@course)
 
-								%input.hidden#start_date_input_hidden{name: "course[start_date]", value: "#{@course.start_date}"}
+							%input.hidden#start_date_input_hidden{name: "course[start_date]", value: "#{@course.start_date}"}
 							#start_date
 								%input.amber.datepicker{placeholder: "Cambiar", name: "", value: "#{date}"}
 
@@ -111,7 +111,7 @@
 				-@list_tags.each do |tags_input|
 					%input{name: "tag[]" , value: tags_input.name, type: "hidden", id: "i_tag_course#{tags_input.name}"}
 
-			= c.input :scoping,collection: [["Público",1],["Por departamento",2],["Privado",3]] , label: "Tipo de curso", input_html:{ id: "scoping-list"},  include_blank: false
+			= c.input :scoping,collection: [["Público",1],["Por programa",2],["Privado",3]] , label: "Tipo de curso", input_html:{ id: "scoping-list"},  include_blank: false
 
 			%br
 			%div.align-text.date-container

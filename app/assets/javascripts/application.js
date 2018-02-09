@@ -31,7 +31,16 @@
 //   return "Data will be lost if you leave the page, are you sure?";
 // };
 
+$(window).scroll(function(){
 
+  if($(this).scrollLeft() > 350)
+  {
+    $("#hidden-message").addClass("display-inline-block")
+  }
+  else{
+    $("#hidden-message").removeClass("display-inline-block")
+  }
+})
     //Para que no se carguen los script de otras paginas
 var PageFile = 0;
 var json_notifications;

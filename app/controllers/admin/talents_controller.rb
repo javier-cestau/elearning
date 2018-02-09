@@ -165,7 +165,7 @@ class Admin::TalentsController < ApplicationController
     @all_approved_courses_department = 0
     @all_reprobed_courses_department = 0
 
-    #Para saber la cantidad de cursos aprobados en el departamento
+    #Para saber la cantidad de cursos aprobados en el programa
     @all_approved_courses_g.each do |acbd|
      @course_by_department = CourseHasDepartment.where(course_id: acbd.course_id, department_id: @department.id)
         if !@course_by_department.empty?
@@ -176,7 +176,7 @@ class Admin::TalentsController < ApplicationController
     end
 
 
-    #Para saber la cantidad de cursos reprobados en el departamento
+    #Para saber la cantidad de cursos reprobados en el programa
     @all_reprobed_courses_g.each do |acbd|
      @course_by_department = CourseHasDepartment.where(course_id: acbd.course_id, department_id: @department.id)
         if !@course_by_department.empty?
@@ -224,7 +224,7 @@ class Admin::TalentsController < ApplicationController
         end
     end
 
-    @message = "El talento posee  #{view_context.pluralize(@counter,'curso aprobado','cursos aprobados')} en el departamento de: #{@department.name}"
+    @message = "El talento posee  #{view_context.pluralize(@counter,'curso aprobado','cursos aprobados')} en el programa de: #{@department.name}"
 
     respond_to do |format|
 
@@ -270,7 +270,7 @@ class Admin::TalentsController < ApplicationController
         end
     end
 
-    @message =  "El talento ha reprobado #{view_context.pluralize(@counter,'curso','cursos')} en el departamento de: #{@department.name}"
+    @message =  "El talento ha reprobado #{view_context.pluralize(@counter,'curso','cursos')} en el programa de: #{@department.name}"
 
     respond_to do |format|
 
@@ -315,7 +315,7 @@ class Admin::TalentsController < ApplicationController
         end
     end
 
-    @message =  "El talento ha participado en  #{view_context.pluralize(@counter,'curso','cursos')} en el departamento de: #{@department.name}"
+    @message =  "El talento ha participado en  #{view_context.pluralize(@counter,'curso','cursos')} en el programa de: #{@department.name}"
 
     respond_to do |format|
 
@@ -361,7 +361,7 @@ class Admin::TalentsController < ApplicationController
         end
     end
 
-    @message= "El talento esta inscrito en  #{view_context.pluralize(@counter,'curso','cursos')} en el departamento de: #{@department.name}"
+    @message= "El talento esta inscrito en  #{view_context.pluralize(@counter,'curso','cursos')} en el programa de: #{@department.name}"
 
     respond_to do |format|
 

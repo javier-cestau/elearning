@@ -52,8 +52,8 @@ class Admin::CategoriesController < ApplicationController
 
     # Si el query WHERE no retorna nada significa que se puede actualizar
     if @name_validate.empty?
-      if @category.update(name: name)
-        redirect_to admin_categories_path, notice: "La categoría '#{name_old}' se ha actualiazado a '#{@category.name}' correctamente"
+      if @category.update(params_category)
+        redirect_to admin_categories_path, notice: "La categoría '#{name_old}' se ha actualiazado correctamente"
       else
         render :edit
       end
@@ -93,7 +93,7 @@ class Admin::CategoriesController < ApplicationController
   private
 
   def params_category
-    params.require(:category).permit(:name)
+    params.require(:category).permit(:name,:description,:photo)
   end
 
   def find_category

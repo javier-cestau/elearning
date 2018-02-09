@@ -91,8 +91,6 @@ before_action :all_topic, only: %i[edit talent_list]
 			(@course.day_counter_update..today).each do |date|
 				@days += 1
 			end
-
-			@days -= 1
 		end
 		@course.tags.each do |tag|
 			@list_tags.push(tag)
@@ -124,7 +122,7 @@ before_action :all_topic, only: %i[edit talent_list]
 	end
 
 	def update
-		
+
 		@course = Course.find(params[:id])
 		#Para saber si se pueden modificar los datos o no.
 		canUpdate = false
@@ -283,7 +281,7 @@ before_action :all_topic, only: %i[edit talent_list]
 									CourseHasPrivateUser.where(course_id: @course.id).destroy_all
 								end
 
-								# Cuando el curso sea de tipo POR DEPARTAMENTOS
+								# Cuando el curso sea de tipo POR programaS
 								if scoping == '2'
 									save_department_association
 								end
@@ -388,7 +386,7 @@ before_action :all_topic, only: %i[edit talent_list]
 							if @course.save
 
 
-								# Cuando el curso sea de tipo POR DEPARTAMENTOS
+								# Cuando el curso sea de tipo POR programaS
 								if scoping == '2'
 									save_department_association
 								end
@@ -425,7 +423,7 @@ before_action :all_topic, only: %i[edit talent_list]
 		end
 	end
 
-	# Para enviar por AJAX al momento que el adminitrador inidique que quiere un curso por departamento
+	# Para enviar por AJAX al momento que el adminitrador inidique que quiere un curso por programa
 	def  departments
 		if params[:id].nil?
 			@course = Course.new

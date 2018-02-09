@@ -186,7 +186,7 @@
 
                                     </li><p></p>
 
-                                    <p> La asignatura será impartida por profesorado adscrito a cuatro departamentos distintos: Departamento de Álgebra, Departamento de Análisis Matemático, Departamento de Geometría y Topología y Departamento de Matemática Aplicada. Está estructurada en sesiones intensivas diarias.</p>
+                                    <p> La asignatura será impartida por profesorado adscrito a cuatro programas distintos: programa de Álgebra, programa de Análisis Matemático, programa de Geometría y Topología y programa de Matemática Aplicada. Está estructurada en sesiones intensivas diarias.</p>
 
                                   </ul>
                                 </div>
@@ -232,7 +232,7 @@
 
                                     </li><p></p>
 
-                                    <p> La asignatura será impartida por profesorado adscrito a cuatro departamentos distintos: Departamento de Álgebra, Departamento de Análisis Matemático, Departamento de Geometría y Topología y Departamento de Matemática Aplicada. Está estructurada en sesiones intensivas diarias.</p>
+                                    <p> La asignatura será impartida por profesorado adscrito a cuatro programas distintos: programa de Álgebra, programa de Análisis Matemático, programa de Geometría y Topología y programa de Matemática Aplicada. Está estructurada en sesiones intensivas diarias.</p>
 
                                   </ul>
                                 </div>
@@ -360,7 +360,7 @@
                                         conocimiento teórico avanzado para la satisfactoria formación de especialistas en el campo de las finanzas públicas.
                                         El Máster responde a la combinación de ambos enfoques, propiciando la profundización en las cuestiones centrales y dogmáticas pero sin desatender la orientación práctica de los futuros docentes y cultivadores de esta materia,
                                         pues se trata de conjugar la investigación del Derecho Financiero y el conocimiento de los problemas concretos de la fiscalidad para resultar un buen profesional en este ámbito.
-                                        Por otro lado, este Máster no es el fruto de la improvisación, sino de una dilatada experiencia en los estudios de posgrado del profesorado del Departamento de Derecho Financiero y Tributario de la UCM y de la intensa actividad
+                                        Por otro lado, este Máster no es el fruto de la improvisación, sino de una dilatada experiencia en los estudios de posgrado del profesorado del programa de Derecho Financiero y Tributario de la UCM y de la intensa actividad
                                         formativa realizada desde su creación por el Centro de Estudios Financieros, principal promotor de la UDIMA.
                                         la necesaria conexión entre el Derecho de los gastos públicos y de los Presupuestos con el estudio de los recursos públicos, fundamentalmente tributarios; la integración del conocimiento de los problemas propios del sistema fiscal español
                                         con todo el conjunto de normas y principios de la Unión Europea y otros marcos de relación internacional, potenciando el tratamiento del Derecho
@@ -775,7 +775,7 @@
                                             conocimiento teórico avanzado para la satisfactoria formación de especialistas en el campo de las finanzas públicas.
                                             El Máster responde a la combinación de ambos enfoques, propiciando la profundización en las cuestiones centrales y dogmáticas pero sin desatender la orientación práctica de los futuros docentes y cultivadores de esta materia,
                                             pues se trata de conjugar la investigación del Derecho Financiero y el conocimiento de los problemas concretos de la fiscalidad para resultar un buen profesional en este ámbito.
-                                            Por otro lado, este Máster no es el fruto de la improvisación, sino de una dilatada experiencia en los estudios de posgrado del profesorado del Departamento de Derecho Financiero y Tributario de la UCM y de la intensa actividad
+                                            Por otro lado, este Máster no es el fruto de la improvisación, sino de una dilatada experiencia en los estudios de posgrado del profesorado del programa de Derecho Financiero y Tributario de la UCM y de la intensa actividad
                                             formativa realizada desde su creación por el Centro de Estudios Financieros, principal promotor de la UDIMA.
                                             la necesaria conexión entre el Derecho de los gastos públicos y de los Presupuestos con el estudio de los recursos públicos, fundamentalmente tributarios; la integración del conocimiento de los problemas propios del sistema fiscal español
                                             con todo el conjunto de normas y principios de la Unión Europea y otros marcos de relación internacional, potenciando el tratamiento del Derecho

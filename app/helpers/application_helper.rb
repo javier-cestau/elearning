@@ -28,6 +28,8 @@ module ApplicationHelper
 			 link = admin_multiple_path(object_id: object_id)
 		 elsif value == Constant::QuestionEnum::TrueFalse
 			 link = admin_true_false_path(object_id: object_id)
+		 elsif value == Constant::QuestionEnum::Redaccion
+			 link = admin_redaction_path(object_id: object_id)
 		 end
 
 		 link
@@ -41,6 +43,15 @@ module ApplicationHelper
 			end
 		end
 		return ""
+	end
+
+	def to_boolean(params)
+		if params.nil?
+			 auto = false
+		else
+			# Comprobar si el valor es true o false
+			 auto = params == "true" ? true : false
+		 end
 	end
 
 end

@@ -6,7 +6,7 @@
 %br
 .jumbotron{style: "background-color: #f9f9f9;"}
   .department
-    %h3 Seleccione los departamentos que usaran esta planilla
+    %h3 Seleccione los programas que usaran esta planilla
     %br
     .flex
       =t.collection_check_boxes :departments, Department.all.order("name ASC"), :id , :name,  { item_wrapper_tag: false } do |b|

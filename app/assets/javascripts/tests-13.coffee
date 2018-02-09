@@ -3,8 +3,6 @@ addAnswerTest = (num) ->
 	answer_replace = answer.replace(/[\s\:\+]+/g, "-")
 	if answer.length > 0
 		exist = $("#answers-list"+num+" #i_answer_survey"+answer_replace).val()
-		console.log answer_replace
-		console.log num
 		if  !exist?
 			option = $("input[name='test[questions_attributes][#{num}][type_question_id]']:checked").val()
 			type = ""
@@ -150,15 +148,18 @@ InitializeSubmit = ->
 						has_correct_answer = false
 
 		note_submit = 0
-		some_question_has_0 = false
-		$(".puntaje input").each ->
-			point = parseInt($(this).val()) || 0;
-			if point == 0
-				some_question_has_0 = true
-			note_submit += point
-
-
 		min_grade = parseInt($("#test_min_grade").val()) || 0;
+		some_question_has_0 = false
+		if $(".puntaje ").length isnt 0
+			$(".puntaje input").each ->
+				point = parseInt($(this).val()) || 0;
+				if point == 0
+					some_question_has_0 = true
+				note_submit += point
+		else
+			note_submit = 20
+			min_grade = 10
+
 
 		deadline_test = new Date($("input[name='test[deadline]']:last-child").val())
 		start_date_test = new Date($("input[name='test[start_date]']:last-child").val())
@@ -231,6 +232,8 @@ InitializeSubmit = ->
 		else if min_grade < 1 || min_grade > 20
 			alert 'Los valores permitidos de la nota mínima es desde 1 hasta 20'
 		else
+			if e.target.id is "change_auto_btn"
+				document.querySelector("#change_auto").value = "true"
 			$("form").submit()
 		return
 
@@ -258,8 +261,10 @@ document.addEventListener 'turbolinks:load', ->
 			$(".panel-element" ).append($(this).data('fields').replace(regexp, time))
 			return
 
-		$("#panel-element").sortable revert: true
-
+		$('#panel-element').sortable
+			revert: true
+			stop: (event, ui) ->
+				$("#hidden-message").removeClass("display-inline-block")
 		$('.panel').on 'click', '.borrar', ->
 			id = $(this).data("id")
 			$("#basic-addon#{id}").remove()

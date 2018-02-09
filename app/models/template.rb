@@ -4,7 +4,7 @@ class Template < ApplicationRecord
 
   validates :name, presence: true,  length: { minimum: 10 }
 
-  #relacion entre departamento y planilla
+  #relacion entre programa y planilla
   has_many :has_templates, dependent: :destroy
   has_many :departments , through: :has_templates
 

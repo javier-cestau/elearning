@@ -1,17 +1,16 @@
 .container
   .col-md-10
-    %h2 Departamentos
-    =link_to  "Crear departamento", new_admin_department_path , class: "btn "
+    %h2 Programas
+    =link_to  "Crear programa", new_admin_department_path , class: "btn "
   .col-md-10
     %ul.collection#images
       - @departments.each do |department|
         %li.collection-item.avatar
-          %i.material-icons.circle.blue-grey.lighten-1
-            %i.fa.fa-building.building-sign
+          %img.circle{src: "#{department.photo}"}
           %span.title
             =department.name
           %p
-            Cantidad de personas dentro del departamento:
+            Cantidad de personas dentro del programa:
             = User.where(department_id: department).count
           .secondary-content
             =link_to "Editar" , edit_admin_department_path(department), class: "btn blue lighten-3"

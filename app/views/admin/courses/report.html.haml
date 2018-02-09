@@ -66,7 +66,7 @@
 
   %br
 .align-text
-  %span Por departamentos
+  %span Por programas
 
   -if params[:year].nil?
     -searching_year = Time.current.year
@@ -137,6 +137,6 @@
 
   .align-text
     %h2
-      Actualmente nadie en el departamento
+      Actualmente nadie en el programa
       ="'#{@department_name}'"
       se ha inscrito

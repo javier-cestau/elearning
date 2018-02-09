@@ -253,11 +253,11 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
 
-  config.omniauth :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'],info_fields: 'email,first_name,last_name,gender,picture',client_options: {
+  config.omniauth :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET'],info_fields: 'email,first_name,last_name,gender,picture'
+  config.omniauth :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'],info_fields: 'email,first_name,last_name,gender,picture',client_options: {
                     site: 'https://academia.leiros.com/',
-                    authorize_url: "https://academia.leiros.com/users/auth/facebook/callback"
+                    authorize_url: "https://academia.leiros.com/users/auth/google_oauth2/callback"
                 }
-  config.omniauth :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'],info_fields: 'email,first_name,last_name,gender,picture'
 
 
   # ==> Warden configuration

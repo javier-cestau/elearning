@@ -24,7 +24,7 @@ en:
     attributes:
       user:
         email: "E-mail:"
-        department: "Departamento:"
+        department: "programa:"
         privilege: "Privilegio:"
         name: "Nombre:"
       department:
@@ -46,5 +46,5 @@ en:
         department:
           attributes:
             name:
-              taken: "ya existe un departamento con ese nombre"
+              taken: "ya existe un programa con ese nombre"
               too_short: "debe tener al menos 4 caracteres"

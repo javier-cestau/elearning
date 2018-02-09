@@ -10,26 +10,26 @@ class TemplateController < ApplicationController
 
      @template = Template.find(params[:id])
 
-     #Se guarda el departamento al cual pertenece el usuario actual
+     #Se guarda el programa al cual pertenece el usuario actual
      department = current_user.department
      is_valid_department_user = false
 
 
      #Se buscan las planillas que hay disponibles
      @template.has_templates.each do |relation|
-      #compara si el departamento del usuario es el mismo que el de la planilla
+      #compara si el programa del usuario es el mismo que el de la planilla
        if relation.department.name == department.name
          is_valid_department_user = true
        end
      end
 
-    #Se comprueba si el departamento del usuario es correcto
+    #Se comprueba si el programa del usuario es correcto
      if is_valid_department_user
-       # De ser asi, se muestran todas las preguntas de la planilla que tiene ese departamento
+       # De ser asi, se muestran todas las preguntas de la planilla que tiene ese programa
        @surveys = @template.surveys.order("sequence ASC")
 
      else
-      #  Si el usuario trata de acceder a una planilla de un departamento que no le corresponde
+      #  Si el usuario trata de acceder a una planilla de un programa que no le corresponde
       #  sera redireccionado a la pagina de inicio
        redirect_to root_path
      end

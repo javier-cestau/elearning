@@ -10,7 +10,7 @@
 require_relative 'functions'
 @five =  5
 
-# Se crea diferentes departamentos
+# Se crea diferentes programas
 
 
 
@@ -20,18 +20,18 @@ template = Template.where(name: "Planilla").first_or_create! do |t|
             end
 
 department_array = ["Mercadeo & ventas","Cadena de suministro","Gth", "Servicios legales", "Servicios generales", "Control y gestión","Contraloría","Tesorería"]
-contador_departamento = 0
+contador_programa = 0
 @department = Array.new
 department_array.each do |department|
     d = Department.where(name: department).first_or_create! do |depart|
           depart.name =  department
         end
     @department.push(d)
-    HasTemplate.create!(template_id: template.id, department_id: @department.at(contador_departamento).id)
-     contador_departamento += 1
+    HasTemplate.create!(template_id: template.id, department_id: @department.at(contador_programa).id)
+     contador_programa += 1
 end
 
- puts "Departamentos creados"
+ puts "programas creados"
 
 
 
@@ -84,6 +84,13 @@ end
                         puts "Tipo de pregunta de examen verdadero o falso"
 
                       end
+                      @question_vf = TypeQuestion.where(id: 4).first_or_create! do |type|
+                        type.name = "Redacción"
+                        type.sequence = 4
+                        type.id = 4
+                        puts "Tipo de pregunta de examen redaccion"
+
+                      end
 
 
 
@@ -110,7 +117,7 @@ end
               end
 
 
-                random_index_department = Faker::Number.between(0, contador_departamento-1)
+                random_index_department = Faker::Number.between(0, contador_programa-1)
                 User.where(email: email_medium_admin).first_or_create! do |user|
 
                  user.email = email_medium_admin
@@ -125,7 +132,7 @@ end
                end
 
 
-                 random_index_department = Faker::Number.between(0, contador_departamento-1)
+                 random_index_department = Faker::Number.between(0, contador_programa-1)
                 User.where(email: email_empleado).first_or_create do |user|
 
                  user.email = email_empleado
@@ -139,7 +146,7 @@ end
                   puts "Empleado creado!"
                 end
 
-                random_index_department = Faker::Number.between(0, contador_departamento-1)
+                random_index_department = Faker::Number.between(0, contador_programa-1)
                User.where(email: email_inscrito).first_or_create do |user|
 
                 user.email = email_inscrito
@@ -294,7 +301,7 @@ if User.count < 20
   ten = 10
   # Cuentas falsas
   ten.times do
-       random_index = Faker::Number.between(0, contador_departamento-1)
+       random_index = Faker::Number.between(0, contador_programa-1)
        name =  "Seed "
        name +=  Faker::Name.first_name
        name += " "+Faker::Name.last_name

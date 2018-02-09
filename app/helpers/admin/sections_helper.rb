@@ -8,7 +8,11 @@
 			test_section = @section.tests.last
 			link_to "Editar examen", edit_admin_course_section_test_path( @course, @section,test_section), class: "btn"
 		else
-			link_to "Crear examen", new_admin_course_section_test_path( @course, @section), class: "btn"
+      content_tag :div do
+  			html = link_to "Examen automático", new_admin_course_section_test_path( @course, @section,auto: true), class: "btn"
+  			html += link_to "Examen de revisión", new_admin_course_section_test_path( @course, @section), class: "btn"
+        return html
+    	end
 		end
 
 	end

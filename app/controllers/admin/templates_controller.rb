@@ -39,11 +39,11 @@ class Admin::TemplatesController < ApplicationController
 
     @template = Template.new(params_template)
 
-    # Se comprueba que se haya seleccionado al menos un departamento
+    # Se comprueba que se haya seleccionado al menos un programa
     if  !params[:template][:departments].at(1).nil?
       if @template.save!
 
-        # Guardar Los departamento que podran acceder a esta planilla que se esta creando
+        # Guardar Los programa que podran acceder a esta planilla que se esta creando
         params[:template][:departments].map do |department,index|
   				@template.save_has_department(department)
   			end
@@ -87,7 +87,7 @@ class Admin::TemplatesController < ApplicationController
     end
   else
 
-    redirect_with_id("&nbsp&nbsp*Debe seleccionar al menos un departamento")
+    redirect_with_id("&nbsp&nbsp*Debe seleccionar al menos un programa")
 
   end
 

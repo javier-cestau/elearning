@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get '/' => redirect('admin/talents')
+    get "redaction", to: "tests#redaction"
     get "true_false", to: "tests#true_false"
     get "multiple", to: "tests#multiple"
     get "simple", to: "tests#simple"
@@ -65,6 +66,7 @@ Rails.application.routes.draw do
         resources :section_files, only: [:create, :destroy]
         resources :tests do
           get 'average', to: 'tests#average', as: 'average'
+          get 'change_auto', to: 'tests#change_auto', as: 'auto'
         end
 
       end
@@ -131,6 +133,6 @@ Rails.application.routes.draw do
   resources :profiles, except: [:destroy,:index,:show, :edit]
   get "profile", to: "profiles#show"
   get "profiles/edit", to: "profiles#edit"
-  
+
   mount ActionCable.server, at: '/cable'
 end

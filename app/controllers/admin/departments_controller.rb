@@ -21,12 +21,12 @@ class Admin::DepartmentsController < ApplicationController
       @department = Department.new()
       @department.name = name
       if @department.save
-        redirect_to admin_departments_path, notice: "El departamento '#{@department.name}' ha sido creado correctamente"
+        redirect_to admin_departments_path, notice: "El programa '#{@department.name}' ha sido creado correctamente"
       else
         render :new
       end
     else
-      redirect_to new_admin_department_path, alert:  "Ya existe un departamento con ese nombre"
+      redirect_to new_admin_department_path, alert:  "Ya existe un programa con ese nombre"
     end
   end
 
@@ -43,15 +43,15 @@ class Admin::DepartmentsController < ApplicationController
     # Si el query WHERE no retorna nada significa que se puede actualizar
     if @name_validate.empty?
 
-      if @department.update(name: name)
-        redirect_to admin_departments_path, notice: "El departamento '#{name_old}' se ha actualiazado a '#{@department.name}' correctamente"
+      if @department.update(params_department)
+        redirect_to admin_departments_path, notice: "El programa '#{name_old}' se ha actualiazado a '#{@department.name}' correctamente"
       else
         render :edit
       end
 
     else
 
-      redirect_to edit_admin_department_path(@department), alert:  "Ya existe un departamento con ese nombre "
+      redirect_to edit_admin_department_path(@department), alert:  "Ya existe un programa con ese nombre "
 
     end
   end
@@ -59,7 +59,7 @@ class Admin::DepartmentsController < ApplicationController
   private
 
   def params_department
-    params.require(:department).permit(:name)
+    params.require(:department).permit(:name,:description,:photo)
   end
   def find_department
     @department = Department.find(params[:id])

@@ -185,7 +185,7 @@
 					Constant::StateEnroll::Active
 				else
 					if course.scoping == 2
-						# Se evalua si el curso esta disponible para su departamento
+						# Se evalua si el curso esta disponible para su programa
 						if !course.departments.where(id: self.department_id).empty?
 							Constant::StateEnroll::Active
 						else

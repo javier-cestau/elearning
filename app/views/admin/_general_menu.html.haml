@@ -77,14 +77,8 @@
 						%img.usuario{src: "#{current_user.photo.url(:thumb)}",id: "user-#{current_user.id}"}
 
 					%small.department-indicator
-						=current_user.name
-
-						="/"
-						-if current_user.is_super_admin?
-							Admin G.
-						-else
-							-if current_user.is_at_least_medium_admin?
-								Admin I.
+						= current_user.name
+		 
 
 - path = request.path.split('/').at(2)
 - path2 = request.path.split('/').at(4)
@@ -114,7 +108,7 @@
 			%li
 				%a{:href => admin_departments_path, :rel => "nofollow"}
 					%i.fa.fa-university
-					%span Departamentos
+					%span Programas
 			%li
 				%a{:href => admin_templates_path, :rel => "nofollow"}
 					%i.fa.fa-pencil-square-o

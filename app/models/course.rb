@@ -30,7 +30,7 @@ class Course < ApplicationRecord
   #relacion entre usuario y curso (has_favorites)
   has_many :has_favorites
 
-  #relacion entre curso y departamento
+  #relacion entre curso y programa
   has_many :course_has_departments
   has_many :departments, through: :course_has_departments
 

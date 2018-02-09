@@ -123,7 +123,7 @@ class Test < ApplicationRecord
         return false
       end
     end
-
+  
     true
   end
 

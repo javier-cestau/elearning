@@ -58,10 +58,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         redirect_to root_path
       end
     else
-      flash[:alert] = "Debe poseer correo electrónico en tu cuenta"
+      flash[:alert] = "Debe poseer correo electrónico"
       redirect_to root_path
 
     end
+
   end
 
 
@@ -84,7 +85,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
         # se comprueba si el usuario no posee ninguna planilla creada
         if template.nil?
-          # Se revisa el ultimo template que tiene el departamento
+          # Se revisa el ultimo template que tiene el programa
           current_user.department.has_templates.reverse_each do |fill_tmp|
 
               #Si el usuario no tiene ninguna planilla, se le obligara a llenar una antes de avanzar en el sistema

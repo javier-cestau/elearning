@@ -36,7 +36,7 @@ class TalentsController < ApplicationController
 	def profile
 
 
-		#Se busca la planilla mas reciente que hay en el departamento del usuario
+		#Se busca la planilla mas reciente que hay en el programa del usuario
 		current_user.department.has_templates.reverse_each do |fill_tmp|
 				#se usa luego en un link en la vista para llevarlo a esa planilla
 				@template = fill_tmp.template_id

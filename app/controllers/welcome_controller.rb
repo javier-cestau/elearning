@@ -77,7 +77,7 @@ class WelcomeController < ApplicationController
       end
 
 
-      # Cursos por departamento
+      # Cursos por programa
       relation_courses_to_department = CourseHasDepartment.where(department_id: current_user.department_id).where.not(course_id: courses_id_by_user)
 
       courses_id = Array.new
@@ -97,7 +97,7 @@ class WelcomeController < ApplicationController
 
 
 
-      # Se recorren dichos cursos(por departamento)
+      # Se recorren dichos cursos(por programa)
       courses.each do |c|
 
 
