@@ -2,25 +2,16 @@
   color: red;
 }
 
-.type-question .switch-field label input[value="1"]:checked + a > label {
- background-color: #A5DC86;
- -webkit-box-shadow: none;
- box-shadow: none;
 
-}
 
-.type-question .switch-field label input[value="2"]:checked + a > label {
- background-color: #A5DC86;;
- -webkit-box-shadow: none;
- box-shadow: none;
-}
 
 .switch-field label + a > label   {
  border-radius: 0 4px 4px 0;
 }
-
-
-.type-question .switch-field label input[value="3"]:checked + a > label {
+.type-question .switch-field label input[value="1"]:checked + a > label,
+.type-question .switch-field label input[value="2"]:checked + a > label,
+.type-question .switch-field label input[value="3"]:checked + a > label,
+.type-question .switch-field label input[value="4"]:checked + a > label {
  background-color: #A5DC86;;
  -webkit-box-shadow: none;
  box-shadow: none;
@@ -35,13 +26,19 @@
   border-radius: 0 ;
 
 }
-
 .type-question .switch-field label input[value="3"] + a > label{
+  border-radius: 0 ;
+
+}
+
+.type-question .switch-field label input[value="4"] + a > label{
   border-radius: 0 4px 4px 0;
 
 }
 
-
+.container_answer input{
+  pointer-events: all !important;
+}
 .container_answer > li > div{
   position: relative;
 }

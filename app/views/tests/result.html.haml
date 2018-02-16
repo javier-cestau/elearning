@@ -36,7 +36,8 @@
 												.emoji__mouth
 										=image_tag("/trophy.png", style: "height: 100%")
 									%h5.headline.align-text Felicitaciones
-									%h3.align-text.green-text="#{@do_test.grade}/20"
+									- if @do_test.test.auto
+										%h3.align-text.green-text="#{@do_test.grade}/20"
 							.card-action.align-text
 								=link_to "Volver a la sección", course_section_path(@course,@section), class: "btn"
 						-else
@@ -49,10 +50,11 @@
 												.emoji__eyes
 												.emoji__mouth
 									%h5.headline.align-text Sigue intentado
-									%h3.align-text.red-text="#{@do_test.grade}/20"
-									%h5.align-text
-										La nota mínima para aprobar es
-										="#{@do_test.test.min_grade}"
+									- if @do_test.test.auto
+										%h3.align-text.red-text="#{@do_test.grade}/20"
+										%h5.align-text
+											La nota mínima para aprobar es
+											="#{@do_test.test.min_grade}"
 							.card-action.align-text
 								-if @do_test.do_course.finished_at.nil?
 									= do_button_test(@section.id)
@@ -61,5 +63,20 @@
 	%br
 	%br
 	%hr
-	%brZ
-	= render 'form'
+	%br
+	-if params[:disabled].nil?
+		= render 'form'
+	-else
+		= render 'form', disabled: true
+		-if current_user.is_at_least_medium_admin? && @do_test.grade.nil?
+			.center-align
+				%br
+				.row
+					.col.s6
+						=simple_form_for @test, :url => admin_course_section_test_manual_grade_path(@course,@section,@test,@do_test) do |f|
+							%input{type: "hidden", name: "aproved",  value: "true"}
+							%button.btn Aprobar
+					.col.s6
+						=simple_form_for @test, :url => admin_course_section_test_manual_grade_path(@course,@section,@test,@do_test) do |f|
+							%input{type: "hidden", name: "aproved",  value: "false"}
+							%button.btn.red Reprobar

@@ -12,7 +12,8 @@ $("a[data-id='#{num}']").removeClass("disabled")
 val = parseInt("<%=@val%>")
 
 if val isnt 4
-	if $("#type_question#{num}").text().length is 0
+	console.log num
+	if $("#type_question#{num}").text().length <= 1
 		html = "
 				<div class='width-50 float-l size-respuesta'>
 					<h4>Respuestas (Seleccione las respuestas correctas)</h4>

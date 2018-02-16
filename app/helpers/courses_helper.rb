@@ -32,7 +32,7 @@ module CoursesHelper
 		 already_recommended = DoRecomendation.where(user_id: current_user.id, course_id: @course.id)
 
 		 if  approved
-		   if already_recommended.empty?
+			 if already_recommended.empty?
 				 color = "teal"
 				 href = "/courses/#{@course.id}/recomendation"
 				 text = "Recomendar curso"
@@ -57,17 +57,17 @@ module CoursesHelper
 
 	def card_title(t_required,section_id)
 
-          @section = Section.find_by_id(section_id)
+					@section = Section.find_by_id(section_id)
 
-            if t_required == 0
-              content_tag(:span,"Cuestionario práctico")+
-              tag(:br)+
-              content_tag(:span,"Sección: #{@section.name}")
-            elsif t_required == 1
-              content_tag(:span,"Examen obligatorio")+
-              tag(:br)+
-              content_tag(:span,"Sección: #{@section.name}")
-	    end
+						if t_required == 0
+							content_tag(:span,"Cuestionario práctico")+
+							tag(:br)+
+							content_tag(:span,"Sección: #{@section.name}")
+						elsif t_required == 1
+							content_tag(:span,"Examen obligatorio")+
+							tag(:br)+
+							content_tag(:span,"Sección: #{@section.name}")
+			end
 
 
 
@@ -75,38 +75,35 @@ module CoursesHelper
 
 
 	def talent_grade(dt_grade,t_min_grade)
-
-                color = ""
+		color = ""
 		if dt_grade < t_min_grade
-	           color = "red darken-2"
+			color = "red darken-2"
 		else
-		   color = "green"
+			color = "green"
 		end
 
-                content_tag(:a, class: "btn-floating btn-large #{color} cursor-default btn-grade") do
-		  "#{dt_grade}/20"
-	        end
-
-
+		content_tag(:a, class: "btn-floating btn-large #{color} cursor-default btn-grade") do
+			"#{dt_grade}/20"
+		end
 	end
 
-        def talent_duration(dt_duration)
+				def talent_duration(dt_duration)
 
-          if  dt_duration < 1
+					if  dt_duration < 1
 
-            content_tag(:span, class:"span-info-box") do
-              "Menos de un minuto"
-            end
+						content_tag(:span, class:"span-info-box") do
+							"Menos de un minuto"
+						end
 
-          elsif dt_duration >= 1
+					elsif dt_duration >= 1
 
-            content_tag(:span, class:"span-info-box") do
-              "#{pluralize(dt_duration, 'minuto','minutos')}"
-            end
+						content_tag(:span, class:"span-info-box") do
+							"#{pluralize(dt_duration, 'minuto','minutos')}"
+						end
 
-          end
+					end
 
-        end
+				end
 
 	def time_limit_message(t_time_limit)
 
@@ -133,23 +130,23 @@ module CoursesHelper
 
 	end
 
-        def head_message_grades(user,course)
+				def head_message_grades(user,course)
 
-          if user.is_employed?
+					if user.is_employed?
 
-            content_tag(:h4,"Exámenes del curso:",class: "align-text")+
-            content_tag(:h4,"#{course.name}",class: "align-text")+
-            content_tag(:h5, "Notas obtenidas" ,class: "align-text")
+						content_tag(:h4,"Exámenes del curso:",class: "align-text")+
+						content_tag(:h4,"#{course.name}",class: "align-text")+
+						content_tag(:h5, "Notas obtenidas" ,class: "align-text")
 
-          else
+					else
 
-            content_tag(:h4,"Exámenes del curso:",class: "align-text")+
-            content_tag(:h4,"#{course.name}",class: "align-text")+
-            content_tag(:h5, "Notas obtenidas del talento: #{user.name}", class: "align-text")
+						content_tag(:h4,"Exámenes del curso:",class: "align-text")+
+						content_tag(:h4,"#{course.name}",class: "align-text")+
+						content_tag(:h5, "Notas obtenidas del talento: #{user.name}", class: "align-text")
 
-          end
+					end
 
-        end
+				end
 
 	def no_attemps_message(attemps_counter)
 

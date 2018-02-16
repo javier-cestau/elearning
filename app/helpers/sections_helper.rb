@@ -8,6 +8,7 @@ module SectionsHelper
 						 "cuestionario práctico"
 					 end
 
+
 		if DoCourse.is_enroll_in_course?(@section.course,current_user)
 
 
@@ -15,57 +16,69 @@ module SectionsHelper
 
 			disabled_pass = ""
 
-
-
-
 			# Evaluar si el usuario termino el curso
 			if !do_course.nil?
 
+        # Si es manual y ya fue enviado
+				send_it = false
 				# Comprobar si aprobo el examen
 				do_course.do_tests.each do |do_t|
 
 					if test_section.id == do_t.test_id
 						# Si aprobo se descactiva la opción de hacerlo
-						if test_section.min_grade < do_t.grade
-							disabled_pass = "disabled"
+						if do_t.grade.nil?
+							send_it = true
+						else
+							if test_section.min_grade < do_t.grade
+								disabled_pass = "disabled"
+							end
 						end
 					end
 				end
 
-				disabled_current = ""
-					# Si ya realizo el examen no hace falta comprobar los examenes anteriores
-					if (disabled_pass.empty?)
-						can_do_it = test_section.can_do_it?(@tests_in_course,do_course)
-						if !can_do_it
-							disabled_current = "disabled"
+				if !send_it
+					disabled_current = ""
+						# Si ya realizo el examen no hace falta comprobar los examenes anteriores
+						if (disabled_pass.empty?)
+							can_do_it = test_section.can_do_it?(@tests_in_course,do_course)
+							if !can_do_it
+								disabled_current = "disabled"
+							end
 						end
-					end
 
-				# Se evalua si ya paso el examen
-				if disabled_pass.empty?
+					# Se evalua si ya paso el examen
+					if disabled_pass.empty?
 
-					# Si no lo ha pasado se evalua si paso el anterior para asi obligar al usuario a realizarlo
-					if disabled_current.empty?
-						content_tag(:div, class: "align-text") do
-							link_to("Hacer #{type}", course_section_test_path( @course, @section,test_section), class: "btn")
+						# Si no lo ha pasado se evalua si paso el anterior para asi obligar al usuario a realizarlo
+						if disabled_current.empty?
+							content_tag(:div, class: "align-text") do
+								link_to("Hacer #{type}", course_section_test_path( @course, @section,test_section), class: "btn")
+							end
+						else
+							# En el caso de que no haya realizado el anterior
+							content_tag(:div, class: "align-text") do
+								content_tag(:h3,"Debe completar los exámenes anteriores", class: "align-text red-text")+
+								tag(:br)+
+								link_to("Hacer #{type}", course_section_test_path( @course, @section,test_section), class: "btn #{disabled_current} ")
+							end
 						end
 					else
-						# En el caso de que no haya realizado el anterior
+						# Si aprobo el examen
 						content_tag(:div, class: "align-text") do
-							content_tag(:h3,"Debe completar los exámenes anteriores", class: "align-text red-text")+
+							content_tag(:h3,"Examen aprobado", class: "align-text ")+
 							tag(:br)+
-							link_to("Hacer #{type}", course_section_test_path( @course, @section,test_section), class: "btn #{disabled_current} ")
+							link_to("Hacer #{type}", course_section_test_path( @course, @section,test_section), class: "btn #{disabled_pass} ")+
+							link_to("Ver nota", course_grades_path(@course,do_course,test_id: test_section.id), class: "btn")
 						end
 					end
 				else
-					# Si aprobo el examen
 					content_tag(:div, class: "align-text") do
-						content_tag(:h3,"Examen aprobado", class: "align-text ")+
+						content_tag(:h5,"En espera de revisión", class: "align-text red-text")+
 						tag(:br)+
-						link_to("Hacer #{type}", course_section_test_path( @course, @section,test_section), class: "btn #{disabled_pass} ")+
-						link_to("Ver nota", course_grades_path(@course,do_course,test_id: test_section.id), class: "btn")
+						link_to("Hacer #{type}", course_section_test_path( @course, @section,test_section), class: "btn disabled ")
 					end
 				end
+
 			else
 
 				do_course = DoCourse.where(enroll: 1, user_id: current_user.id, course_id: @course.id).where.not(finished_at: nil).last

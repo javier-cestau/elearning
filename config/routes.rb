@@ -59,6 +59,10 @@ Rails.application.routes.draw do
     resources :departments, except: [:destroy]
     resources :categories
     resources :courses, except: [:destroy] do
+      get 'teachers', to: "teachers#index"
+      get 'teachers/remove', to: "teachers#remove"
+      get 'teachers/add', to: "teachers#add"
+
       get 'talent_list', to: 'courses#talent_list', as:'talent_list'
       resources :multimedia_courses, only: [:create, :destroy]
       resources :sections do
@@ -67,6 +71,8 @@ Rails.application.routes.draw do
         resources :tests do
           get 'average', to: 'tests#average', as: 'average'
           get 'change_auto', to: 'tests#change_auto', as: 'auto'
+          get 'list_talent', to: 'tests#list_talent', as: 'list_talent'
+          patch 'manual_grade/:do_test', to: 'tests#manual_grade', as: 'manual_grade'
         end
 
       end
@@ -88,6 +94,14 @@ Rails.application.routes.draw do
 
 
 
+
+
+  ##############################
+  #                            #
+  #        Talents Paths       #
+  #                            #
+  ##############################
+
   get "/talent/:id/notifications", to: "talents#notifications_user"
   resource :talent, only: [] do
     member do
@@ -105,6 +119,7 @@ Rails.application.routes.draw do
 
 
     get 'grades/:id', to: 'courses#grades', as: 'grades'
+
     collection do
       get ':id/enroll',  to: "courses#enroll", as: "enroll"
       get ':id/recomendation',  to: "courses#recomendation"

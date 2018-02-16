@@ -3,11 +3,12 @@ class TestsController < ApplicationController
 	include Verify
 
   before_action :find_section
-	before_action :find_test
+	around_action :find_test
 	before_action :all_topic
 	around_action :evaluate, except: [:result]
 	around_action :finished!, except: [:result]
 	around_action :can_do_it!, except: [:result]
+
 
 
 	def show
@@ -61,73 +62,102 @@ class TestsController < ApplicationController
 		end
 	end
 
+	def save_manual
+		do_course = DoCourse.inscription(current_user,@course)
+		@do_test = DoTest.where(test_id: @test.id,do_course_id: do_course.id).last
+
+	end
+
 	def check_answer
 		do_course = DoCourse.inscription(current_user,@course)
 		@do_test = DoTest.where(test_id: @test.id,do_course_id: do_course.id).last
 
 		grade = 0
 		if in_time?
-			test_params[:questions_attributes].each do|q,values|
-				question_object = Question.find_by(id: values[:id].to_i)
-				amount_correct_answer = Answer.where(question_id: question_object.id,is_correct: 1).count
+			if @test.auto
+				test_params[:questions_attributes].each do|q,values|
+					question_object = Question.find_by(id: values[:id].to_i)
+					amount_correct_answer = Answer.where(question_id: question_object.id,is_correct: 1).count
 
-				counter_correct = 0
-				counter_incorrect = 0
-				if !values[:answers_correct].nil?
-					values[:answers_correct].each do |c|
-						answer = Answer.find_by(question_id: question_object.id,description: c)
-						HasAnswer.create(do_test_id: @do_test.id,answer_id: answer.id)
-						
-						if answer.is_correct == 1
-							counter_correct += 1
-						else
-							counter_incorrect += 1
+					counter_correct = 0
+					counter_incorrect = 0
+					if !values[:answers_correct].nil?
+						values[:answers_correct].each do |c|
+							answer = Answer.find_by(question_id: question_object.id,description: c)
+							HasAnswer.create(do_test_id: @do_test.id,answer_id: answer.id)
+
+							if answer.is_correct == 1
+								counter_correct += 1
+							else
+								counter_incorrect += 1
+							end
 						end
-					end
 
-					# Si las incorrectas son menores que las correctas se suma la nota del usuario
-					if counter_incorrect < counter_correct
-						values_answer = question_object.points/amount_correct_answer
-						grade +=  values_answer*(counter_correct-counter_incorrect)
+						# Si las incorrectas son menores que las correctas se suma la nota del usuario
+						if counter_incorrect < counter_correct
+							values_answer = question_object.points/amount_correct_answer
+							grade +=  values_answer*(counter_correct-counter_incorrect)
+						end
+
 					end
 
 				end
 
-			end
-			# Se evalua si es el ultimo examen para aprobar el curso
-			all_topic()
-			if @test.required == 1
-				if @test.is_the_last?(@tests_in_course)
-					if grade >= @test.min_grade
-						session[:approved_course] = 1
-						do_course.finished_at = Date.today
-						do_course.save
-					end
-				end
-				# Si el usuario reprobo se analiza si es el ultimo intento
-				if @test.attemps_limits != 0
-					if grade < @test.min_grade
-						amount_of_try = @test.amount_of_try(do_course.id)
-
-						if amount_of_try >= @test.attemps_limits
-							do_course.enroll = 0
-							do_course.failed = 1
+				# Se evalua si es el ultimo examen para aprobar el curso
+				all_topic()
+				if @test.required == 1
+					if @test.is_the_last?(@tests_in_course)
+						if grade >= @test.min_grade
+							session[:approved_course] = 1
 							do_course.finished_at = Date.today
 							do_course.save
-							flash[:alert] = "Usted ha reprobado el curso"
+						end
+					end
+					# Si el usuario reprobo se analiza si es el ultimo intento
+					if @test.attemps_limits != 0
+						if grade < @test.min_grade
+							amount_of_try = @test.amount_of_try(do_course.id)
+
+							if amount_of_try >= @test.attemps_limits
+								do_course.enroll = 0
+								do_course.failed = 1
+								do_course.finished_at = Date.today
+								do_course.save
+								flash[:alert] = "Usted ha reprobado el curso"
+							end
 						end
 					end
 				end
+				@do_test.grade = grade
+				redirect_to course_section_test_result_path(@course,@section,@test,@do_test)
+			else
+        # Cuando es manual la correción
+				test_params[:questions_attributes].each do|q,values|
+					question_object = Question.find_by(id: values[:id].to_i)
+					if !values[:answers_correct].nil?
+						values[:answers_correct].each do |c|
+							answer = Answer.find_by(question_id: question_object.id,description: c)
+							if values[:answers].nil?
+								HasAnswerDescription.create!(do_test_id: @do_test.id,description: c,question_id: values[:id].to_i)
+							else
+								HasAnswer.create!(do_test_id: @do_test.id,answer_id: answer.id)
+							end
+						end
+					end
+				end
+				flash[:notice] = "Se le notificará cuando su examen haya sido corregido"
+				@do_test.grade = nil
+				redirect_to course_section_path(@course,@section)
 			end
-
-
+		else
+			flash[:alert] = "No envió el examen a tiempo"
+			@do_test.grade = 0
+			redirect_to course_section_path(@course,@section)
 		end
 
-		@do_test.grade = grade
 		@do_test.duration = @duration
 		@do_test.save
 
-		redirect_to course_section_test_result_path(@course,@section,@test,@do_test)
 	end
 
 
@@ -158,7 +188,7 @@ class TestsController < ApplicationController
 
 		@duration = (Time.now - @do_test.created_at)/60
 
-		if @test.time_limit.nil?
+		if @test.time_limit == 0
 			true
 		else
 			if @duration <=  (@test.time_limit+1)
@@ -170,10 +200,20 @@ class TestsController < ApplicationController
 	end
 
 	def find_test
-		if params[:test_id].nil?
-		 @test = Test.find(params[:id])
+	 if params[:test_id].nil?
+		 @test = Test.find_by_id(params[:id])
+		 if !@test.nil?
+			 yield
+		 else
+			 redirect_to course_section_path(@course,@section)
+		 end
 	 else
-		 @test = Test.with_deleted.find(params[:test_id])
+		 if params[:action] == "result"
+			 @test = Test.find_by_id(params[:test_id])
+			 yield
+		 else
+			 @test = Test.with_deleted.find(params[:test_id])
+		 end
 	 end
 	end
 

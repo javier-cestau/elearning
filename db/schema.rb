@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180208124955) do
+ActiveRecord::Schema.define(version: 20180215142628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 20180208124955) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "category_id"
+    t.string "aasm_state"
     t.index ["category_id"], name: "index_courses_on_category_id"
     t.index ["name"], name: "index_courses_on_name"
   end
@@ -168,6 +169,16 @@ ActiveRecord::Schema.define(version: 20180208124955) do
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
+  create_table "has_answer_descriptions", force: :cascade do |t|
+    t.text "description"
+    t.bigint "question_id"
+    t.bigint "do_test_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["do_test_id"], name: "index_has_answer_descriptions_on_do_test_id"
+    t.index ["question_id"], name: "index_has_answer_descriptions_on_question_id"
+  end
+
   create_table "has_answers", id: :serial, force: :cascade do |t|
     t.integer "answer_id"
     t.integer "do_test_id"
@@ -200,6 +211,15 @@ ActiveRecord::Schema.define(version: 20180208124955) do
     t.integer "course_id"
     t.index ["course_id"], name: "index_has_tags_on_course_id"
     t.index ["tag_id"], name: "index_has_tags_on_tag_id"
+  end
+
+  create_table "has_teachers", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_has_teachers_on_course_id"
+    t.index ["user_id"], name: "index_has_teachers_on_user_id"
   end
 
   create_table "has_templates", id: :serial, force: :cascade do |t|
@@ -411,6 +431,8 @@ ActiveRecord::Schema.define(version: 20180208124955) do
   add_foreign_key "do_tests", "users"
   add_foreign_key "favorites", "courses"
   add_foreign_key "favorites", "users"
+  add_foreign_key "has_answer_descriptions", "do_tests"
+  add_foreign_key "has_answer_descriptions", "questions"
   add_foreign_key "has_answers", "answers"
   add_foreign_key "has_answers", "do_tests"
   add_foreign_key "has_choises", "choises"
@@ -419,6 +441,8 @@ ActiveRecord::Schema.define(version: 20180208124955) do
   add_foreign_key "has_favorites", "users"
   add_foreign_key "has_tags", "courses"
   add_foreign_key "has_tags", "tags"
+  add_foreign_key "has_teachers", "courses"
+  add_foreign_key "has_teachers", "users"
   add_foreign_key "has_templates", "departments"
   add_foreign_key "has_templates", "templates"
   add_foreign_key "multimedia_courses", "courses"

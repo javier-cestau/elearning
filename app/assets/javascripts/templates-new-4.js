@@ -9,7 +9,7 @@ document.addEventListener("turbolinks:load", function(){
   //  cuando se creen la nuevas preguntas sean iguales
   function returnTypeDescription (){
 
-    let list_type_survey = {
+    varlist_type_survey = {
       id: new Array([]),
       name: new Array([])
     };
@@ -73,7 +73,7 @@ document.addEventListener("turbolinks:load", function(){
       var counter;
       // si el id es mayor a 2 es necesario que se agreguen las funcionalidades a los botones de elimininar y cambiar el name
 
-      let delete_choises = function(e){
+      vardelete_choises = function(e){
           var complete_id = e.target.id,
               id = complete_id.split("survey")[1].split("_")[0];
 
@@ -97,7 +97,7 @@ document.addEventListener("turbolinks:load", function(){
           dataType:'html',
           success : function(data) {
 
-              let choises = data;
+              varchoises = data;
               $("#choises1").append(choises);
 
               $("#choises1").on("click", "#btn-add-choise1", function(){
@@ -128,7 +128,7 @@ document.addEventListener("turbolinks:load", function(){
 
 
     if (id > 1){
-        for (let i = 2; i <= id; i++) {
+        for (vari = 2; i <= id; i++) {
 
           $("input[id='template_survey"+i+"_type_survey_id_4']").click(function(){
             var exist = $("#choises"+i+" >.jumbotron").text().length;
@@ -145,7 +145,7 @@ document.addEventListener("turbolinks:load", function(){
                 dataType:'html',
                 success : function(data) {
                   //  Se debe hacer un split debido a que lo devuelve con un tag <form> y solo se debera usar lo que esta dentro de dicho tag
-                    let choises = data;
+                    varchoises = data;
                     $("#choises"+i).append(choises);
                     $("#choises"+i).on("click", "#btn-add-choise"+i, function(){
                         addAnswer(i);
@@ -160,7 +160,7 @@ document.addEventListener("turbolinks:load", function(){
 
           });
 
-          let delete_choises = function(e){
+          vardelete_choises = function(e){
             var complete_id = e.target.id,
             id = complete_id.split("survey")[1].split("_")[0];
 
@@ -180,7 +180,7 @@ document.addEventListener("turbolinks:load", function(){
 
 
           var a = function(){
-            let number_button = i;
+            varnumber_button = i;
             $(".panel").on("click" ,".borrar"+number_button,function(){
                $("#basic-addon"+number_button).remove();
             });
@@ -286,7 +286,7 @@ document.addEventListener("turbolinks:load", function(){
 
       var CreateQuestionFromPartial = function(){
 
-        let counter= description_count;
+        varcounter= description_count;
         $(".jumbotron").on("click" ,".borrar"+counter,function(){
            $("#basic-addon"+counter).remove();
         });
@@ -300,7 +300,7 @@ document.addEventListener("turbolinks:load", function(){
               dataType:'html',
               success : function(data) {
                 // Se debe hacer un split debido a que lo devuelve con un tag <form> y solo se debera usar lo que esta dentro de dicho tag
-                let choises = data;
+                varchoises = data;
 
                 $("#choises"+counter).append(choises);
 
@@ -320,7 +320,7 @@ document.addEventListener("turbolinks:load", function(){
         }); // total
 
 
-          let delete_choises = function(e){
+          vardelete_choises = function(e){
             var complete_id = e.target.id,
             id = complete_id.split("survey")[1].split("_")[0];
 
@@ -347,7 +347,7 @@ document.addEventListener("turbolinks:load", function(){
 
 	$("#template-name").blur(function() {
 
-		let nombre = $("#template-name").val().trim();
+		varnombre = $("#template-name").val().trim();
 
 		if (nombre.length == 0) {
 
@@ -383,7 +383,7 @@ document.addEventListener("turbolinks:load", function(){
         // En el caso de entrar con modificar una planilla se detecta la cantidad de preguntas
 
         // Para recorrer los botones ya existentes para la opcion de seleccion multiple
-        for (let i = 1; i <= description_count; i++) {
+        for (vari = 1; i <= description_count; i++) {
 
             $("#btn-add-choise"+i).click(function(){
                 addAnswer(i);

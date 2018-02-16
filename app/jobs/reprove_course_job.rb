@@ -13,7 +13,7 @@ class ReproveCourseJob < ApplicationJob
                 do_course.finished_at = c.deadline_course
                 do_course.save
            end
-
+           message = ""
            if c.start_date == c.deadline_course
               if c.deadline_course == Date.today
                 message = "El curso #{c.name} inicia y finaliza hoy"
@@ -28,10 +28,11 @@ class ReproveCourseJob < ApplicationJob
              end
            end
 
+           if !message.empty?
             notification = Notification.new(user_id: do_course.user.id ,message: "#{message}", url:"/courses/#{c.id}", date: DateTime.now.localtime("-04:00"))
             notification.save!
             ActionCable.server.broadcast "notification_channel_#{do_course.user.id}",  notification: notification
-
+          end
         else
 
           if c.start_date == Date.today

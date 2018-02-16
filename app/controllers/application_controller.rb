@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
 
 
   def is_course_avaible
-    if @course.active == 0
+    if @course.closed?
       flash[:alert] = "El curso no está actualmente activo para los usuarios"
       redirect_to courses_path and return true
     end

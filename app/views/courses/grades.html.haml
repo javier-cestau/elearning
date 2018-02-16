@@ -8,6 +8,7 @@
     .col.s12.m12
       - if !@hash_test.empty?
         - @hash_test.each do |t,dotests|
+
           .card
             .card-title.align-text
               %br
@@ -47,37 +48,51 @@
                       .collapsible-header.align-text
                         ="Intento número #{do_test_counter}"
                       .collapsible-body.collapsible-grades.align-text
-                        .col.s6
-                          %span.title
-                            = "Nota mínima para aprobar: "
+                        -if dt.grade.nil?
+                          .col.s12
+                            %span.title.center-align.red-text{style: "position: relative;bottom: 15px;"}
+                              = "En revisión "
                             %br
                             %br
-                          %a.btn-floating.btn-large.blue.darken-1.cursor-default.btn-grade
-                            ="#{t.min_grade}/20"
-                            %br
-                        .col.s6
-                          %span.title
-                            ="Nota obtenida: "
-                            %br
-                            %br
-                          = talent_grade(dt.grade,t.min_grade)
-                          %br
-                          %br
-                        .col.s6.col-grades
-                          .rad-info-box.info-box-grades
-                            %i.fa-grades.fa.fa-clock-o
-                            %span.span-info-box Duración del talento:
-                            %br
-                            =talent_duration(dt.duration)
-                        .col.s6.col-grades
-                          .rad-info-box.info-box-grades
-                            %i.fa-grades.fa.fa-calendar
-                            %span.span-info-box Fecha de realización:
-                            %br
-                            %span.span-info-box
-                              ="#{localize(dt.created_at.to_s.split(" ")[0].to_date)}"
-                        .align-text
-                          =link_to "Ver respuestas", course_section_test_result_path(@course, t.section_id, t, dt, show:1), class: "btn green darken-2"
+                        -else
+                          -if t.auto
+                            .col.s6
+                              %span.title
+                                = "Nota mínima para aprobar: "
+                                %br
+                                %br
+                              %a.btn-floating.btn-large.blue.darken-1.cursor-default.btn-grade
+                                ="#{t.min_grade}/20"
+                                %br
+                            .col.s6
+                              %span.title
+                                ="Nota obtenida: "
+                                %br
+                                %br
+                              = talent_grade(dt.grade,t.min_grade)
+                              %br
+                              %br
+                          -else
+                            .col.s12
+                              -if dt.approve?
+                                %h5.green-text Aprobó
+                              -else
+                                %h5.red-text Reprobó
+                          .col.s6.col-grades
+                            .rad-info-box.info-box-grades
+                              %i.fa-grades.fa.fa-clock-o
+                              %span.span-info-box Duración del talento:
+                              %br
+                              =talent_duration(dt.duration)
+                          .col.s6.col-grades
+                            .rad-info-box.info-box-grades
+                              %i.fa-grades.fa.fa-calendar
+                              %span.span-info-box Fecha de realización:
+                              %br
+                              %span.span-info-box
+                                ="#{localize(dt.created_at.to_s.split(" ")[0].to_date)}"
+                          .align-text
+                            =link_to "Ver respuestas", course_section_test_result_path(@course, t.section_id, t, dt, show:1, disabled: true), class: "btn green darken-2"
               - else
                 %h6.align-text.red-text
                   ="No se han realizado intentos en este examen"

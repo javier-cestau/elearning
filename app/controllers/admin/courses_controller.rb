@@ -1,13 +1,9 @@
 # coding: utf-8
 class Admin::CoursesController < ApplicationController
-	# TODO hace que el administrador genral pueda perlar cursos el curso
-	# TODO hacer que la fecha de inicio al crear el curso sea la de hoy
-	# TODO hacer que la fecha de inicio al crear el curso sea la de hoy
-	# TODO cuando el curso no tenga imagen pner una en el menu por defecto
 before_action :authenticate_medium_admin!
 before_action :find_course, only: [:edit]
-before_action :find_course_in_section, only: [:talent_list]
-before_action :all_topic, only: %i[edit talent_list]
+before_action :find_course_in_section, only: [:talent_list,:teachers]
+before_action :all_topic, only: %i[edit talent_list teachers]
 
 
 	def index
@@ -86,7 +82,7 @@ before_action :all_topic, only: %i[edit talent_list]
 		today = Date.new(Date.current.year,Date.current.month,Date.current.day)
 		@days = 0
 
-		if @course.active == 1
+		if @course.active?
 
 			(@course.day_counter_update..today).each do |date|
 				@days += 1
@@ -128,17 +124,17 @@ before_action :all_topic, only: %i[edit talent_list]
 		canUpdate = false
 
 		if current_user.is_super_admin?
-			active =  course_params[:active]
+			active =  course_params[:aasm_state]
 		else
-			active =  @course.active
+			active =  @course.aasm_state
 		end
 		# Si el curso esta desactivado se puede modificar.
-		if @course.active == 0
+		if @course.disabled?
 			canUpdate = true
 		else
 
 			#Si el curso esta activado pero se detecta que se desea cambiar el estado a desactivado, se podra modificar
-			if  active == '0'
+			if  active == 'disabled'
 				canUpdate = true
 				@course.day_counter_update = nil
 
@@ -170,11 +166,17 @@ before_action :all_topic, only: %i[edit talent_list]
 				#Se eliminan las recomendaciones hechas a ese curso
 				DoRecomendation.where(course_id: @course.id).destroy_all
 
+			elsif active == "closed"
+				canUpdate = true
 			end
+
+
+
+
 		end
 
 		# Se comprueba si el estado enviado es valido
-		if active == '1' or  active == '0'
+		if active == 'active' or  active == 'disabled' or active == "closed"
 
 			if canUpdate
 
@@ -253,7 +255,7 @@ before_action :all_topic, only: %i[edit talent_list]
 								cover = course_params[:cover]
 							end
 
-							if active.to_i == 1 and @course.day_counter_update == nil
+							if active == "active" and @course.day_counter_update == nil
 								@course.day_counter_update = Date.today
 							end
 
@@ -266,11 +268,12 @@ before_action :all_topic, only: %i[edit talent_list]
 							if @course.update(
 									:category_id => category_id,
 									:prelation => prelation,
-									:active => active.to_i,
 									:description => description,
 									:name => name,
 									:scoping => scoping,
-									:cover => cover								)
+									:cover => cover,
+									:aasm_state => active
+																)
 
 								# Dependiendo de su antiguo scoping se eliminan las relaciones anteriores
 								# Para dar paso a las nuevas relaciones
@@ -359,7 +362,6 @@ before_action :all_topic, only: %i[edit talent_list]
 				@course.deadline_course = deadline_course
 				@course.start_date = start_date
 				@course.category_id = course_params_category[:category_id].to_i
-				@course.active = 0
 
 
 				# Variables necesarias de declarar en caso  de errors
@@ -519,6 +521,11 @@ before_action :all_topic, only: %i[edit talent_list]
 		end
 	end
 
+
+	def update_teacher
+		user = User.find_by_id(params[:id])
+	end
+
 	private
 
 	def course_departments
@@ -526,7 +533,7 @@ before_action :all_topic, only: %i[edit talent_list]
 	end
 
 	def course_params
-		params.require(:course).permit(:name,:description,:scoping,:active,:cover)
+		params.require(:course).permit(:name,:description,:scoping,:aasm_state,:cover)
 	end
 
 	def course_params_category
@@ -649,6 +656,5 @@ before_action :all_topic, only: %i[edit talent_list]
 			end
 		end
 	end
-
 
 end

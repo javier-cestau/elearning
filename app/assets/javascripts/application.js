@@ -11,7 +11,7 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery_ujs
+//= require rails-ujs
 //= require jquery-fileupload/basic
 //= require materialize-sprockets
 //= require flipclock.min
@@ -30,6 +30,9 @@
 // window.onbeforeunload = function() {
 //   return "Data will be lost if you leave the page, are you sure?";
 // };
+
+
+
 
 $(window).scroll(function(){
 
@@ -167,7 +170,7 @@ function SubtractNotificationCounter(){
 
 
 document.addEventListener("turbolinks:load", function(){
-
+   
   $('input.autocomplete').autocomplete({
   data: gon.sections_url,
   limit: 20,

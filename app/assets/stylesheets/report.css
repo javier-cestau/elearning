@@ -6,8 +6,7 @@
 .chartWrapper > canvas {
     position: absolute;
     left: 0;
-    top: 0;
-    pointer-events:none;
+    top: 0; 
 }
 .chartAreaWrapper {
     overflow-x: scroll;

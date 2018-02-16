@@ -32,8 +32,8 @@
 					- if q.object.type_question.sequence == 4
 						-show = false
 
-				-if show
-					%div{id: "type_question#{id}"}
+				%div{id: "type_question#{id.to_s}"}
+					-if show
 						.width-50.float-l.size-respuesta
 							%h4 Respuestas (Seleccione las respuestas correctas)
 							%span.red-text{style: "display: none"} Debe agreagar mas dos o mas respuestas

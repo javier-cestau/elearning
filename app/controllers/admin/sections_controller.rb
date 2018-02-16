@@ -145,7 +145,7 @@ before_action :find_course_in_section, only: %i[edit create update destroy]
     @section = Section.find(params[:id])
     @sub_section = Section.where(prv_section: @section.id)
 
-    if @course.active == 0
+    if @course.disabled?
         @sub_section.each do |s|
           destroy_section_child(s)
         end

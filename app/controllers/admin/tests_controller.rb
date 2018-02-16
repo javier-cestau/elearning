@@ -2,11 +2,11 @@ class Admin::TestsController < ApplicationController
 
 
  before_action :authenticate_medium_admin!
- before_action :find_course_in_section, only: %i[edit new create destroy average]
- before_action :find_section, only: %i[edit new create destroy]
- before_action :all_topic, only: %i[edit average]
+ before_action :find_course_in_section, only: %i[edit new create destroy average list_talent manual_grade]
+ before_action :find_section, only: %i[edit new create destroy list_talent manual_grade]
+ before_action :all_topic, only: %i[edit average list_talent]
  before_action :get_object_id, only: %i[simple multiple true_false redaction]
- before_action :find_test, only: %i[edit destroy]
+ around_action :find_test, only: %i[edit destroy]
  before_action :set_javascript_date, only: %i[edit new]
  around_action :is_active_course , only: %i[destroy create]
 
@@ -181,17 +181,6 @@ class Admin::TestsController < ApplicationController
   end
  end
 
- def change_auto
-   @test = Test.find_by_id(params[:test_id])
-   @test.auto = !@test.auto
-
-   for question in @test.questions
-     if question.type_question.sequence == 4
-
-     end
-   end
-   @test.save
- end
 
  def average
 
@@ -226,6 +215,64 @@ class Admin::TestsController < ApplicationController
 
  end
 
+ def list_talent
+   @test = Test.find(params[:test_id])
+   @do_tests= @test.do_tests.where(grade: nil)
+   @talents_info = Hash.new
+   for do_test in @do_tests
+     @talents_info[do_test.user] = do_test
+   end
+ end
+
+  def manual_grade
+    do_test = DoTest.find(params[:do_test])
+    @test = Test.find(params[:test_id])
+    user = do_test.user
+    do_course = DoCourse.inscription(user,@course)
+
+    if params[:aproved] == "true"
+       grade = 20
+       flash[:notice] = "Usuario aprobado"
+       message = "Usted aprobó el examen del curso #{@course.name}"
+    else
+       grade = 0
+       flash[:notice] = "Usuario reprobado"
+       message = "Usted reprobó el examen del curso #{@course.name}"
+    end
+
+    url = course_section_test_result_path(@course,@section,@test,do_test,disabled: true)
+    do_test.grade = grade
+
+    all_topic()
+    if @test.required == 1
+      if @test.is_the_last?(@tests_in_course)
+        if grade >= @test.min_grade
+          do_course.finished_at = Date.today
+          do_course.save
+          message = "Aprobó el curso #{@course.name}"
+        end
+      end
+      # Si el usuario reprobo se analiza si es el ultimo intento
+      if @test.attemps_limits != 0
+        if grade < @test.min_grade
+          amount_of_try = @test.amount_of_try(do_course.id)
+          if amount_of_try >= @test.attemps_limits
+            do_course.enroll = 0
+            do_course.failed = 1
+            do_course.finished_at = Date.today
+            message = "Reprobó el curso #{@course.name}"
+            url = course_path(@course)
+            do_course.save
+          end
+        end
+      end
+    end
+
+    Notification.broadcast(user.id, message, url)
+    do_test.save!
+    redirect_to admin_course_section_test_list_talent_path(@course, @section,@test)
+
+  end
 
  private
 
@@ -238,17 +285,27 @@ class Admin::TestsController < ApplicationController
  end
 
  def is_active_course
-   yield
-   # if @course.active == 0
-   # else
-   #   flash[:alert] = "No se puede modificar o eliminar un examen mientras el curso está activo"
-   #   redirect_to edit_admin_course_section_path(@course, @section)
-   #
-   # end
+
+   if !@course.closed?
+     yield
+   else
+     flash[:alert] = "No se puede modificar o eliminar un examen mientras el curso está activo"
+     redirect_to edit_admin_course_section_path(@course, @section)
+   end
+ end
+
+ def check_test_update
+   @test.section_id
  end
 
  def find_test
-  @test = Test.find(params[:id])
+   @test = Test.find(params[:id])
+   if @course.disabled?
+     yield
+   else
+     flash[:alert] = "Acción no permitida, el curso esta activo"
+     redirect_to edit_admin_course_section_path(@course, @section)
+   end
  end
 
  def find_section

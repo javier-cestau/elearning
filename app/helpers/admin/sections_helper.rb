@@ -2,37 +2,12 @@
  module Admin::SectionsHelper
    include Constant::QuestionEnum
 
-	def show_button_test(section_id)
-		test_section = Test.where(section_id: section_id)
-		if !test_section.empty?
-			test_section = @section.tests.last
-			link_to "Editar examen", edit_admin_course_section_test_path( @course, @section,test_section), class: "btn"
-		else
-      content_tag :div do
-  			html = link_to "Examen automático", new_admin_course_section_test_path( @course, @section,auto: true), class: "btn"
-  			html += link_to "Examen de revisión", new_admin_course_section_test_path( @course, @section), class: "btn"
-        return html
-    	end
-		end
+	 
 
-	end
 
-	def delete_button_test(section_id)
-		test_section = Test.where(section_id: section_id)
-		if !test_section.empty?
-			test_section = @section.tests.last
-			link_to "Eliminar examen", admin_course_section_test_path( @course, @section,test_section), class: "btn red", method: :delete, data:{confirm: "¿Esta seguro de eliminar el examen?"}
-		end
-
-	end
-
-        def average_button_test(section_id)
-		test_section = Test.where(section_id: section_id)
-		if !test_section.empty?
-			test_section = @section.tests.last
-			link_to "Promedio de aprobados y reprobados", admin_course_section_test_average_path(@course, @section,test_section), class: "btn"
-		end
-	end
+  def review_test(section_id)
+    test_section = Test.where(section_id: section_id)
+  end
 
 
 
@@ -90,6 +65,7 @@
 				end
 			end
 	end
+
 
 
 end

@@ -9,7 +9,6 @@
   height: 13.28%;
   overflow: hidden;
   background: #000;
-  pointer-events: none;
 
 
 }
@@ -60,8 +59,7 @@
 /*////////////////////////////////////////*/
 /* Title */
 .panel__title {
-  font-size: 14px !important;
-  pointer-events: auto;
+  font-size: 14px !important; 
   color: #FFF;
   position: relative;
   z-index: 1;

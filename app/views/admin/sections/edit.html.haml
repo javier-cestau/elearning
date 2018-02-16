@@ -6,9 +6,17 @@
 	.col.s12
 		%h2.align-text  Editar sección
 		%br
-		= show_button_test(@section.id)
-		= delete_button_test(@section.id)
-		= average_button_test(@section.id)
+		-if !@section.tests.empty?
+			- test_section = @section.tests.last
+			= link_to "Editar examen", edit_admin_course_section_test_path( @course, @section, test_section), class: "btn"
+			= link_to "Eliminar examen", admin_course_section_test_path( @course, @section,test_section), class: "btn red", method: :delete, data:{confirm: "¿Esta seguro de eliminar el examen?"}
+			= link_to "Promedio de aprobados y reprobados", admin_course_section_test_average_path(@course, @section,test_section), class: "btn"
+			= link_to "Revisar", admin_course_section_test_list_talent_path(@course, @section,test_section), class: "btn"
+		-else
+			= link_to "Examen automático", new_admin_course_section_test_path( @course, @section,auto: true), class: "btn"
+			= link_to "Examen de revisión", new_admin_course_section_test_path( @course, @section), class: "btn"
+
+
 		=simple_form_for [:admin , @course, @section] , html: {id: "form-section"} do |s|
 			= s.input :name, label: "Nombre de la sección", input_html:{id: "section-name"}
 			Descripción

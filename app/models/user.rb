@@ -2,6 +2,7 @@
 	class User < ApplicationRecord
 	 include  Constant::StateEnroll
 
+
 	validates :privilege, presence: true
 	# validates :name, presence: true, numericality: false ,length: { minimum: 5 }
 	# validates :position, presence: true
@@ -27,6 +28,7 @@
 
 	#relacion entre usuario y curso (do_courses)
 	has_many :do_courses ,  dependent: :destroy
+	has_many :has_teachers ,  dependent: :destroy
 
 
 	#relacion entre usuario y curso(do_recomendation)
@@ -115,6 +117,33 @@
 	 self.privilege >= 3
  end
 
+
+ 	 def url
+ 		 if self.photo_file_name.nil?
+ 			 if self.is_at_least_medium_admin?
+ 				 return "/image-profile-admin.png"
+ 			else
+ 				 return "/image-profile-user.png"
+ 			 end
+ 		 else
+ 			 return self.photo.url(:thumb)
+ 		 end
+ 	 end
+
+
+ 	def as_json(options = {})
+ 	  super options.merge(methods: [:url])
+ 	end
+
+
+ def self.get_teachers
+		where(privilege: [2,3]).joins(:has_teachers)
+ end
+
+ def self.get_not_teachers
+		where(privilege: [2,3]).joins("LEFT JOIN has_teachers ON users.id = has_teachers.user_id").where("has_teachers.user_id is null")
+ end
+
  def self.auth_creation(auth)
 
 	 password =  BCrypt::Password.create("#{auth.uid}")
@@ -155,9 +184,11 @@
 		#Por eso se pide el último examen, ya que cuando se aprueba un examen no se puede volver a hacer
 		 dt = DoTest.where(test_id: test.id, do_course_id: docourse.id).last
 			#Se evalua si en ese ultimo intento que realizó se aprobó el examen o no
-			if dt.grade >= test.min_grade
-				#Si lo aprobó, se devuelve el examen
-				return dt
+			unless dt.grade.nil?
+				if dt.grade >= test.min_grade
+					#Si lo aprobó, se devuelve el examen
+					return dt
+				end
 			end
 
 		end

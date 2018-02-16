@@ -22,7 +22,7 @@ function InitializeTinymiceEditor(){
   $("#images").on("click", "button", function(){
 
       var name = ($(this).attr("name"));
-      let html = "<p style='font-size: 25px'> #image{"+$(this).attr("value")+"/"+name+"} </p>";
+      varhtml = "<p style='font-size: 25px'> #image{"+$(this).attr("value")+"/"+name+"} </p>";
       tinyMCE.activeEditor.dom.add(tinyMCE.activeEditor.getBody(), 'p',{}, html);
       $('#modal-image').modal('close');
 

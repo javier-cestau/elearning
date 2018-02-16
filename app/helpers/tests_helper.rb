@@ -9,15 +9,19 @@ module TestsHelper
 		end
 	end
 
+
 	def show_answer(answer,question)
 
-		type_id = question.object.type_question_id
+		type_sequence = question.object.type_question.sequence
 
 		hidden_field_tag(  "test[questions_attributes][#{question.index}][answers][]", "#{answer.description}") +
 		content_tag(:p ) do
-			if type_id == Constant::QuestionEnum::SeleccionMultiple
+			if type_sequence == Constant::QuestionEnum::SeleccionMultiple
 				check_box_tag( "test[questions_attributes][#{question.index}][answers_correct][]","#{answer.description}",false, id: "test_questions_attributes_#{question.index}_answers_correct_#{answer.description}")+
 				content_tag(:label, "#{answer.description}", for: "test_questions_attributes_#{question.index}_answers_correct_#{answer.description}")
+			elsif type_sequence == Constant::QuestionEnum::Redaccion
+				content_tag(:label, "#{answer.description}", for: "test_questions_attributes_#{question.index}_answers_correct_#{answer.description}")
+				content_tag(:textarea, "#{answer.description}", class: " validate required-textarea materialize-textarea")
 			else
 
 				radio_button_tag( "test[questions_attributes][#{question.index}][answers_correct][]","#{answer.description}",false,id:"test_questions_attributes_#{question.index}_answers_correct_#{answer.description}")+
@@ -28,7 +32,7 @@ module TestsHelper
 
 	def show_responses(answer,question)
 
-		type_id = question.object.type_question_id
+		type_sequence = question.object.type_question.sequence
 		has_answer = HasAnswer.where(do_test_id: @do_test.id, answer_id: answer.id)
 
 		checked = false
@@ -46,13 +50,14 @@ module TestsHelper
 
 
 		content_tag(:p) do
-			if type_id == Constant::QuestionEnum::SeleccionMultiple
+			if type_sequence == Constant::QuestionEnum::SeleccionMultiple
 				check_box_tag( "","",checked)+
 				content_tag(:label,class:"#{text_color}") do
 					"#{answer.description}".html_safe+
 					"&nbsp&nbsp#{icon}".html_safe
 
 				end
+
 			else
 				radio_button_tag( "","",checked)+
 				content_tag(:label,class:"#{text_color}") do
@@ -61,6 +66,10 @@ module TestsHelper
 				end
 			end
 
-end
+		end
+	end
+
+	def get_answer_description(question_id)
+		return HasAnswerDescription.where(do_test_id: @do_test.id, question_id: question_id).last.description
 	end
 end

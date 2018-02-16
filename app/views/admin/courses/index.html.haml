@@ -38,12 +38,15 @@
             .col.s12.l4
               .col.s12{style: "padding-bottom: 8px;"}
                 =link_to "Administrar",edit_admin_course_path(c), class: "btn blue lighten-3"
-                -if c.active == 1
+                -if c.active?
                   %p.white-text.chip.green
                     Activado
-                -else
+                -elsif c.disabled?
                   %p.white-text.red.chip
                     Desactivado
+                -else
+                  %p.white-text.red.chip
+                    Cerrado
 
 
 

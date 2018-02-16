@@ -365,11 +365,12 @@ template {
 .type-question .switch-field label input[value="1"] + label,
 .type-question .switch-field label input[value="2"] + label,
 .type-question .switch-field label input[value="3"] + label,
+.type-question .switch-field label input[value="4"] + label,
 .type-question .switch-field label input[value="1"] + a label,
 .type-question .switch-field label input[value="2"] + a label,
 .type-question .switch-field label input[value="3"] + a label,
-.type-question .switch-field label input[value="4"] + label {
- width: 25% !important;
+.type-question .switch-field label input[value="4"] + a label {
+ width: 20% !important;
  height: 35px !important;
  font-size: 12px;
  }
