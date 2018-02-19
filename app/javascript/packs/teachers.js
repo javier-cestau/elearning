@@ -20,14 +20,16 @@
 
 import Vue from 'vue/dist/vue.esm'
 import Teachers from '../components/Teachers.vue'
+import TurbolinksAdapter from 'vue-turbolinks';
 import VueResource from 'vue-resource'
 
 Vue.use(VueResource)
+Vue.use(TurbolinksAdapter)
 
-document.addEventListener('DOMContentLoaded', () => {
 
-  const el = document.getElementById("app")
+document.addEventListener('turbolinks:load', () => {
 
+  const el = document.getElementById("app") 
   const app = new Vue({
     el,
     components: {Teachers}

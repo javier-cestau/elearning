@@ -1,10 +1,8 @@
 class Admin::SectionsController < ApplicationController
-# TODO mensaje cuando se intente guardar un section sin nombre
-before_action :authenticate_medium_admin!
-before_action :find_course_in_section, only: %i[edit create update destroy]
-
-
+  before_action :authenticate_medium_admin!
+  before_action :find_course_in_section, only: %i[edit create update destroy]
   before_action :all_topic, only:[:edit]
+  include SecurityTeacher
 
   def edit
     @section = Section.find(params[:id])

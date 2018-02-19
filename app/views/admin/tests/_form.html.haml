@@ -22,7 +22,9 @@
 			= t.input :description, input_html: {class: "materialize-textarea ",'data-length': "20"}, label: "Descripción (mínimo de 20 caracteres)"
 
 	.row.valign-wrapper
+		-size = "s12"
 		- if !@course.deadline_course.nil?
+			-size = "s9"
 			.col.s3
 				.row
 					.col.s12
@@ -48,7 +50,8 @@
 									%p.align-text= localize(@test.deadline)
 								-date = date_format(@test.deadline,@test)
 								%input.red.btn.datepicker{placeholder: "Cambiar",name: "test[deadline]", value: "#{date}"}
-		.col.s9
+
+		.col{class: "#{size}"}
 			.row
 				.col.s12.relative
 					.font-icon-test
@@ -93,7 +96,7 @@
 	%h3 Preguntas
 	.panel
 		#panel-element.panel-element
-			= t.simple_fields_for :questions do |q| 
+			= t.simple_fields_for :questions do |q|
 				= render "questions", q: q, id: q.index
 		.post-avatar.button-description
 			= link_to_add_tr_field(t, :questions, "question_test")

@@ -1,20 +1,21 @@
 <template>
 
-    <div class="container-profile col s12">
-      <input type="text" name="" v-model="search">
-      <div v-for="(user,index) in filteredUsers" >
+    <div class="container-profile w80">
+      <h6>Buscar</h6>
+      <input type="text" name="" v-model="search" placeholder="Buscar usuario">
+      <div v-for="user in filteredUsers" >
 
           <figure class="snip1344">
             <img :src="user.url" alt="profile-sample1" class="background"/>
             <img :src="user.url" alt="profile-sample1" class="profile"/>
             <figcaption>
               <h6>{{user.name | truncate('20')}}<span>{{user.position}}</span></h6>
-              <div class="icons" ><a v-on:click="addTeacher(user,index)" class="btn">Agregar</a></div>
+              <div class="icons" ><a v-on:click="addTeacher(user)" class="btn">Agregar</a></div>
             </figcaption>
           </figure>
         </div>
 
-        <div style="position:fixed;right:0;width:250px;" class="">
+        <div style="position:fixed;right:0;width:250px;top: 70px;" class="">
           <h5>Profesores</h5>
           <ul class="collection" style="height:70vh;overflow: scroll;" >
             <li v-for="(teacher,index) in teachers"  class="collection-item avatar">
@@ -50,7 +51,6 @@ export default {
   mounted(){
     this.users = JSON.parse(gon.users)
     this.teachers = JSON.parse(gon.teachers)
-
   },
   computed:
   {
@@ -58,17 +58,20 @@ export default {
       {
           if(this.users ==null)
           {
-            return ["No hay nada"]
+            return []
 
           }
           else
           {
 
             var self=this;
-            var u = this.users.filter(function(user){return user.name.toLowerCase().indexOf(self.search.toLowerCase())>=0;});
-            if(u == null){
-              return ["No hay nada"]
-            }
+            var u = this.users.filter(function(user){
+                                        return user.name.toLowerCase().indexOf(self.search.toLowerCase())>=0;
+                                      });
+            if(u == null)
+              return []
+            else
+              return u
           }
       }
   },
@@ -82,14 +85,14 @@ export default {
       // error callback
       });
     },
-    addTeacher: function (user,index){
+    addTeacher: function (user){
 
       this.$http.get(`/admin/courses/${gon.course_id}/teachers/add?user_id=${user.id}`)
       .then(response => {
         this.teachers.push(user)
-        console.log(index);
-        console.log(user);
+        var index = this.users.indexOf(user)
         this.users.splice(index,1)
+
       }, response => {
       // error callback
       });
@@ -98,5 +101,8 @@ export default {
 }
 </script>
 
-<style >
+<style  type="text/css">
+  .w80{
+    width: 80%;
+  }
 </style>

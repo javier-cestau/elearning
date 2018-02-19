@@ -1,10 +1,10 @@
 # coding: utf-8
 class Admin::CoursesController < ApplicationController
-before_action :authenticate_medium_admin!
-before_action :find_course, only: [:edit]
-before_action :find_course_in_section, only: [:talent_list,:teachers]
-before_action :all_topic, only: %i[edit talent_list teachers]
-
+	before_action :authenticate_medium_admin!
+	before_action :find_course, only: [:edit]
+	before_action :find_course_in_section, only: [:talent_list]
+	before_action :all_topic, only: %i[edit talent_list teachers]
+  include SecurityTeacher
 
 	def index
 		order = "name ASC"
@@ -46,6 +46,11 @@ before_action :all_topic, only: %i[edit talent_list teachers]
 			rescue
 			end
 		end
+
+		if current_user.is_medium_admin?
+			@courses = @courses.joins(:has_teachers).where("has_teachers.user_id = #{current_user.id}")
+		end
+
 	end
 
 	def edit
@@ -387,6 +392,9 @@ before_action :all_topic, only: %i[edit talent_list teachers]
 
 							if @course.save
 
+								if current_user.is_medium_admin?
+									HasTeacher.create(user_id: current_user.id, course_id: @course.id)
+								end
 
 								# Cuando el curso sea de tipo POR programaS
 								if scoping == '2'
@@ -602,6 +610,8 @@ before_action :all_topic, only: %i[edit talent_list teachers]
 			end
 		end
 	end
+
+
 
 	def save_user_association
 		if !users_params.empty?

@@ -136,12 +136,12 @@
  	end
 
 
- def self.get_teachers
-		where(privilege: [2,3]).joins(:has_teachers)
+ def self.get_teachers(course_id)
+		where(privilege: [2,3]).joins(:has_teachers).where("has_teachers.course_id = ?",course_id)
  end
 
- def self.get_not_teachers
-		where(privilege: [2,3]).joins("LEFT JOIN has_teachers ON users.id = has_teachers.user_id").where("has_teachers.user_id is null")
+ def self.get_not_teachers(course_id)
+		where(privilege: [2,3]).joins("LEFT JOIN has_teachers ON users.id = has_teachers.user_id AND has_teachers.course_id = #{course_id}").where("has_teachers.user_id is null")
  end
 
  def self.auth_creation(auth)
@@ -195,6 +195,9 @@
 
 	end
 
+	def is_teacher?(course_id)
+		return !HasTeacher.where(user_id: self.id, course_id: course_id).empty?
+	end
 
 	def can_enroll?(course)
 		if !DoCourse.is_enroll_in_course?(course,self)

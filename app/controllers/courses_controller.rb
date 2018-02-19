@@ -7,6 +7,7 @@
   before_action :all_topic, only: %i[show grades]
 
 
+
   def index
     order = "name ASC"
 
