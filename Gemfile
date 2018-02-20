@@ -70,7 +70,7 @@ gem 'faker'
 gem 'dotenv-rails'
 gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
-gem 'redis'
+gem 'redis', '~> 3.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
