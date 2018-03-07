@@ -102,6 +102,7 @@ class ApplicationController < ActionController::Base
 			end
 		end
     gon.course_id = @course.id
+    binding.pry
     gon.sections_url = section_hash_url.to_json
   end
 
