@@ -101,8 +101,9 @@ class ApplicationController < ActionController::Base
 				@sections_hash[tmp_primary_section].push([section => index])
 			end
 		end
+
     gon.course_id = @course.id
-    binding.pry
+    # Toma al secciones con su nombre e ID
     gon.sections_url = section_hash_url.to_json
   end
 

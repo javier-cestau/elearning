@@ -3,7 +3,6 @@ class CommentCoursesController < ApplicationController
 
 
 	def create
-
 		if !comment_params[:body].empty?
 			@course = Course.find(params[:course_id])
 			@comment = current_user.comment_courses.new(comment_params)
@@ -58,14 +57,13 @@ class CommentCoursesController < ApplicationController
 			render status: 500
 		end
 	end
+
 	def destroy
 		@comment = CommentCourse.find(params[:id])
 		CommentCourse.where(prv_comment: @comment.id).destroy_all
 		@comment.destroy
-
-
-
 	end
+
 	private
 
 	def comment_params

@@ -116,7 +116,7 @@
 											%h6.comment-name
 												%span.black-text= current_user.name
 										.comment-content
-											=simple_form_for [@course,CommentCourse.new], remote: true, html: {"data-type": :json, id: "comment-form"} do |c|
+											=simple_form_for [@course,CommentCourse.new], html: { id: "comment-form"} do |c|
 												.row
 													.input-field.col.s12
 														= c.input :body, label: false, placeholder: "Añade un comentario...", input_html: {class: "text-area-comment"}
@@ -201,7 +201,7 @@
 
 
 
-
+= render 'reply_form'
 -url = ""
 - if current_user.photo_file_name.nil?
 	-if current_user.is_at_least_medium_admin?

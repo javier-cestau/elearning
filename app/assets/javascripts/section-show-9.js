@@ -4,7 +4,6 @@
 				console.log(ev);
 			});
 			$(document).on ("ajax:success", "#comment-form-section", function (ev,data){
-
 				$("#comment-form-section textarea").val("");
 
 				var name = data.name;

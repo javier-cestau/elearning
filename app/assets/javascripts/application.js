@@ -65,6 +65,29 @@ function AddOrRemoveFromFavorites(){
      // Se obtiene el valor del boton, para calcular si el curso se agregara o eliminara de favoritos
      value = $(this).attr("value");
 
+          // Si el valor es 1, el curso sera agregado a favoritos
+          if ( value == 1 ) {
+
+            // Por lo tanto, el icono sera cambiado al de "eliminar de favoritos"
+            $("#f-icon"+course_id).removeClass('add-favorite').addClass('remove-favorite');
+            $("#f-btn"+course_id).attr('value', 2);
+            // Se cambia el tooltip también
+            $("#f-btn"+course_id).attr('data-tooltip', "Eliminar de favoritos");
+            $('.tooltipped').tooltip({delay: 50});
+
+
+            // Si el valor es 2, es para eliminar de favoritos
+          } else if ( value == 2 ) {
+
+              // Por lo tanto, el icono sera cambiado al de "Agregar a favoritos"
+            $("#f-icon"+course_id).removeClass('remove-favorite').addClass('add-favorite');
+            $("#f-btn"+course_id).attr('value', 1);
+            // Se cambia el tooltip también
+            $("#f-btn"+course_id).attr('data-tooltip', "Agregar a favoritos");
+           $('.tooltipped').tooltip({delay: 50});
+          }
+          var self = this
+          console.log(value);
            $.ajax({
              url : '/courses/'+course_id+'/favorite',
              type : 'get',
@@ -72,34 +95,35 @@ function AddOrRemoveFromFavorites(){
              success : function() {
 
 
-               // Si el valor es 1, el curso sera agregado a favoritos
-               if ( value == 1 ) {
-
-                 // Por lo tanto, el icono sera cambiado al de "eliminar de favoritos"
-                 $("#f-icon"+course_id).removeClass('add-favorite').addClass('remove-favorite');
-                 $("#f-btn"+course_id).attr('value', 2);
-                 // Se cambia el tooltip también
-                 $("#f-btn"+course_id).attr('data-tooltip', "Eliminar de favoritos");
-                 $('.tooltipped').tooltip({delay: 50});
-
-
-                 // Si el valor es 2, es para eliminar de favoritos
-               } else if ( value == 2 ) {
-
-                   // Por lo tanto, el icono sera cambiado al de "Agregar a favoritos"
-                 $("#f-icon"+course_id).removeClass('remove-favorite').addClass('add-favorite');
-                 $("#f-btn"+course_id).attr('value', 1);
-                 // Se cambia el tooltip también
-                 $("#f-btn"+course_id).attr('data-tooltip', "Agregar a favoritos");
-                $('.tooltipped').tooltip({delay: 50});
-               }
-
                   },
              error : function(request,error)
              {
 
-               console.log(request);
-               console.log(error);
+                  // Se obtiene el valor del boton, para calcular si el curso se agregara o eliminara de favoritos
+                  value = $(self).attr("value");
+                  console.log(value);
+                 // Si el valor es 1, el curso sera agregado a favoritos
+                 if ( value == 1 ) {
+
+                   // Por lo tanto, el icono sera cambiado al de "eliminar de favoritos"
+                   $("#f-icon"+course_id).removeClass('add-favorite').addClass('remove-favorite');
+                   $("#f-btn"+course_id).attr('value', 2);
+                   // Se cambia el tooltip también
+                   $("#f-btn"+course_id).attr('data-tooltip', "Eliminar de favoritos");
+                   $('.tooltipped').tooltip({delay: 50});
+
+
+                   // Si el valor es 2, es para eliminar de favoritos
+                 } else if ( value == 2 ) {
+
+                     // Por lo tanto, el icono sera cambiado al de "Agregar a favoritos"
+                   $("#f-icon"+course_id).removeClass('remove-favorite').addClass('add-favorite');
+                   $("#f-btn"+course_id).attr('value', 1);
+                   // Se cambia el tooltip también
+                   $("#f-btn"+course_id).attr('data-tooltip', "Agregar a favoritos");
+                  $('.tooltipped').tooltip({delay: 50});
+                 }
+
 
              }
 
@@ -170,7 +194,7 @@ function SubtractNotificationCounter(){
 
 
 document.addEventListener("turbolinks:load", function(){
-   
+
   $('input.autocomplete').autocomplete({
   data: gon.sections_url,
   limit: 20,

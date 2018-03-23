@@ -138,7 +138,6 @@
       if already_in_favorites.empty?
         #Si el curso no esta en la lista, se agrega a ella
         HasFavorite.create(user_id: current_user.id, course_id: @course.id)
-        flash[:notice]= 'El curso ha sido agregado a su lista de favoritos.'
         redirect_to course_path @course
       else
         #Si el curso esta en la lista, se elimina de ella
