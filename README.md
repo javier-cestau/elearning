@@ -37,36 +37,44 @@ You are ready to navigate in the admin panel (You can find it by click your prof
 
 ## What can I do?
 
+
+
 #### Courses
 
-* Create courses
-* Activate or deactivate a course, that is for allow the normal user to find the course
-* You can assign a start date, a deadline date or a deadline date for the inscriptions
-* Add tag to allow the user find the course easily 
-* Add courses preferences
-* Add unlimited sections
-* Create a dynamic description with tinymice editor
+* Create courses.
+* Activate or deactivate a course, that is for allow the normal user to find the course.
+* You can assign a start date, a deadline date or a deadline date for the inscriptions.
+* Add tag to allow the user find the course easily.
+* Add courses preferences.
+* Add unlimited sections.
+* Create a dynamic description with tinymice editor.
 
 #### Sections
 
-* Create a dynamic description with tinymice editor
-* Add Document attached to the sections like a complement material
-* Add tests
-* Adding subsections
+* Create a dynamic description with tinymice editor.
+* Add Document attached to the sections like a complement material (Excel, Word, Powerpoint or PDF).
+* Add tests.
+* Adding subsections.
 
 
 #### Tests
-*	Add a start date and deadline
-*	Assign the minimum grade to approve the test
-*	Make the test a Quiz (optional test) or required
+*	Add a start date and deadline.
+*	Assign the minimum grade to approve the test.
+*	Make the test a Quiz (optional test) or required.
 *	Create a question limited to 4 types:
-	* Description
-	* True or false
-	* Multiple selection
-	* Simple selection
-* Add specific grade to each question
-* Assign a time limit for the test
+	* Description.
+	* True or false.
+	* Multiple selection.
+	* Simple selection.
+* Add specific grade to each question.
+* Assign a time limit for the test.
+* See the students grade in all test or only one.
 
+#### Data and others
+* See the inscription of all user in the platform
+* See all the student enroll in a course
+* See specific information about one user
+* Give them a certificate
 
 ## Built With
 
