@@ -23,7 +23,7 @@ You need to log in with facebook
 ```
 rails c
 ```
-Then search for your user id and
+Then search for your user id and:
 
 ```
 user = User.find(your_user_id)
