@@ -80,7 +80,7 @@ You are ready to navigate in the admin panel (You can find it by click your prof
 
 * Ruby on Rails
 * Postgresql
-* Recently add Vuejs
+* Recently added Vuejs
 * Materialize (CSS)
 
 ## Authors
