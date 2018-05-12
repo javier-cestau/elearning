@@ -9,6 +9,9 @@ Elearning system that allow the administrator to test the skills of their studen
 ```
 bundle
 yarn install
+rails db:create
+rails db:migrate
+rails db:seed
 rails s
 ```
 
