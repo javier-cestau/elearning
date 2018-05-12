@@ -1,24 +1,51 @@
-# README
+# Elearning
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Elearning system that allow the administrator to test the skills of their students
 
-Things you may want to cover:
 
-* Ruby version
+### Installing
 
-* System dependencies
 
-* Configuration
+```
+bundle
+yarn install
+rails s
+```
 
-* Database creation
 
-* Database initialization
 
-* How to run the test suite
+## Log in
 
-* Services (job queues, cache servers, search engines, etc.)
+You need to log in with facebook
 
-* Deployment instructions
+### Adding administrator privileges
 
-* ...
+```
+rails c
+```
+Then search for your user id and
+
+```
+user = User.find(your_user_id)
+user.privilege = 3 
+user.save
+```
+
+You are ready to navigate in the admin panel (You can find it by click your profile image in the top-right corner)
+
+
+## Built With
+
+* Ruby on Rails
+* Postgresql
+* Recently add Vuejs
+* Materialize (CSS)
+
+## Authors
+
+* **Javier Cestau** 
+* **Diego Molina** 
+
+## License
+
+This project is licensed under the MIT License 
